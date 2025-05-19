@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles for a professional look */
+body {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
+  color: #1a202c;
+  min-height: 100vh;
+  letter-spacing: 0.01em;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.card {
+  @apply bg-white rounded-xl shadow-lg p-6 transition-shadow duration-200 hover:shadow-2xl;
+}
+
+.btn-primary {
+  @apply bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 text-gray-800 font-medium px-4 py-2 rounded-lg hover:bg-gray-300 transition;
+}
+
+.input {
+  @apply border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition;
+}
+
+.header-title {
+  @apply text-3xl font-extrabold tracking-tight text-gray-900;
+}
+
+.section-title {
+  @apply text-2xl font-bold text-gray-800 mb-4;
+}
+
+.shadow-card {
+  box-shadow: 0 4px 24px 0 rgba(30, 41, 59, 0.08);
+}
+
+.transition-base {
+  @apply transition-all duration-200 ease-in-out;
+}
+
+/* ... existing code ... */ 
