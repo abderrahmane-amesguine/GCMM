@@ -7,7 +7,8 @@ import { DataContext } from '../context/DataContext';
 import { getScoreBadgeClass } from '../utils/colors';
 
 const Dashboard = () => {
-  const { axes, domains, objectives, globalScore, handleNavigate } = useContext(DataContext);
+  const context = useContext(DataContext) || {};
+  const { axes = [], domains = [], objectives = [], globalScore = 0, handleNavigate = () => {} } = context;
   
   // Données pour le graphique à barres
   const barChartData = axes.map(axis => ({

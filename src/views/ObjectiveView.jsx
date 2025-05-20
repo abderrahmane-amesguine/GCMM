@@ -2,9 +2,25 @@ import React, { useContext, useState } from 'react';
 import { ArrowLeft, ChevronRight, MessageSquare, Edit, CheckSquare, Award, ArrowUp, ArrowDown, Info } from 'lucide-react';
 import { DataContext } from '../context/DataContext';
 import ScoreIndicator from '../components/ScoreIndicator';
+import { axisColors } from '../utils/colors';
 
 const ObjectiveView = () => {
-  const { axes, domains, objectives, selectedAxis, selectedDomain, selectedObjective, handleNavigate } = useContext(DataContext);
+  const context = useContext(DataContext) || {};  
+  const { axes = [{ id: 1, name: 'Legal', score: 2.8, color: axisColors[0] },
+  { id: 2, name: 'Technologies', score: 3.2, color: axisColors[1] },
+  { id: 3, name: 'Organization', score: 2.5, color: axisColors[2] },
+  { id: 4, name: 'Capacity', score: 2.4, color: axisColors[3] },
+  { id: 5, name: 'Cooperation', score: 2.1, color: axisColors[4] }], domains = [{ id: '3.1', name: 'Strategy', axisId: 3, score: 2.7 },
+    { id: '3.2', name: 'Committees', axisId: 3, score: 2.3 },
+    { id: '3.3', name: 'Cert/Csirt', axisId: 3, score: 2.8 },
+    { id: '3.4', name: 'xxxx', axisId: 3, score: 2.4 },
+    { id: '3.5', name: 'xxxx', axisId: 3, score: 2.2 },
+    { id: '3.6', name: 'xxxx', axisId: 3, score: 2.6 }], objectives = [
+      { id: '3.2.63', name: 'xxxx', axisId: 3, domainId: '3.2', score: 2.1, levels: ['Ad hoc', 'Initiated', 'Defined', 'Managed', 'Optimized'] },
+      { id: '3.2.64', name: 'xxx', axisId: 3, domainId: '3.2', score: 2.3, levels: ['Ad hoc', 'Initiated', 'Defined', 'Managed', 'Optimized'] },
+      { id: '3.2.65', name: 'Exec Committee', axisId: 3, domainId: '3.2', score: 2.5, levels: ['Ad hoc', 'Initiated', 'Defined', 'Managed', 'Optimized'] },
+      { id: '3.2.66', name: 'xxx', axisId: 3, domainId: '3.2', score: 2.0 },
+      { id: '3.2.67', name: 'xxxx', axisId: 3, domainId: '3.2', score: 2.6 }], selectedAxis = 3, selectedDomain = '3.2', selectedObjective = '3.2.65', handleNavigate = () => {} } = context;
   
   const [activeTab, setActiveTab] = useState('levels');
   

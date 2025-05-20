@@ -8,6 +8,7 @@ import AxisView from './views/AxisView';
 import DomainView from './views/DomainView';
 import ObjectiveView from './views/ObjectiveView';
 import { Toaster, ToastProvider, toast } from './components/ui/Toast';
+import GCMMDashboard from './views/GCMMDashboard';
 
 const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -83,7 +84,7 @@ const App = () => {
 // Composant pour afficher le contenu en fonction de la vue actuelle
 const AppContent = () => {
   const context = React.useContext(DataContext) || {};
-  const { currentView = '', loaded = false, loading = false } = context;
+  const { currentView = '', loaded = true, loading = false } = context;
 
   if (loading) {
     return (
@@ -116,6 +117,8 @@ const AppContent = () => {
       return <DomainView />;
     case 'objective':
       return <ObjectiveView />;
+    case 'gcmm':
+      return <GCMMDashboard />;
     default:
       return <Dashboard />;
   }

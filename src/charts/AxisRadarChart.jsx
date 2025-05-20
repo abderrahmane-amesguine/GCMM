@@ -42,7 +42,8 @@ const CustomLegend = ({ payload }) => {
 };
 
 const AxisRadarChart = () => {
-  const { radarData } = useContext(DataContext);
+  const context = useContext(DataContext) || {};
+  const { radarData = [{},{},{},{},{}] } = context;
   
   return (
     <div className="h-full w-full">

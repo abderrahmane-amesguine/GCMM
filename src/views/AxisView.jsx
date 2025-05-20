@@ -3,27 +3,43 @@ import { ArrowLeft, BarChart2, Layers, Eye, Briefcase, Download, Printer } from 
 import DomainRadarChart from '../charts/DomainRadarChart';
 import ScoreIndicator from '../components/ScoreIndicator';
 import { DataContext } from '../context/DataContext';
+import { axisColors } from '../utils/colors';
 
 const AxisView = () => {
-  const { axes, domains, objectives, selectedAxis, handleNavigate } = useContext(DataContext);
-  
+  const context = useContext(DataContext) || {};
+  const { axes = [{ id: 1, name: 'Legal', score: 2.8, color: axisColors[0] },
+  { id: 2, name: 'Technologies', score: 3.2, color: axisColors[1] },
+  { id: 3, name: 'Organization', score: 2.5, color: axisColors[2] },
+  { id: 4, name: 'Capacity', score: 2.4, color: axisColors[3] },
+  { id: 5, name: 'Cooperation', score: 2.1, color: axisColors[4] }], domains = [{ id: '3.1', name: 'Strategy', axisId: 3, score: 2.7 },
+    { id: '3.2', name: 'Committees', axisId: 3, score: 2.3 },
+    { id: '3.3', name: 'Cert/Csirt', axisId: 3, score: 2.8 },
+    { id: '3.4', name: 'xxxx', axisId: 3, score: 2.4 },
+    { id: '3.5', name: 'xxxx', axisId: 3, score: 2.2 },
+    { id: '3.6', name: 'xxxx', axisId: 3, score: 2.6 }], objectives = [
+      { id: '3.2.63', name: 'xxxx', axisId: 3, domainId: '3.2', score: 2.1 },
+      { id: '3.2.64', name: 'xxx', axisId: 3, domainId: '3.2', score: 2.3 },
+      { id: '3.2.65', name: 'Exec Committee', axisId: 3, domainId: '3.2', score: 2.5 },
+      { id: '3.2.66', name: 'xxx', axisId: 3, domainId: '3.2', score: 2.0 },
+      { id: '3.2.67', name: 'xxxx', axisId: 3, domainId: '3.2', score: 2.6 }], selectedAxis = 2, handleNavigate = () => {} } = context;
+
   const axis = axes.find(a => a.id === selectedAxis);
   if (!axis) return <div>Axe non trouvé</div>;
-  
+
   const axisDomains = domains.filter(d => d.axisId === selectedAxis);
-  
+
   // Calculate some statistics
   const domainCount = axisDomains.length;
   const objectiveCount = objectives.filter(o => o.axisId === axis.id).length;
   const lowScoreObjectives = objectives.filter(o => o.axisId === axis.id && o.evaluation < 2).length;
   const highScoreObjectives = objectives.filter(o => o.axisId === axis.id && o.evaluation >= 4).length;
-  
+
   return (
     <div className="flex flex-col space-y-8">
       {/* Header section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-xl shadow-md">
         <div className="flex items-center">
-          <button 
+          <button
             onClick={() => handleNavigate('dashboard')}
             className="mr-4 p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all text-gray-600"
             aria-label="Back to Dashboard"
@@ -32,13 +48,13 @@ const AxisView = () => {
           </button>
           <div>
             <h2 className="text-2xl font-bold flex items-center" style={{ color: axis.color }}>
-              <span className="inline-flex items-center justify-center w-8 h-8 mr-2 rounded-lg text-white text-sm" 
-                   style={{backgroundColor: axis.color}}>{axis.id}</span>
+              <span className="inline-flex items-center justify-center w-8 h-8 mr-2 rounded-lg text-white text-sm"
+                style={{ backgroundColor: axis.color }}>{axis.id}</span>
               {axis.name}
             </h2>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-2 mt-4 md:mt-0">
           <button className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors">
             <Download size={16} />
@@ -50,7 +66,7 @@ const AxisView = () => {
           </button>
         </div>
       </div>
-      
+
       {/* Score and statistics */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1">
@@ -59,7 +75,7 @@ const AxisView = () => {
               <BarChart2 className="mr-2 text-blue-500" size={20} />
               Évaluation de l'axe
             </h3>
-            
+
             <div className="flex items-center space-x-4 mb-6">
               <div className="relative w-16 h-16">
                 <svg className="w-full h-full" viewBox="0 0 36 36">
@@ -91,14 +107,14 @@ const AxisView = () => {
                 <p className="text-sm text-gray-500 mt-1">sur 5 points</p>
               </div>
             </div>
-            
+
             <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
-              <div 
-                className="h-2 rounded-full transition-all duration-700" 
+              <div
+                className="h-2 rounded-full transition-all duration-700"
                 style={{ width: `${(axis.score / 5) * 100}%`, backgroundColor: axis.color }}
               ></div>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
                 <div className="flex items-center text-gray-600 mb-2">
@@ -115,7 +131,7 @@ const AxisView = () => {
                 <div className="text-2xl font-bold">{objectiveCount}</div>
               </div>
             </div>
-            
+
             <div className="mt-4 pt-4 border-t border-gray-100">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-600">Objectifs faibles:</span>
@@ -128,7 +144,7 @@ const AxisView = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="lg:col-span-2">
           <div className="card bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
             <h3 className="text-xl font-semibold mb-4 flex items-center">
@@ -142,21 +158,21 @@ const AxisView = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Domains grid */}
       <div className="card bg-white rounded-xl shadow-md">
         <h3 className="text-xl font-semibold mb-6 flex items-center">
           <Layers size={20} className="mr-2 text-blue-500" />
           Domaines ({axisDomains.length})
         </h3>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {axisDomains.map((domain) => {
             // Count objectives for this domain
             const domainObjectives = objectives.filter(o => o.axisId === axis.id && o.domainId === domain.id);
-            
+
             return (
-              <div 
+              <div
                 key={domain.key}
                 className="bg-white p-5 rounded-lg cursor-pointer hover:bg-blue-50 shadow-sm border border-gray-200 transition-all hover:shadow-md group"
                 onClick={() => handleNavigate('domain', axis.id, domain.id)}
@@ -170,14 +186,14 @@ const AxisView = () => {
                   </h4>
                   <ScoreIndicator score={domain.score} size="sm" />
                 </div>
-                
+
                 <div className="mt-3 w-full bg-gray-200 rounded-full h-1.5">
-                  <div 
-                    className="h-1.5 rounded-full transition-all" 
+                  <div
+                    className="h-1.5 rounded-full transition-all"
                     style={{ width: `${(domain.score / 5) * 100}%`, backgroundColor: axis.color }}
                   ></div>
                 </div>
-                
+
                 <div className="mt-4 flex items-center justify-between">
                   <div className="text-sm text-gray-600">
                     {domainObjectives.length} objectifs
