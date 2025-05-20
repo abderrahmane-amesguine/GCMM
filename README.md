@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # GCMM Platform - Global Cybersecurity Maturity Model
 
 Une plateforme moderne pour évaluer et visualiser la maturité en cybersécurité.
@@ -90,3 +91,6 @@ Ce projet est sous licence MIT. Voir le fichier LICENSE pour plus de détails.
 ---
 
 Développé avec ❤️ par Votre Équipe
+=======
+
+>>>>>>> 84f97d4f0df0c4e1badd92a82806c6ba1fd80b34
