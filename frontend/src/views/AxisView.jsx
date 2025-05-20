@@ -5,34 +5,24 @@ import ScoreIndicator from '../components/ScoreIndicator';
 import { DataContext } from '../context/DataContext';
 import { axisColors } from '../utils/colors';
 
-const AxisView = () => {
-  const context = useContext(DataContext) || {};
-  const { axes = [{ id: 1, name: 'Legal', score: 2.8, color: axisColors[0] },
-  { id: 2, name: 'Technologies', score: 3.2, color: axisColors[1] },
-  { id: 3, name: 'Organization', score: 2.5, color: axisColors[2] },
-  { id: 4, name: 'Capacity', score: 2.4, color: axisColors[3] },
-  { id: 5, name: 'Cooperation', score: 2.1, color: axisColors[4] }], domains = [{ id: '3.1', name: 'Strategy', axisId: 3, score: 2.7 },
-    { id: '3.2', name: 'Committees', axisId: 3, score: 2.3 },
-    { id: '3.3', name: 'Cert/Csirt', axisId: 3, score: 2.8 },
-    { id: '3.4', name: 'xxxx', axisId: 3, score: 2.4 },
-    { id: '3.5', name: 'xxxx', axisId: 3, score: 2.2 },
-    { id: '3.6', name: 'xxxx', axisId: 3, score: 2.6 }], objectives = [
-      { id: '3.2.63', name: 'xxxx', axisId: 3, domainId: '3.2', score: 2.1 },
-      { id: '3.2.64', name: 'xxx', axisId: 3, domainId: '3.2', score: 2.3 },
-      { id: '3.2.65', name: 'Exec Committee', axisId: 3, domainId: '3.2', score: 2.5 },
-      { id: '3.2.66', name: 'xxx', axisId: 3, domainId: '3.2', score: 2.0 },
-      { id: '3.2.67', name: 'xxxx', axisId: 3, domainId: '3.2', score: 2.6 }], selectedAxis = 2, handleNavigate = () => {} } = context;
+const AxisView = ({ axisId, onNavigate }) => {
+  const { axes, domains, objectives } = useContext(DataContext);
 
-  const axis = axes.find(a => a.id === selectedAxis);
+  const axis = axes.find(a => a.id === axisId);
   if (!axis) return <div>Axe non trouvé</div>;
 
-  const axisDomains = domains.filter(d => d.axisId === selectedAxis);
+  const axisDomains = domains.filter(d => d.axisId === axisId);
+  const axisObjectives = objectives.filter(o => o.axisId === axisId);
 
-  // Calculate some statistics
+  const handleDomainClick = (domainId) => {
+    onNavigate('domain', { axisId, domainId });
+  };
+
+  // Calculate statistics
   const domainCount = axisDomains.length;
-  const objectiveCount = objectives.filter(o => o.axisId === axis.id).length;
-  const lowScoreObjectives = objectives.filter(o => o.axisId === axis.id && o.evaluation < 2).length;
-  const highScoreObjectives = objectives.filter(o => o.axisId === axis.id && o.evaluation >= 4).length;
+  const objectiveCount = axisObjectives.length;
+  const lowScoreObjectives = axisObjectives.filter(o => o.evaluation < 2).length;
+  const highScoreObjectives = axisObjectives.filter(o => o.evaluation >= 4).length;
 
   return (
     <div className="flex flex-col space-y-8">
@@ -40,9 +30,9 @@ const AxisView = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-xl shadow-md">
         <div className="flex items-center">
           <button
-            onClick={() => handleNavigate('dashboard')}
+            onClick={() => onNavigate('gcmm-table')}
             className="mr-4 p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all text-gray-600"
-            aria-label="Back to Dashboard"
+            aria-label="Back to Table"
           >
             <ArrowLeft size={18} />
           </button>
@@ -175,7 +165,7 @@ const AxisView = () => {
               <div
                 key={domain.key}
                 className="bg-white p-5 rounded-lg cursor-pointer hover:bg-blue-50 shadow-sm border border-gray-200 transition-all hover:shadow-md group"
-                onClick={() => handleNavigate('domain', axis.id, domain.id)}
+                onClick={() => handleDomainClick(domain.id)}
               >
                 <div className="flex justify-between items-start">
                   <h4 className="text-lg font-medium text-blue-800 flex items-center gap-2">

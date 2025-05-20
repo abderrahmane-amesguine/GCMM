@@ -6,9 +6,9 @@ import ScoreIndicator from '../components/ScoreIndicator';
 import { DataContext } from '../context/DataContext';
 import { getScoreBadgeClass } from '../utils/colors';
 
-const Dashboard = () => {
+const Dashboard = ({ onNavigate }) => {
   const context = useContext(DataContext) || {};
-  const { axes = [], domains = [], objectives = [], globalScore = 0, handleNavigate = () => {} } = context;
+  const { axes = [], domains = [], objectives = [], globalScore = 0 } = context;
   
   // Données pour le graphique à barres
   const barChartData = axes.map(axis => ({
@@ -94,8 +94,7 @@ const Dashboard = () => {
           return (
             <div 
               key={axis.id}
-              className="card group cursor-pointer border-t-4 hover:shadow-2xl transform transition-all hover:-translate-y-1"
-              onClick={() => handleNavigate('axis', axis.id)}
+              className="card group cursor-pointer border-t-4 hover:shadow-2xl transform transition-all hover:-translate-y-1"              onClick={() => onNavigate('axis', { axisId: axis.id })}
               style={{ borderTopColor: axis.color }}
             >
               <div className="flex justify-between items-start mb-2">
@@ -116,8 +115,8 @@ const Dashboard = () => {
                     style={{ width: `${(axis.score / 5) * 100}%`, backgroundColor: axis.color }}
                   ></div>
                 </div>
-                <div className="absolute -top-6 right-0 text-xs text-gray-500">5</div>
-                <div className="absolute -top-6 left-0 text-xs text-gray-500">0</div>
+                <div className="absolute -top-4 right-0 text-xs text-gray-500">5</div>
+                <div className="absolute -top-4 left-0 text-xs text-gray-500">0</div>
               </div>
               
               <div className="flex items-center justify-between text-sm text-gray-500">
@@ -155,8 +154,7 @@ const Dashboard = () => {
               return (
                 <div 
                   key={`${obj.axisId}-${obj.domainId}-${obj.id}`}
-                  className="p-4 bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all cursor-pointer"
-                  onClick={() => handleNavigate('objective', obj.axisId, obj.domainId, obj.id)}
+                  className="p-4 bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all cursor-pointer"                  onClick={() => onNavigate('objective', { axisId: obj.axisId, domainId: obj.domainId, objectiveId: obj.id })}
                 >
                   <div className="flex items-start">
                     <div className="w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: axis.color }}>

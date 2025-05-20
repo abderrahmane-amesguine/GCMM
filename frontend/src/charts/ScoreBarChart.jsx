@@ -47,8 +47,7 @@ const ScoreBarChart = ({ data }) => {
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
-          margin={{ top: 20, right: 20, left: 10, bottom: 5 }}
-          barSize={40}
+          margin={{ top: 20, right: 20, left: 30, bottom: 20 }} 
         >
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
           <XAxis 
@@ -56,6 +55,11 @@ const ScoreBarChart = ({ data }) => {
             tick={{ fill: '#475569', fontSize: 12 }}
             tickLine={false}
             axisLine={false}
+            interval={0}
+            width={100}
+            height={60}
+            angle={-45} // Rotate labels
+            textAnchor="end" // Align rotated text
           />
           <YAxis 
             domain={[0, 5]} 
@@ -73,7 +77,8 @@ const ScoreBarChart = ({ data }) => {
               value: `Moyenne: ${averageScore.toFixed(2)}`, 
               fill: '#64748B',
               fontSize: 12,
-              position: 'left' 
+              position: 'left',
+              offset: 10
             }}
           />
           <Bar 
@@ -83,6 +88,7 @@ const ScoreBarChart = ({ data }) => {
             label={renderCustomBarLabel}
             animationDuration={1500}
             animationEasing="ease-out"
+            barSize={30} // Reduced bar size
           >
             {data.map((entry, index) => (
               <Cell 
