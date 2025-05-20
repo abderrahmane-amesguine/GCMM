@@ -7,12 +7,12 @@ import Dashboard from './views/Dashboard';
 import AxisView from './views/AxisView';
 import DomainView from './views/DomainView';
 import ObjectiveView from './views/ObjectiveView';
-import { Toaster, toast } from './components/ui/Toast';
+import { Toaster, ToastProvider, toast } from './components/ui/Toast';
 
 const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);
-  
+
   // Close sidebar when clicking outside on mobile
   useEffect(() => {
     const handleResize = () => {
@@ -24,15 +24,15 @@ const App = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [isSidebarOpen]);
-  
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  
+
   const openFileUpload = () => {
     setIsFileUploadOpen(true);
   };
-  
+
   const handleFileUpload = (file) => {
     // Pour cette démo, on ferme simplement le modal
     setIsFileUploadOpen(false);
@@ -42,7 +42,7 @@ const App = () => {
       type: "success",
     });
   };
-  
+
   const exportData = () => {
     // Dans une implémentation réelle, nous exporterions les données ici
     toast({
@@ -51,14 +51,14 @@ const App = () => {
       type: "info",
     });
   };
-  
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex flex-col text-slate-800 font-sans">
       <Header toggleSidebar={toggleSidebar} />
       <div className="flex flex-1 relative">
-        <Sidebar 
-          isOpen={isSidebarOpen} 
-          toggleSidebar={toggleSidebar} 
+        <Sidebar
+          isOpen={isSidebarOpen}
+          toggleSidebar={toggleSidebar}
           openFileUpload={openFileUpload}
           exportData={exportData}
         />
@@ -68,20 +68,23 @@ const App = () => {
           </div>
         </main>
       </div>
-      <FileUploadModal 
-        isOpen={isFileUploadOpen} 
+      <FileUploadModal
+        isOpen={isFileUploadOpen}
         onClose={() => setIsFileUploadOpen(false)}
         onFileUpload={handleFileUpload}
       />
-      <Toaster />
+      <ToastProvider>
+        <Toaster />
+      </ToastProvider>
     </div>
   );
 };
 
 // Composant pour afficher le contenu en fonction de la vue actuelle
 const AppContent = () => {
-  const { currentView, loaded, loading } = React.useContext(DataContext);
-  
+  const context = React.useContext(DataContext) || {};
+  const { currentView = '', loaded = false, loading = false } = context;
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -92,7 +95,7 @@ const AppContent = () => {
       </div>
     );
   }
-  
+
   if (!loaded) {
     return (
       <div className="bg-white p-6 rounded-xl shadow-lg">
@@ -103,7 +106,7 @@ const AppContent = () => {
       </div>
     );
   }
-  
+
   switch (currentView) {
     case 'dashboard':
       return <Dashboard />;
