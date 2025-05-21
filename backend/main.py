@@ -39,20 +39,22 @@ def validate_excel_structure(df):
     """Validate the structure of the uploaded Excel file."""
     # Expected columns
     required_columns = [
-        'Axe',           # Column 0
-        'Nom Axe',       # Column 1
-        'Domaine',       # Column 2
-        'Nom Domaine',   # Column 3
-        'Objectif',      # Column 4
-        'Nom Objectif',  # Column 5
-        'Description',   # Column 6
-        'Niveau 1 (Ad hoc)',      # Column 7
-        'Niveau 2 (Initiated)',      # Column 8
-        'Niveau 3 (Defined)',      # Column 9
-        'Niveau 4 (Managed)',      # Column 10
-        'Niveau 5 (Optimized)',      # Column 11
-        'Evaluation',    # Column 12
-        'Commentaire'    # Column 13
+        '#Axis',           # Column 0
+        'Axis',       # Column 1
+        '#Domain',       # Column 2
+        'Domain',   # Column 3
+        'Domain Description',   # Column 4
+        'Obj. ID',      # Column 5
+        'Objective',  # Column 6
+        'Description',   # Column 7 
+        'Level 1 (Ad hoc)',      # Column 8
+        'Level 2 (Initiated)',      # Column 9
+        'Level 3 (Defined)',      # Column 10
+        'Level 4 (Managed)',      # Column 11
+        'Level 5 (Optimized)',      # Column 12
+        'Profil',    # Column 13
+        'Target Profil',      # Column 14
+        'Comment'    # Column 15
     ]
     
     # Check if we have enough columns
@@ -151,16 +153,26 @@ async def upload_file(file: UploadFile = File(...)):
                 axis_name = row[1]
                 domain_id = str(row[2]) if not pd.isna(row[2]) else None
                 domain_name = row[3]
-                objective_id = str(row[4]) if not pd.isna(row[4]) else None
-                objective_name = row[5]
-                description = row[6]
-                level1 = row[7]
-                level2 = row[8]
-                level3 = row[9]
-                level4 = row[10]
-                level5 = row[11]
-                evaluation = float(row[12]) if not pd.isna(row[12]) else 0
-                comment = row[13]
+                domain_description = row[4]
+                objective_id = str(row[5]) if not pd.isna(row[5]) else None
+                objective_name = row[6]
+                description = row[7]
+                level1 = row[8]
+                level2 = row[9]
+                level3 = row[10]
+                level4 = row[11]
+                level5 = row[12]                
+                evaluation = float(row[13]) if not pd.isna(row[13]) else 0
+                comment = row[14]
+
+                # Process recommendations for each level
+                recommendations = []
+                for level in range(5):
+                    recommendations.append({
+                        "level": level + 1,
+                        "actionable": row[15 + level] if not pd.isna(row[15 + level]) else "",
+                        "strategic": row[20 + level] if not pd.isna(row[20 + level]) else ""
+                    })
                 
                 # Add axis if it doesn't exist
                 if axis_id and not any(a["id"] == axis_id for a in axes):
@@ -191,7 +203,38 @@ async def upload_file(file: UploadFile = File(...)):
                         "description": description or "",
                         "domainId": domain_id,
                         "axisId": axis_id,
-                        "levels": [level1, level2, level3, level4, level5],
+                        "levels": [
+                            {
+                                "level": 1,
+                                "description": level1,
+                                "actionable": str(row[15]) if not pd.isna(row[15]) else "",
+                                "strategic": str(row[20]) if not pd.isna(row[20]) else ""
+                            },
+                            {
+                                "level": 2,
+                                "description": level2,
+                                "actionable": str(row[16]) if not pd.isna(row[16]) else "",
+                                "strategic": str(row[21]) if not pd.isna(row[21]) else ""
+                            },
+                            {
+                                "level": 3,
+                                "description": level3,
+                                "actionable": str(row[17]) if not pd.isna(row[17]) else "",
+                                "strategic": str(row[22]) if not pd.isna(row[22]) else ""
+                            },
+                            {
+                                "level": 4,
+                                "description": level4,
+                                "actionable": str(row[18]) if not pd.isna(row[18]) else "",
+                                "strategic": str(row[23]) if not pd.isna(row[23]) else ""
+                            },
+                            {
+                                "level": 5,
+                                "description": level5,
+                                "actionable": str(row[19]) if not pd.isna(row[19]) else "",
+                                "strategic": str(row[24]) if not pd.isna(row[24]) else ""
+                            }
+                        ],
                         "evaluation": evaluation,
                         "comment": comment or ""
                     })
@@ -380,11 +423,21 @@ async def export_excel():
                         "Objectif": objective["id"],
                         "Nom Objectif": objective["name"],
                         "Description": objective["description"],
-                        "Niveau 1 (Ad hoc)": objective["levels"][0],
-                        "Niveau 2 (Initiated)": objective["levels"][1],
-                        "Niveau 3 (Defined)": objective["levels"][2],
-                        "Niveau 4 (Managed)": objective["levels"][3],
-                        "Niveau 5 (Optimized)": objective["levels"][4],
+                        "Niveau 1 (Ad hoc)": objective["levels"][0]["description"],
+                        "AR N1": objective["levels"][0]["actionable"],
+                        "SR N1": objective["levels"][0]["strategic"],
+                        "Niveau 2 (Initiated)": objective["levels"][1]["description"],
+                        "AR N2": objective["levels"][1]["actionable"],
+                        "SR N2": objective["levels"][1]["strategic"],
+                        "Niveau 3 (Defined)": objective["levels"][2]["description"],
+                        "AR N3": objective["levels"][2]["actionable"],
+                        "SR N3": objective["levels"][2]["strategic"],
+                        "Niveau 4 (Managed)": objective["levels"][3]["description"],
+                        "AR N4": objective["levels"][3]["actionable"],
+                        "SR N4": objective["levels"][3]["strategic"],
+                        "Niveau 5 (Optimized)": objective["levels"][4]["description"],
+                        "AR N5": objective["levels"][4]["actionable"],
+                        "SR N5": objective["levels"][4]["strategic"],
                         "Evaluation": objective["evaluation"],
                         "Commentaire": objective["comment"]
                     })

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ArrowLeft, BarChart2, Layers, Eye, Briefcase, Download, Printer } from 'lucide-react';
-import DomainRadarChart from '../charts/DomainRadarChart';
+import ObjectivesRadarChart from '../charts/ObjectivesRadarChart';
 import ScoreIndicator from '../components/ScoreIndicator';
 import { DataContext } from '../context/DataContext';
 import { axisColors } from '../utils/colors';
@@ -55,97 +55,89 @@ const AxisView = ({ axisId, onNavigate }) => {
             <span>Imprimer</span>
           </button>
         </div>
-      </div>
-
-      {/* Score and statistics */}
+      </div>      {/* Score and statistics */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1">
-          <div className="card bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <h3 className="text-xl font-semibold mb-4 flex items-center">
-              <BarChart2 className="mr-2 text-blue-500" size={20} />
-              Évaluation de l'axe
-            </h3>
+        <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow p-6 h-full">
+          <h3 className="text-xl font-semibold mb-4 flex items-center">
+            <BarChart2 className="mr-2 text-blue-500" size={20} />
+            Évaluation de l'axe
+          </h3>
 
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="relative w-16 h-16">
-                <svg className="w-full h-full" viewBox="0 0 36 36">
-                  <path
-                    d="M18 2.0845
+          <div className="flex items-center space-x-4 mb-6">
+            <div className="relative w-16 h-16">
+              <svg className="w-full h-full" viewBox="0 0 36 36">
+                <path
+                  d="M18 2.0845
                       a 15.9155 15.9155 0 0 1 0 31.831
                       a 15.9155 15.9155 0 0 1 0 -31.831"
-                    fill="none"
-                    stroke="#e2e8f0"
-                    strokeWidth="3"
-                  />
-                  <path
-                    d="M18 2.0845
+                  fill="none"
+                  stroke="#e2e8f0"
+                  strokeWidth="3"
+                />
+                <path
+                  d="M18 2.0845
                       a 15.9155 15.9155 0 0 1 0 31.831
                       a 15.9155 15.9155 0 0 1 0 -31.831"
-                    fill="none"
-                    stroke={axis.color}
-                    strokeWidth="3"
-                    strokeDasharray={`${axis.score * 20}, 100`}
-                    strokeLinecap="round"
-                  />
-                  <text x="18" y="20.5" textAnchor="middle" fontSize="9" fontWeight="bold" fill={axis.color}>
-                    {axis.score.toFixed(1)}
-                  </text>
-                </svg>
-              </div>
-              <div>
-                <ScoreIndicator score={axis.score} size="lg" />
-                <p className="text-sm text-gray-500 mt-1">sur 5 points</p>
-              </div>
-            </div>
-
-            <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
-              <div
-                className="h-2 rounded-full transition-all duration-700"
-                style={{ width: `${(axis.score / 5) * 100}%`, backgroundColor: axis.color }}
-              ></div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                <div className="flex items-center text-gray-600 mb-2">
-                  <Layers size={16} className="mr-2 text-blue-500" />
-                  <span className="text-sm font-medium">Domaines</span>
-                </div>
-                <div className="text-2xl font-bold">{domainCount}</div>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                <div className="flex items-center text-gray-600 mb-2">
-                  <Briefcase size={16} className="mr-2 text-indigo-500" />
-                  <span className="text-sm font-medium">Objectifs</span>
-                </div>
-                <div className="text-2xl font-bold">{objectiveCount}</div>
-              </div>
-            </div>
-
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-gray-600">Objectifs faibles:</span>
-                <span className="font-medium text-red-600">{lowScoreObjectives}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-600">Objectifs excellents:</span>
-                <span className="font-medium text-green-600">{highScoreObjectives}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="lg:col-span-2">
-          <div className="card bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow">
-            <h3 className="text-xl font-semibold mb-4 flex items-center">
-              <svg className="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+                  fill="none"
+                  stroke={axis.color}
+                  strokeWidth="3"
+                  strokeDasharray={`${axis.score * 20}, 100`}
+                  strokeLinecap="round"
+                />
+                <text x="18" y="20.5" textAnchor="middle" fontSize="9" fontWeight="bold" fill={axis.color}>
+                  {axis.score.toFixed(1)}
+                </text>
               </svg>
-              Performance par domaine
-            </h3>
-            <DomainRadarChart domains={axisDomains} axisColor={axis.color} />
+            </div>
+            <div>
+              <ScoreIndicator score={axis.score} size="lg" />
+              <p className="text-sm text-gray-500 mt-1">sur 5 points</p>
+            </div>
           </div>
+
+          <div className="w-full bg-gray-200 rounded-full h-2 mb-6">
+            <div
+              className="h-2 rounded-full transition-all duration-700"
+              style={{ width: `${(axis.score / 5) * 100}%`, backgroundColor: axis.color }}
+            ></div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+              <div className="flex items-center text-gray-600 mb-2">
+                <Layers size={16} className="mr-2 text-blue-500" />
+                <span className="text-sm font-medium">Domaines</span>
+              </div>
+              <div className="text-2xl font-bold">{domainCount}</div>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+              <div className="flex items-center text-gray-600 mb-2">
+                <Briefcase size={16} className="mr-2 text-indigo-500" />
+                <span className="text-sm font-medium">Objectifs</span>
+              </div>
+              <div className="text-2xl font-bold">{objectiveCount}</div>
+            </div>
+          </div>
+
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-gray-600">Objectifs faibles:</span>
+              <span className="font-medium text-red-600">{lowScoreObjectives}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600">Objectifs excellents:</span>
+              <span className="font-medium text-green-600">{highScoreObjectives}</span>
+            </div>
+          </div>
+        </div>        <div className="col-span-2 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow p-6 h-full">
+          <h3 className="text-xl font-semibold mb-4 flex items-center">
+            <svg className="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+            </svg>
+            Performance par Objectif
+          </h3>
+          <ObjectivesRadarChart objectives={axisObjectives} axisColor={axis.color} />
         </div>
       </div>
 

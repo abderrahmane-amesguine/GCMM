@@ -7,14 +7,13 @@ import Dashboard from './views/Dashboard';
 import AxisView from './views/AxisView';
 import DomainView from './views/DomainView';
 import ObjectiveView from './views/ObjectiveView';
-import GCMMDashboard from './views/GCMMDashboard';
 import GCMMTable from './views/GCMMTable';
 import { Toaster, ToastProvider } from './components/ui/Toast';
 
 // App content component that uses the DataContext
 const AppContent = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);  const [activeView, setActiveView] = useState('gcmm-table');
+  const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);  const [activeView, setActiveView] = useState('gcmm');
   const [viewParams, setViewParams] = useState({});
   
   const context = useContext(DataContext);
@@ -67,7 +66,7 @@ const AppContent = () => {
       case 'gcmm-table':
         return <GCMMTable onNavigate={handleNavigate} />;
       case 'gcmm':
-        return <GCMMDashboard />;
+        return <Dashboard onNavigate={handleNavigate} />;
       case 'axis':
         return <AxisView axisId={viewParams.axisId} onNavigate={handleNavigate} />;
       case 'domain':
@@ -78,7 +77,7 @@ const AppContent = () => {
           domainId={viewParams.domainId} 
           objectiveId={viewParams.objectiveId} 
           onNavigate={handleNavigate}
-        />;      case 'dashboard':
+        />;
       default:
         return <Dashboard onNavigate={handleNavigate} />;
     }
@@ -99,6 +98,7 @@ const AppContent = () => {
           exportData={exportData}
           switchView={handleNavigate}
           activeView={activeView}
+          viewParams={viewParams}
         />
         <main className="flex-1 transition-all duration-300 ease-in-out">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

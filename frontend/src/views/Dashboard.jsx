@@ -157,8 +157,8 @@ const Dashboard = ({ onNavigate }) => {
                   className="p-4 bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all cursor-pointer"                  onClick={() => onNavigate('objective', { axisId: obj.axisId, domainId: obj.domainId, objectiveId: obj.id })}
                 >
                   <div className="flex items-start">
-                    <div className="w-8 h-8 flex-shrink-0 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: axis.color }}>
-                      <span className="text-white text-xs font-bold">{obj.axisId}.{obj.id}</span>
+                    <div className="w-12 h-8 flex-shrink-0 rounded-full flex items-center justify-center mr-3" style={{ backgroundColor: axis.color }}>
+                      <span className="text-white text-xs font-bold">{obj.id}</span>
                     </div>
                     <div className="flex-1">
                       <h4 className="font-medium text-gray-800">{obj.name}</h4>

@@ -16,19 +16,18 @@ const Sidebar = ({ isOpen, toggleSidebar, openFileUpload, exportData, switchView
       console.error('Export failed:', error);
     }
   };
-
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50">
+    <div className={`fixed inset-0 z-50 transition-opacity duration-300 ${!isOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
       {/* Backdrop overlay with blur effect */}
       <div
-        className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300"
+        className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
         onClick={toggleSidebar}
       ></div>
 
       {/* Sidebar panel */}
-      <div className="absolute top-0 left-0 h-full w-80 bg-white shadow-2xl transform transition-transform duration-300 ease-in-out">
+      <div className={`absolute top-0 left-0 h-full w-80 bg-white shadow-2xl transform transition-all duration-300 ease-in-out ${
+        isOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}>
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-blue-50 to-blue-100">
@@ -65,16 +64,8 @@ const Sidebar = ({ isOpen, toggleSidebar, openFileUpload, exportData, switchView
                   toggleSidebar();
                 }}
               />
-              <SidebarItem
-                icon={<Activity size={18} />}
-                label="Classic Dashboard"
-                isActive={activeView === 'dashboard'}
-                onClick={() => {
-                  switchView('dashboard');
-                  toggleSidebar();
-                }}
-              />
-            </div>            {/* Axes section */}
+            </div>
+            {/* Axes section */}
             <div className="mt-8">
               <h3 className="px-3 mb-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 Axes
@@ -86,7 +77,7 @@ const Sidebar = ({ isOpen, toggleSidebar, openFileUpload, exportData, switchView
                   label={`Axe ${axis.id}: ${axis.name}`}
                   isActive={activeView === 'axis' && viewParams?.axisId === axis.id}
                   onClick={() => {
-                    switchView('axis', { axisId: axis.id });
+                    switchView('axis', { axisId: axis.id, axisColor : axis.color });
                     toggleSidebar();
                   }}
                   borderColor={axis.color}
@@ -136,29 +127,66 @@ const Sidebar = ({ isOpen, toggleSidebar, openFileUpload, exportData, switchView
 
 // Sidebar item component
 const SidebarItem = ({ icon, label, isActive, onClick, borderColor, score }) => {
+  const getStyles = () => {
+    const baseStyle = borderColor ? {
+      boxShadow: `inset 3px 0 0 ${borderColor}`
+    } : {};
+
+    if (!isActive) return baseStyle;
+    
+    if (borderColor) {
+      // For axis items, use their specific color
+      return {
+        ...baseStyle,
+        background: `${borderColor}15`,
+        color: borderColor
+      };
+    }
+    
+    // For non-axis items (like Dashboard, GCMM Table)
+    return {
+      background: 'linear-gradient(to right, #3b82f6, #6366f1)'
+    };
+  };
+
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center justify-center
-                  px-4 py-3 mb-2 rounded-2xl
-                  transition-transform transition-colors duration-200 ease-in-out
-                  transform hover:scale-105
-                  focus:outline-none focus:ring-4 focus:ring-blue-200
+      className={`w-full flex items-center px-4 py-3 mb-2 rounded-2xl
+                  transition-all duration-200 ease-in-out
+                  hover:scale-[1.02]
+                  focus:outline-none focus:ring-2 focus:ring-blue-200
                   ${isActive
-                        ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold shadow-lg'
-                        : 'bg-white text-gray-700 hover:bg-gray-100 shadow'
-                      }
-                  ${borderColor ? 'border-l-4' : ''}
-                `}
-      style={{ borderColor }}
-    >
-      <span className={`mr-3 ${isActive ? 'text-blue-500' : 'text-gray-500'}`}>
+                    ? borderColor 
+                      ? 'font-semibold shadow-md' 
+                      : 'text-white font-semibold shadow-lg'
+                    : 'bg-white text-gray-700 hover:bg-gray-50 shadow-sm'
+                  }`}
+      style={getStyles()}
+    >      <span className={`mr-3 ${
+        isActive 
+          ? borderColor ? '' : 'text-white'
+          : 'text-gray-500'
+      }`}
+        style={isActive && borderColor ? { color: borderColor } : undefined}>
         {icon}
+      </span>      <span 
+        className="flex-1 truncate text-left"
+        style={isActive && borderColor ? { color: borderColor } : undefined}
+      >
+        {label}
       </span>
-      <span className="flex-1 truncate text-left">{label}</span>
       {score && (
-        <span className={`ml-2 px-1.5 py-0.5 rounded text-xs font-medium ${isActive ? 'bg-blue-200 text-blue-800' : 'bg-gray-200 text-gray-700'
-          }`}>
+        <span 
+          className={`ml-2 px-2 py-0.5 rounded-full text-xs font-medium ${
+            isActive 
+              ? borderColor 
+                ? 'bg-white' 
+                : 'bg-white/20 text-white'
+              : 'bg-gray-100 text-gray-600'
+          }`}
+          style={isActive && borderColor ? { color: borderColor } : undefined}
+        >
           {score}
         </span>
       )}

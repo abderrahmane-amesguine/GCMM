@@ -10,6 +10,7 @@ const GCMMTable = () => {
   const [selectedDomain, setSelectedDomain] = useState(null);
   const [selectedObjective, setSelectedObjective] = useState(null);
   const [currentEvaluation, setCurrentEvaluation] = useState("");
+  const [targetEvaluation, setTargetEvaluation] = useState("");
   const [currentComment, setCurrentComment] = useState("");
 
   if (loading) {
@@ -43,6 +44,7 @@ const GCMMTable = () => {
   const handleObjectiveClick = (objective) => {
     setSelectedObjective(objective);
     setCurrentEvaluation(objective.evaluation.toString());
+    setTargetEvaluation(objective.evaluation.toString());
     setCurrentComment(objective.comment || "");
   };
 
@@ -144,12 +146,12 @@ const GCMMTable = () => {
       {selectedObjective && (
         <div className="border border-gray-300 rounded-lg overflow-hidden shadow-lg">
           <div className="bg-white p-4 font-semibold border-b border-gray-300">
-            <h2 className="text-lg">Objective Details</h2>
+            <h2 className="text-lg">Objective Details <span className='font-bold text-blue-600'>{selectedObjective.id}</span></h2>
           </div>
           <div className="bg-white p-4">
             <div className="grid grid-cols-12 gap-4 mb-6">
               <div className="col-span-2 font-semibold">ID:</div>
-              <div className="col-span-10">{selectedObjective.axisId}.{selectedObjective.domainId}.{selectedObjective.id}</div>
+              <div className="col-span-10">{selectedObjective.id}</div>
 
               <div className="col-span-2 font-semibold">Axis:</div>
               <div className="col-span-10">{axes.find(a => a.id === selectedObjective.axisId)?.name}</div>
@@ -185,10 +187,10 @@ const GCMMTable = () => {
 
             <div className="border-t border-gray-200 pt-6">
               <h3 className="font-semibold mb-4">Evaluation</h3>
-              <div className="space-y-4">
+              <div className="space-y-4 flex flex-col">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Current Level (1-5)
+                    Current Profil (1-5)
                   </label>
                   <input
                     type="number"
@@ -196,6 +198,19 @@ const GCMMTable = () => {
                     max="5"
                     value={currentEvaluation}
                     onChange={(e) => setCurrentEvaluation(e.target.value)}
+                    className="border border-gray-300 rounded-md px-3 py-2 w-full max-w-xs"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Target Profil ({currentEvaluation}-5)
+                  </label>
+                  <input
+                    type="number"
+                    min={currentEvaluation}
+                    max="5"
+                    value={targetEvaluation}
+                    onChange={(e) => setTargetEvaluation(e.target.value)}
                     className="border border-gray-300 rounded-md px-3 py-2 w-full max-w-xs"
                   />
                 </div>
@@ -215,7 +230,7 @@ const GCMMTable = () => {
                     onClick={handleSaveEvaluation}
                     className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
                   >
-                    Save Evaluation
+                    Save Profil
                   </button>
                 </div>
               </div>
