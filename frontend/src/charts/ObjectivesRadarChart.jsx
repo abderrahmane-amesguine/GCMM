@@ -17,7 +17,7 @@ const ObjectivesRadarChart = ({ objectives, axisColor }) => {
   // Transform objectives data for the radar chart
   const chartData = objectives.map(objective => ({
     name: objective.name,
-    score: objective.evaluation || 0,
+    score: objective.profile || 0,
     fullMark: 5
   }));
 

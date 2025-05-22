@@ -148,7 +148,6 @@ async def upload_file(file: UploadFile = File(...)):
             for row in rows:
                 if not row[0]:  # Skip empty rows
                     continue
-                    
                 axis_id = int(row[0]) if not pd.isna(row[0]) else None
                 axis_name = row[1]
                 domain_id = str(row[2]) if not pd.isna(row[2]) else None
@@ -161,17 +160,18 @@ async def upload_file(file: UploadFile = File(...)):
                 level2 = row[9]
                 level3 = row[10]
                 level4 = row[11]
-                level5 = row[12]                
-                evaluation = float(row[13]) if not pd.isna(row[13]) else 0
-                comment = row[14]
+                level5 = row[12]
+                profile = int(row[13]) if not pd.isna(row[13]) else 0
+                target_profile = int(row[14]) if not pd.isna(row[14]) else profile
+                comment = row[15]
 
                 # Process recommendations for each level
                 recommendations = []
                 for level in range(5):
                     recommendations.append({
                         "level": level + 1,
-                        "actionable": row[15 + level] if not pd.isna(row[15 + level]) else "",
-                        "strategic": row[20 + level] if not pd.isna(row[20 + level]) else ""
+                        "actionable": row[16 + level] if not pd.isna(row[16 + level]) else "",
+                        "strategic": row[21 + level] if not pd.isna(row[21 + level]) else ""
                     })
                 
                 # Add axis if it doesn't exist
@@ -191,6 +191,7 @@ async def upload_file(file: UploadFile = File(...)):
                             "key": domain_key,
                             "id": domain_id,
                             "name": domain_name,
+                            "description": domain_description,
                             "axisId": axis_id,
                             "score": 0
                         })
@@ -207,35 +208,36 @@ async def upload_file(file: UploadFile = File(...)):
                             {
                                 "level": 1,
                                 "description": level1,
-                                "actionable": str(row[15]) if not pd.isna(row[15]) else "",
-                                "strategic": str(row[20]) if not pd.isna(row[20]) else ""
-                            },
-                            {
-                                "level": 2,
-                                "description": level2,
                                 "actionable": str(row[16]) if not pd.isna(row[16]) else "",
                                 "strategic": str(row[21]) if not pd.isna(row[21]) else ""
                             },
                             {
-                                "level": 3,
-                                "description": level3,
+                                "level": 2,
+                                "description": level2,
                                 "actionable": str(row[17]) if not pd.isna(row[17]) else "",
                                 "strategic": str(row[22]) if not pd.isna(row[22]) else ""
                             },
                             {
-                                "level": 4,
-                                "description": level4,
+                                "level": 3,
+                                "description": level3,
                                 "actionable": str(row[18]) if not pd.isna(row[18]) else "",
                                 "strategic": str(row[23]) if not pd.isna(row[23]) else ""
                             },
                             {
-                                "level": 5,
-                                "description": level5,
+                                "level": 4,
+                                "description": level4,
                                 "actionable": str(row[19]) if not pd.isna(row[19]) else "",
                                 "strategic": str(row[24]) if not pd.isna(row[24]) else ""
+                            },
+                            {
+                                "level": 5,
+                                "description": level5,
+                                "actionable": str(row[20]) if not pd.isna(row[20]) else "",
+                                "strategic": str(row[25]) if not pd.isna(row[25]) else ""
                             }
                         ],
-                        "evaluation": evaluation,
+                        "profile": profile,
+                        "target_profile": target_profile,
                         "comment": comment or ""
                     })
         except Exception as e:
@@ -254,14 +256,14 @@ async def upload_file(file: UploadFile = File(...)):
                                 and o["domainId"] == domain["id"]]
                 
                 if domain_objectives:
-                    domain["score"] = sum(o["evaluation"] for o in domain_objectives) / len(domain_objectives)
+                    domain["score"] = sum(o["profile"] for o in domain_objectives) / len(domain_objectives)
             
             # Calculate axis scores
             for axis in axes:
                 axis_objectives = [o for o in objectives if o["axisId"] == axis["id"]]
                 
                 if axis_objectives:
-                    axis["score"] = sum(o["evaluation"] for o in axis_objectives) / len(axis_objectives)
+                    axis["score"] = sum(o["profile"] for o in axis_objectives) / len(axis_objectives)
             
             # Calculate global score
             global_score = sum(axis["score"] for axis in axes) / len(axes) if axes else 0
@@ -343,8 +345,10 @@ async def get_objectives(domain_id: str):
 
 class ObjectiveEvaluation(BaseModel):
     objectiveId: str
-    evaluation: float
-    comment: str
+    profile: int
+    target_profile: int
+    comment: str = ""
+    recommendations: dict = {}
 
 @app.post("/api/objectives/{objective_id}/evaluate")
 async def evaluate_objective(objective_id: str, evaluation: ObjectiveEvaluation):
@@ -353,12 +357,20 @@ async def evaluate_objective(objective_id: str, evaluation: ObjectiveEvaluation)
         objective = next((obj for obj in gcmm_data["objectives"] if obj["id"] == objective_id), None)
         if not objective:
             raise HTTPException(status_code=404, detail="Objective not found")
-
         # Update the objective
-        objective["evaluation"] = evaluation.evaluation
+        objective["profile"] = evaluation.profile
+        objective["target_profile"] = max(evaluation.target_profile, evaluation.profile)
         objective["comment"] = evaluation.comment
 
-        # Recalculate scores
+        if evaluation.recommendations:
+            for level_idx, level_data in evaluation.recommendations.items():
+                level_idx = int(level_idx)
+                if 0 <= level_idx < len(objective["levels"]):
+                    if "actionable" in level_data:
+                        objective["levels"][level_idx]["actionable"] = level_data["actionable"]
+                    if "strategic" in level_data:
+                        objective["levels"][level_idx]["strategic"] = level_data["strategic"]
+
         # Update domain scores
         for domain in gcmm_data["domains"]:
             domain_objectives = [o for o in gcmm_data["objectives"] 
@@ -366,14 +378,14 @@ async def evaluate_objective(objective_id: str, evaluation: ObjectiveEvaluation)
                             and o["domainId"] == domain["id"]]
             
             if domain_objectives:
-                domain["score"] = sum(o["evaluation"] for o in domain_objectives) / len(domain_objectives)
+                domain["score"] = sum(o["profile"] for o in domain_objectives) / len(domain_objectives)
         
         # Update axis scores
         for axis in gcmm_data["axes"]:
             axis_objectives = [o for o in gcmm_data["objectives"] if o["axisId"] == axis["id"]]
             
             if axis_objectives:
-                axis["score"] = sum(o["evaluation"] for o in axis_objectives) / len(axis_objectives)
+                axis["score"] = sum(o["profile"] for o in axis_objectives) / len(axis_objectives)
         
         # Update global score
         global_score = sum(axis["score"] for axis in gcmm_data["axes"]) / len(gcmm_data["axes"]) if gcmm_data["axes"] else 0
@@ -409,39 +421,50 @@ async def export_excel():
         records = []
         for axis in gcmm_data["axes"]:
             axis_domains = [d for d in gcmm_data["domains"] if d["axisId"] == axis["id"]]
-            
             for domain in axis_domains:
                 # Get objectives for this specific domain
                 domain_objectives = [o for o in gcmm_data["objectives"] 
                                   if o["domainId"] == domain["id"] and o["axisId"] == axis["id"]]
                 for objective in domain_objectives:
-                    records.append({
-                        "Axe": axis["id"],
-                        "Nom Axe": axis["name"],
-                        "Domaine": domain["id"],
-                        "Nom Domaine": domain["name"],
-                        "Objectif": objective["id"],
-                        "Nom Objectif": objective["name"],
+                    record = {
+                        "#Axis": axis["id"],
+                        "Axis": axis["name"],
+                        "#Domain": domain["id"],
+                        "Domain": domain["name"],
+                        "Domain Description": domain["description"],
+                        "Obj. ID": objective["id"],
+                        "Objective": objective["name"],
                         "Description": objective["description"],
-                        "Niveau 1 (Ad hoc)": objective["levels"][0]["description"],
-                        "AR N1": objective["levels"][0]["actionable"],
-                        "SR N1": objective["levels"][0]["strategic"],
-                        "Niveau 2 (Initiated)": objective["levels"][1]["description"],
-                        "AR N2": objective["levels"][1]["actionable"],
-                        "SR N2": objective["levels"][1]["strategic"],
-                        "Niveau 3 (Defined)": objective["levels"][2]["description"],
-                        "AR N3": objective["levels"][2]["actionable"],
-                        "SR N3": objective["levels"][2]["strategic"],
-                        "Niveau 4 (Managed)": objective["levels"][3]["description"],
-                        "AR N4": objective["levels"][3]["actionable"],
-                        "SR N4": objective["levels"][3]["strategic"],
-                        "Niveau 5 (Optimized)": objective["levels"][4]["description"],
-                        "AR N5": objective["levels"][4]["actionable"],
-                        "SR N5": objective["levels"][4]["strategic"],
-                        "Evaluation": objective["evaluation"],
-                        "Commentaire": objective["comment"]
-                    })
-        
+                        "Level 1 (Ad hoc)": objective["levels"][0]["description"],
+                        "Level 2 (Initiated)": objective["levels"][1]["description"],
+                        "Level 3 (Defined)": objective["levels"][2]["description"],
+                        "Level 4 (Managed)": objective["levels"][3]["description"],
+                        "Level 5 (Optimized)": objective["levels"][4]["description"],
+                        "Profil": objective["profile"],
+                        "Target Profil": objective["target_profile"],
+                        "Comment": objective["comment"],
+                        "Actionable Recommendation for Level 1": '',
+                        "Strategic Recommendation for Level 1": '',
+                        "Actionable Recommendation for Level 2": '',
+                        "Strategic Recommendation for Level 2": '',
+                        "Actionable Recommendation for Level 3": '',
+                        "Strategic Recommendation for Level 3": '',
+                        "Actionable Recommendation for Level 4": '',
+                        "Strategic Recommendation for Level 4": ''
+                    }
+                    # Only add recommendations if target_profile is greater than profile
+                    if objective["target_profile"] > objective["profile"]:
+                        # Add recommendations from current profile to target profile
+                        for i in range(objective["profile"]-1, objective["target_profile"]):
+                            if i == len(objective["levels"])-1:
+                                print('len : ', i)
+                                continue
+                            level = objective["levels"][i]
+                            record[f"Actionable Recommendation for Level {i+1}"] = level["actionable"]
+                            record[f"Strategic Recommendation for Level {i+1}"] = level["strategic"]
+                    
+                    records.append(record)
+
         # Create DataFrame and write to Excel
         df = pd.DataFrame(records)
         

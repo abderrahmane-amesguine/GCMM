@@ -43,26 +43,27 @@ const GCMMTable = () => {
 
   const handleObjectiveClick = (objective) => {
     setSelectedObjective(objective);
-    setCurrentEvaluation(objective.evaluation.toString());
-    setTargetEvaluation(objective.evaluation.toString());
+    setCurrentEvaluation(objective.profile.toString());
+    setTargetEvaluation(objective.target_profile.toString());
     setCurrentComment(objective.comment || "");
   };
 
   const handleSaveEvaluation = async () => {
     if (!selectedObjective) return;
-    
+
     try {
       await saveObjectiveEvaluation(
         selectedObjective.id,
         Number(currentEvaluation),
+        Number(targetEvaluation),
         currentComment
       );
-      
+
       // Refresh data after saving
       if (refreshData) {
         await refreshData();
       }
-      
+
       alert("Evaluation saved successfully!");
     } catch (error) {
       console.error("Error saving evaluation:", error);
@@ -84,9 +85,8 @@ const GCMMTable = () => {
               <div
                 key={axis.id}
                 onClick={() => handleAxisClick(axis.id)}
-                className={`p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 ${
-                  selectedAxis === axis.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
-                }`}
+                className={`p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 ${selectedAxis === axis.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
+                  }`}
               >
                 <h3 className="font-medium">Axe {axis.id}: {axis.name}</h3>
                 <p className="text-sm text-gray-600">Score: {axis.score.toFixed(2)}/5</p>
@@ -106,9 +106,8 @@ const GCMMTable = () => {
                 <div
                   key={domain.id}
                   onClick={() => handleDomainClick(domain.id)}
-                  className={`p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 ${
-                    selectedDomain === domain.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
-                  }`}
+                  className={`p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 ${selectedDomain === domain.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
+                    }`}
                 >
                   <h3 className="font-medium">{domain.name}</h3>
                   <p className="text-sm text-gray-600">Score: {domain.score.toFixed(2)}/5</p>
@@ -129,12 +128,11 @@ const GCMMTable = () => {
                 <div
                   key={objective.id}
                   onClick={() => handleObjectiveClick(objective)}
-                  className={`p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 ${
-                    selectedObjective?.id === objective.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
-                  }`}
+                  className={`p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-50 ${selectedObjective?.id === objective.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
+                    }`}
                 >
                   <h3 className="font-medium">{objective.name}</h3>
-                  <p className="text-sm text-gray-600">Level: {objective.evaluation}/5</p>
+                  <p className="text-sm text-gray-600">Level: {objective.profile}/5</p>
                 </div>
               ))}
             </div>
@@ -155,13 +153,13 @@ const GCMMTable = () => {
 
               <div className="col-span-2 font-semibold">Axis:</div>
               <div className="col-span-10">{axes.find(a => a.id === selectedObjective.axisId)?.name}</div>
-              
+
               <div className="col-span-2 font-semibold">Domain:</div>
               <div className="col-span-10">{domains.find(d => d.id === selectedObjective.domainId)?.name}</div>
-              
+
               <div className="col-span-2 font-semibold">Objective:</div>
               <div className="col-span-10">{selectedObjective.name}</div>
-              
+
               <div className="col-span-2 font-semibold">Description:</div>
               <div className="col-span-10">{selectedObjective.description}</div>
             </div>
@@ -169,14 +167,13 @@ const GCMMTable = () => {
             <div className="mb-6">
               <h3 className="font-semibold mb-4">Maturity Levels</h3>
               <div className="grid grid-cols-5 gap-4">
-                {selectedObjective.levels.map((level, index) => (
+                {selectedObjective.levels.forEach((level, index) => (
                   <div
                     key={index}
-                    className={`p-4 rounded-lg border ${
-                      Number(currentEvaluation) >= index + 1
+                    className={`p-4 rounded-lg border ${Number(currentEvaluation) >= index + 1
                         ? 'bg-green-50 border-green-200'
                         : 'bg-gray-50 border-gray-200'
-                    }`}
+                      }`}
                   >
                     <div className="font-medium mb-2">Level {index + 1}</div>
                     <p className="text-sm text-gray-600">{level}</p>
@@ -186,33 +183,36 @@ const GCMMTable = () => {
             </div>
 
             <div className="border-t border-gray-200 pt-6">
-              <h3 className="font-semibold mb-4">Evaluation</h3>
-              <div className="space-y-4 flex flex-col">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Current Profil (1-5)
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="5"
-                    value={currentEvaluation}
-                    onChange={(e) => setCurrentEvaluation(e.target.value)}
-                    className="border border-gray-300 rounded-md px-3 py-2 w-full max-w-xs"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Target Profil ({currentEvaluation}-5)
-                  </label>
-                  <input
-                    type="number"
-                    min={currentEvaluation}
-                    max="5"
-                    value={targetEvaluation}
-                    onChange={(e) => setTargetEvaluation(e.target.value)}
-                    className="border border-gray-300 rounded-md px-3 py-2 w-full max-w-xs"
-                  />
+              <h3 className="font-semibold mb-4">Set Your Current Profile</h3>
+              <div className="space-y-4">
+                <div className='flex justify-between'>
+                  <div className='w-1/2'>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Current Profil (1-5)
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      max="5"
+                      value={currentEvaluation}
+                      onChange={(e) => setCurrentEvaluation(e.target.value)}
+                      className="border border-gray-300 rounded-md px-3 py-2 w-full max-w-xs"
+                    />
+                  </div>
+                  <div className='w-1/2'>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Target Profil ({currentEvaluation}-5)
+                    </label>
+                    <input
+                      type="number"
+                      min={currentEvaluation}
+                      max="5"
+                      value={targetEvaluation}
+                      onChange={(e) => setTargetEvaluation(e.target.value)}
+                      className="border border-gray-300 rounded-md px-3 py-2 w-full max-w-xs"
+                    />
+                  </div>
+                  <div></div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">

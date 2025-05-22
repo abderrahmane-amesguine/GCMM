@@ -97,11 +97,12 @@ export const uploadExcelFile = async (file) => {
 /**
  * Save evaluation for an objective
  * @param {string} objectiveId - The ID of the objective
- * @param {number} evaluation - The evaluation score (1-5)
+ * @param {number} profile - The evaluation score (1-5)
+ * @param {number} target_profile - The evaluation score (1-5)
  * @param {string} comment - The evaluation comment
  * @returns {Promise<Object>} The updated objective
  */
-export const saveObjectiveEvaluation = async (objectiveId, evaluation, comment) => {
+export const saveObjectiveEvaluation = async (objectiveId, profile, target_profile, comment) => {
   const response = await fetch(`${API_BASE_URL}/objectives/${objectiveId}/evaluate`, {
     method: 'POST',
     headers: {
@@ -109,7 +110,8 @@ export const saveObjectiveEvaluation = async (objectiveId, evaluation, comment) 
     },
     body: JSON.stringify({
       objectiveId,
-      evaluation: Number(evaluation),
+      profile: Number(profile),
+      target_profile: Number(target_profile),
       comment
     })
   });

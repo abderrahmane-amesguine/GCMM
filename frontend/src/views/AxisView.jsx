@@ -21,8 +21,8 @@ const AxisView = ({ axisId, onNavigate }) => {
   // Calculate statistics
   const domainCount = axisDomains.length;
   const objectiveCount = axisObjectives.length;
-  const lowScoreObjectives = axisObjectives.filter(o => o.evaluation < 2).length;
-  const highScoreObjectives = axisObjectives.filter(o => o.evaluation >= 4).length;
+  const lowScoreObjectives = axisObjectives.filter(o => o.profile < 2).length;
+  const highScoreObjectives = axisObjectives.filter(o => o.profile >= 4).length;
 
   return (
     <div className="flex flex-col space-y-8">
