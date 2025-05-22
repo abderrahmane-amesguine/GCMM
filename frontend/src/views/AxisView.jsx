@@ -101,20 +101,14 @@ const AxisView = ({ axisId, onNavigate }) => {
           </h3>
 
           <div className="flex items-center space-x-4 mb-6">
-            <div className="relative w-16 h-16">
-              <svg className="w-full h-full" viewBox="0 0 36 36">
+            <div className="relative w-16 h-16">              <svg className="w-full h-full" viewBox="0 0 36 36">
                 <path
-                  d="M18 2.0845
-                      a 15.9155 15.9155 0 0 1 0 31.831
-                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                  d="M18 2.0845a15.9155 15.9155 0 0 1 0 31.831a15.9155 15.9155 0 0 1 0 -31.831"
                   fill="none"
                   stroke="#e2e8f0"
                   strokeWidth="3"
-                />
-                <path
-                  d="M18 2.0845
-                      a 15.9155 15.9155 0 0 1 0 31.831
-                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                />                <path
+                  d="M18 2.0845a15.9155 15.9155 0 0 1 0 31.831a15.9155 15.9155 0 0 1 0 -31.831"
                   fill="none"
                   stroke={axis.color}
                   strokeWidth="3"
@@ -167,10 +161,9 @@ const AxisView = ({ axisId, onNavigate }) => {
             </div>
           </div>
         </div>        <div className="col-span-2 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow p-6 h-full">
-          <h3 className="text-xl font-semibold mb-4 flex items-center">
-            <svg className="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+          <h3 className="text-xl font-semibold mb-4 flex items-center">            <svg className="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
             </svg>
             Performance par Objectif
           </h3>

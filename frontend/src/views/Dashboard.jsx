@@ -145,7 +145,7 @@ const Dashboard = ({ onNavigate }) => {
         <h3 className="text-xl font-semibold text-gray-800 mb-4">Points clés à améliorer</h3>
         <div className="space-y-4">
           {objectives
-            .filter(obj => obj.evaluation < 2)
+            .filter(obj => obj.profile < 2)
             .slice(0, 3)
             .map(obj => {
               const domain = domains.find(d => d.id === obj.domainId && d.axisId === obj.axisId);
@@ -165,7 +165,7 @@ const Dashboard = ({ onNavigate }) => {
                       <p className="text-sm text-gray-600 mt-1 line-clamp-2">{obj.description}</p>
                       <div className="flex items-center justify-between mt-2">
                         <span className="text-xs text-gray-500">{domain?.name}</span>
-                        <ScoreIndicator score={obj.evaluation} size="sm" />
+                        <ScoreIndicator score={obj.profile} size="sm" />
                       </div>
                     </div>
                   </div>

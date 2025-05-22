@@ -167,7 +167,7 @@ const GCMMTable = () => {
             <div className="mb-6">
               <h3 className="font-semibold mb-4">Maturity Levels</h3>
               <div className="grid grid-cols-5 gap-4">
-                {selectedObjective.levels.forEach((level, index) => (
+                {selectedObjective.levels.map((level, index) => (
                   <div
                     key={index}
                     className={`p-4 rounded-lg border ${Number(currentEvaluation) >= index + 1
@@ -176,7 +176,7 @@ const GCMMTable = () => {
                       }`}
                   >
                     <div className="font-medium mb-2">Level {index + 1}</div>
-                    <p className="text-sm text-gray-600">{level}</p>
+                    <p className="text-sm text-gray-600">{level.description}</p>
                   </div>
                 ))}
               </div>

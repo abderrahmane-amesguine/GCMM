@@ -13,7 +13,8 @@ import { Toaster, ToastProvider } from './components/ui/Toast';
 // App content component that uses the DataContext
 const AppContent = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);  const [activeView, setActiveView] = useState('gcmm');
+  const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);  
+  const [activeView, setActiveView] = useState('gcmm');
   const [viewParams, setViewParams] = useState({});
   
   const context = useContext(DataContext);
@@ -84,37 +85,37 @@ const AppContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex flex-col text-slate-800 font-sans">
-      <Header 
-        toggleSidebar={toggleSidebar} 
-        switchView={handleNavigate} 
-        activeView={activeView}
-      />
-      <div className="flex flex-1 relative">
-        <Sidebar
-          isOpen={isSidebarOpen}
-          toggleSidebar={toggleSidebar}
-          openFileUpload={openFileUpload}
-          exportData={exportData}
-          switchView={handleNavigate}
+    <ToastProvider>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex flex-col text-slate-800 font-sans">
+        <Header 
+          toggleSidebar={toggleSidebar} 
+          switchView={handleNavigate} 
           activeView={activeView}
-          viewParams={viewParams}
         />
-        <main className="flex-1 transition-all duration-300 ease-in-out">
-          <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            {renderView()}
-          </div>
-        </main>
-      </div>
-      <FileUploadModal
-        isOpen={isFileUploadOpen}
-        onClose={() => setIsFileUploadOpen(false)}
-        onFileUpload={onFileUpload}
-      />
-      <ToastProvider>
+        <div className="flex flex-1 relative">
+          <Sidebar
+            isOpen={isSidebarOpen}
+            toggleSidebar={toggleSidebar}
+            openFileUpload={openFileUpload}
+            exportData={exportData}
+            switchView={handleNavigate}
+            activeView={activeView}
+            viewParams={viewParams}
+          />
+          <main className="flex-1 transition-all duration-300 ease-in-out">
+            <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+              {renderView()}
+            </div>
+          </main>
+        </div>
+        <FileUploadModal
+          isOpen={isFileUploadOpen}
+          onClose={() => setIsFileUploadOpen(false)}
+          onFileUpload={onFileUpload}
+        />
         <Toaster />
-      </ToastProvider>
-    </div>
+      </div>
+    </ToastProvider>
   );
 };
 
