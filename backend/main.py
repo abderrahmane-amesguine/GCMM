@@ -457,7 +457,6 @@ async def export_excel():
                         # Add recommendations from current profile to target profile
                         for i in range(objective["profile"]-1, objective["target_profile"]):
                             if i == len(objective["levels"])-1:
-                                print('len : ', i)
                                 continue
                             level = objective["levels"][i]
                             record[f"Actionable Recommendation for Level {i+1}"] = level["actionable"]
@@ -485,4 +484,165 @@ async def export_excel():
     
     except Exception as e:
         print(f"Error during export: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/axes/{axis_id}/export")
+async def export_axis_excel(axis_id: int):
+    """Export a specific axis data to an Excel file."""
+    try:
+        # Verify axis exists
+        axis = next((a for a in gcmm_data["axes"] if a["id"] == axis_id), None)
+        if not axis:
+            raise HTTPException(status_code=404, detail=f"Axis {axis_id} not found")
+            
+        # Create a list of records for this axis only
+        records = []
+        axis_domains = [d for d in gcmm_data["domains"] if d["axisId"] == axis_id]
+        
+        for domain in axis_domains:
+            # Get objectives for this specific domain
+            domain_objectives = [o for o in gcmm_data["objectives"] 
+                               if o["domainId"] == domain["id"] and o["axisId"] == axis_id]
+            
+            for objective in domain_objectives:
+                record = {
+                    "#Axis": axis["id"],
+                    "Axis": axis["name"],
+                    "#Domain": domain["id"],
+                    "Domain": domain["name"],
+                    "Domain Description": domain["description"],
+                    "Obj. ID": objective["id"],
+                    "Objective": objective["name"],
+                    "Description": objective["description"],
+                    "Level 1 (Ad hoc)": objective["levels"][0]["description"],
+                    "Level 2 (Initiated)": objective["levels"][1]["description"],
+                    "Level 3 (Defined)": objective["levels"][2]["description"],
+                    "Level 4 (Managed)": objective["levels"][3]["description"],
+                    "Level 5 (Optimized)": objective["levels"][4]["description"],
+                    "Profil": objective["profile"],
+                    "Target Profil": objective["target_profile"],
+                    "Comment": objective["comment"],
+                    "Actionable Recommendation for Level 1": '',
+                    "Strategic Recommendation for Level 1": '',
+                    "Actionable Recommendation for Level 2": '',
+                    "Strategic Recommendation for Level 2": '',
+                    "Actionable Recommendation for Level 3": '',
+                    "Strategic Recommendation for Level 3": '',
+                    "Actionable Recommendation for Level 4": '',
+                    "Strategic Recommendation for Level 4": ''
+                }
+                
+                # Add recommendations columns
+                if objective["target_profile"] > objective["profile"]:
+                    # Add recommendations from current profile to target profile
+                    for i in range(objective["profile"]-1, objective["target_profile"]):
+                        if i == len(objective["levels"])-1:
+                            continue
+                        level = objective["levels"][i]
+                        record[f"Actionable Recommendation for Level {i+1}"] = level["actionable"]
+                        record[f"Strategic Recommendation for Level {i+1}"] = level["strategic"]
+                
+                records.append(record)
+
+        # Create DataFrame and write to Excel
+        df = pd.DataFrame(records)
+        
+        # Create an in-memory Excel file
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False, sheet_name=f'Axis {axis_id}')
+        
+        # Get the value of the BytesIO buffer
+        excel_data = output.getvalue()
+        
+        headers = {
+            'Content-Disposition': f'attachment; filename="GCMM_Axis_{axis_id}_Export.xlsx"',
+            'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        }
+        
+        return Response(content=excel_data, headers=headers)
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error during axis export: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/axes/{axis_id}/report")
+async def generate_axis_report(axis_id: int):
+    """Generate a Word report for a specific axis."""
+    try:
+        from docx import Document
+        from docx.shared import Inches, Pt, RGBColor
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
+        
+        # Verify axis exists
+        axis = next((a for a in gcmm_data["axes"] if a["id"] == axis_id), None)
+        if not axis:
+            raise HTTPException(status_code=404, detail=f"Axis {axis_id} not found")
+
+        # Get axis data
+        axis_domains = [d for d in gcmm_data["domains"] if d["axisId"] == axis_id]
+        axis_objectives = [o for o in gcmm_data["objectives"] if o["axisId"] == axis_id]
+        
+        # Create a new Word document
+        doc = Document()
+        
+        # Add title
+        title = doc.add_heading(f'GCMM Report - {axis["name"]}', 0)
+        title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        
+        # Add axis summary
+        doc.add_heading('Axis Summary', level=1)
+        doc.add_paragraph(f'Score: {axis["score"]:.1f}/5')
+        
+        # Add domain summaries
+        doc.add_heading('Domains', level=1)
+        for domain in axis_domains:
+            doc.add_heading(f'{domain["name"]} (Score: {domain["score"]:.1f}/5)', level=2)
+            doc.add_paragraph(domain["description"])
+            
+            # Add objectives for this domain
+            domain_objectives = [o for o in axis_objectives if o["domainId"] == domain["id"]]
+            for objective in domain_objectives:
+                doc.add_heading(f'Objective {objective["id"]}: {objective["name"]}', level=3)
+                doc.add_paragraph(f'Current Level: {objective["profile"]}')
+                doc.add_paragraph(f'Target Level: {objective["target_profile"]}')
+                doc.add_paragraph(objective["description"])
+                
+                # Add recommendations if target_profile > profile
+                if objective["target_profile"] > objective["profile"]:
+                    doc.add_heading('Recommendations', level=4)
+                    for i in range(objective["profile"]-1, objective["target_profile"]):
+                        if i == len(objective["levels"])-1:
+                            continue
+                        level = objective["levels"][i]
+                        if level["actionable"] or level["strategic"]:
+                            doc.add_paragraph(f'Level {i+1}:', style='Heading 5')
+                            if level["actionable"]:
+                                doc.add_paragraph(f'Actionable: {level["actionable"]}')
+                            if level["strategic"]:
+                                doc.add_paragraph(f'Strategic: {level["strategic"]}')
+        
+        # Save the document to a BytesIO object
+        output = io.BytesIO()
+        doc.save(output)
+        doc_data = output.getvalue()
+        
+        headers = {
+            'Content-Disposition': f'attachment; filename="GCMM_Axis_{axis_id}_Report.docx"',
+            'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        }
+        
+        return Response(content=doc_data, headers=headers)
+    
+    except ImportError:
+        raise HTTPException(
+            status_code=500,
+            detail="python-docx library is required for generating Word reports. Please install it with 'pip install python-docx'"
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error during report generation: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

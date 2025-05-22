@@ -34,7 +34,7 @@ const ObjectiveView = ({ axisId, domainId, objectiveId, onNavigate }) => {
             <h2 className="text-2xl font-bold">{objective.name}</h2>
           </div>
         </div>
-        <ScoreIndicator score={objective.evaluation} size="lg" showLabel={true} />
+        <ScoreIndicator score={objective.profile} size="lg" showLabel={true} />
       </div>
 
       {/* Description */}
@@ -57,22 +57,22 @@ const ObjectiveView = ({ axisId, domainId, objectiveId, onNavigate }) => {
             <div 
               key={index}
               className={`p-4 rounded-lg border ${
-                objective.evaluation >= index + 1 
+                objective.profile >= index + 1 
                   ? 'bg-green-50 border-green-200' 
                   : 'bg-gray-50 border-gray-200'
               }`}
             >
               <div className="flex items-start gap-4">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                  objective.evaluation >= index + 1
+                  objective.profile >= index + 1
                     ? 'bg-green-100 text-green-600'
                     : 'bg-gray-200 text-gray-500'
                 }`}>
                   {index + 1}
                 </div>
                 <div>
-                  <h4 className="font-semibold mb-1">Level {index + 1}</h4>
-                  <p className="text-gray-600">{level}</p>
+                  <h4 className="font-semibold mb-1">Level {level.level}</h4>
+                  <p className="text-gray-600">{level.description}</p>
                 </div>
               </div>
             </div>

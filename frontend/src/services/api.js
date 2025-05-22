@@ -174,6 +174,84 @@ export const exportGCMMToExcel = async () => {
 };
 
 /**
+ * Export a specific axis data to Excel
+ * @param {number} axisId - The ID of the axis to export
+ */
+export const exportAxisToExcel = async (axisId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/axes/${axisId}/export`);
+    
+    if (!response.ok) {
+      throw new Error(`Export failed: ${response.status} ${response.statusText}`);
+    }
+    
+    const contentType = response.headers.get('Content-Type');
+    if (!contentType || !contentType.includes('spreadsheet')) {
+      console.error('Invalid content type:', contentType);
+      throw new Error('Server did not return an Excel file');
+    }
+    
+    const contentDisposition = response.headers.get('Content-Disposition');
+    const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/);
+    const filename = filenameMatch ? filenameMatch[1] : `GCMM_Axis_${axisId}_Export.xlsx`;
+    
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    return { success: true, message: 'Axis export completed successfully' };
+  } catch (error) {
+    console.error('Axis export error:', error);
+    throw error;
+  }
+};
+
+/**
+ * Generate a Word report for a specific axis
+ * @param {number} axisId - The ID of the axis to generate a report for
+ */
+export const generateAxisReport = async (axisId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/axes/${axisId}/report`);
+    
+    if (!response.ok) {
+      throw new Error(`Report generation failed: ${response.status} ${response.statusText}`);
+    }
+    
+    const contentType = response.headers.get('Content-Type');
+    if (!contentType || !contentType.includes('word')) {
+      console.error('Invalid content type:', contentType);
+      throw new Error('Server did not return a Word document');
+    }
+    
+    const contentDisposition = response.headers.get('Content-Disposition');
+    const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/);
+    const filename = filenameMatch ? filenameMatch[1] : `GCMM_Axis_${axisId}_Report.docx`;
+    
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    return { success: true, message: 'Report generated successfully' };
+  } catch (error) {
+    console.error('Report generation error:', error);
+    throw error;
+  }
+};
+
+/**
  * Creates a sample data structure for testing without an API
  * @returns {Object} Sample GCMM data
  */
@@ -221,5 +299,7 @@ export default {
   uploadExcelFile,
   saveObjectiveEvaluation,
   exportGCMMToExcel,
+  exportAxisToExcel,
+  generateAxisReport,
   getSampleData
 };

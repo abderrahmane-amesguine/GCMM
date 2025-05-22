@@ -4,6 +4,8 @@ import ObjectivesRadarChart from '../charts/ObjectivesRadarChart';
 import ScoreIndicator from '../components/ScoreIndicator';
 import { DataContext } from '../context/DataContext';
 import { axisColors } from '../utils/colors';
+import { exportAxisToExcel, generateAxisReport } from '../services/api';
+import { toast } from '../components/ui/Toast';
 
 const AxisView = ({ axisId, onNavigate }) => {
   const { axes, domains, objectives } = useContext(DataContext);
@@ -45,12 +47,47 @@ const AxisView = ({ axisId, onNavigate }) => {
           </div>
         </div>
 
-        <div className="flex items-center space-x-2 mt-4 md:mt-0">
-          <button className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors">
+        <div className="flex items-center space-x-2 mt-4 md:mt-0">          <button 
+            onClick={async () => {
+              try {
+                await exportAxisToExcel(axisId);
+                toast({
+                  title: "Export réussi",
+                  description: `Les données de l'axe ${axis.name} ont été exportées avec succès.`,
+                  type: "success"
+                });
+              } catch (error) {
+                toast({
+                  title: "Erreur d'export",
+                  description: "Une erreur s'est produite lors de l'export des données.",
+                  type: "error"
+                });
+              }
+            }} 
+            className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors"
+          >
             <Download size={16} />
             <span>Exporter</span>
           </button>
-          <button className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors">
+          <button 
+            onClick={async () => {
+              try {
+                await generateAxisReport(axisId);
+                toast({
+                  title: "Rapport généré",
+                  description: `Le rapport pour l'axe ${axis.name} a été généré avec succès.`,
+                  type: "success"
+                });
+              } catch (error) {
+                toast({
+                  title: "Erreur de génération",
+                  description: "Une erreur s'est produite lors de la génération du rapport.",
+                  type: "error"
+                });
+              }
+            }}
+            className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors"
+          >
             <Printer size={16} />
             <span>Imprimer</span>
           </button>
