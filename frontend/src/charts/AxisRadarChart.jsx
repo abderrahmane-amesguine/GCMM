@@ -43,7 +43,15 @@ const CustomLegend = ({ payload }) => {
 
 const AxisRadarChart = () => {
   const context = useContext(DataContext) || {};
-  const { radarData = [{},{},{},{},{}] } = context;
+  const { radarData = [] } = context;
+
+  if (!radarData.length) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-gray-500">Aucune donnée disponible pour le radar.</p>
+      </div>
+    );
+  }
   
   return (
     <div className="h-full w-full">

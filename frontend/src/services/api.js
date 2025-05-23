@@ -89,7 +89,6 @@ export const uploadExcelFile = async (file) => {
 
     return await response.json();
   } catch (error) {
-    console.error('Upload error:', error);
     throw error;
   }
 };
@@ -133,14 +132,12 @@ export const exportGCMMToExcel = async () => {
     
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Export failed:', errorText);
       throw new Error(`Export failed: ${response.status} ${response.statusText}`);
     }
     
     // Check if we received the Excel file
     const contentType = response.headers.get('Content-Type');
     if (!contentType || !contentType.includes('spreadsheet')) {
-      console.error('Invalid content type:', contentType);
       throw new Error('Server did not return an Excel file');
     }
     
@@ -168,7 +165,6 @@ export const exportGCMMToExcel = async () => {
 
     return { success: true, message: 'Export completed successfully' };
   } catch (error) {
-    console.error('Export error:', error);
     throw error;
   }
 };
@@ -187,7 +183,6 @@ export const exportAxisToExcel = async (axisId) => {
     
     const contentType = response.headers.get('Content-Type');
     if (!contentType || !contentType.includes('spreadsheet')) {
-      console.error('Invalid content type:', contentType);
       throw new Error('Server did not return an Excel file');
     }
     
@@ -207,7 +202,6 @@ export const exportAxisToExcel = async (axisId) => {
 
     return { success: true, message: 'Axis export completed successfully' };
   } catch (error) {
-    console.error('Axis export error:', error);
     throw error;
   }
 };
@@ -226,7 +220,6 @@ export const generateAxisReport = async (axisId) => {
     
     const contentType = response.headers.get('Content-Type');
     if (!contentType || !contentType.includes('word')) {
-      console.error('Invalid content type:', contentType);
       throw new Error('Server did not return a Word document');
     }
     
@@ -246,7 +239,6 @@ export const generateAxisReport = async (axisId) => {
 
     return { success: true, message: 'Report generated successfully' };
   } catch (error) {
-    console.error('Report generation error:', error);
     throw error;
   }
 };

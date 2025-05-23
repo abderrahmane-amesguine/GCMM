@@ -1,12 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { X, UploadCloud, CheckCircle, File, Trash2 } from 'lucide-react';
+import { toast } from './ui/Toast';
 
 const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
   const [file, setFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef(null);
-  
-  if (!isOpen) return null;
   
   const handleDrag = (e) => {
     e.preventDefault();
@@ -23,24 +22,81 @@ const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const droppedFile = e.dataTransfer.files[0];
-      if (droppedFile.name.endsWith('.xlsx') || droppedFile.name.endsWith('.xls')) {
-        setFile(droppedFile);
-      }
+
+    const droppedFile = e.dataTransfer.files[0];
+    if (validateFile(droppedFile)) {
+      setFile(droppedFile);
     }
   };
-  
+
+  const validateFile = (file) => {
+    if (!file) return false;
+
+    const validTypes = [
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+      'application/vnd.ms-excel', // .xls
+      'text/csv' // .csv
+    ];
+
+    if (!validTypes.includes(file.type)) {
+      toast({
+        title: "Invalid File Type",
+        description: "Please upload an Excel (.xlsx, .xls) or CSV file",
+        type: "error"
+      });
+      return false;
+    }
+
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      toast({
+        title: "File Too Large",
+        description: "File size should be less than 5MB",
+        type: "error"
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (validateFile(selectedFile)) {
+      setFile(selectedFile);
+      toast({
+        title: "File Selected",
+        description: "File is ready to be uploaded",
+        type: "info"
+      });
     }
   };
   
-  const handleSubmit = () => {
-    if (file) {
-      onFileUpload(file);
+  const handleSubmit = async () => {
+    if (!file) {
+      toast({
+        title: "No File Selected",
+        description: "Please select a file to upload",
+        type: "warning"
+      });
+      return;
+    }
+
+    try {
+      await onFileUpload(file);
+      setFile(null);
+      onClose();
+      toast({
+        title: "Success",
+        description: "File uploaded successfully",
+        type: "success"
+      });
+    } catch (error) {
+      toast({
+        title: "Upload Failed",
+        description: error.message || "Error uploading file",
+        type: "error"
+      });
     }
   };
   
@@ -59,6 +115,8 @@ const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
+  
+  if (!isOpen) return null;
   
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">

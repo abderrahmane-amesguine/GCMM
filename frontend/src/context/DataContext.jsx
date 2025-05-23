@@ -37,7 +37,6 @@ export const DataProvider = ({ children }) => {
       
       setGlobalScore(response.globalScore || 0);
     } catch (error) {
-      console.error('Error loading data:', error);
       toast({
         title: "Error",
         description: "Failed to load data from the server. Please try again later.",
@@ -66,7 +65,6 @@ export const DataProvider = ({ children }) => {
         type: "success"
       });
     } catch (error) {
-      console.error('Error uploading file:', error);
       let errorMessage = "Failed to upload file. ";
       
       // Get the detailed error message from the error object

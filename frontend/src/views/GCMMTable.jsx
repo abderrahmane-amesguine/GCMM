@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import { DataContext } from '../context/DataContext';
 import { saveObjectiveEvaluation } from '../services/api';
-import { axisColors } from '../utils/colors';
+import { toast } from '../components/ui/Toast';
+import FileUploadModal from '../components/FileUploadModal';
 
 const GCMMTable = () => {
   const { axes, domains, objectives, loading, refreshData } = useContext(DataContext);
@@ -12,23 +12,6 @@ const GCMMTable = () => {
   const [currentEvaluation, setCurrentEvaluation] = useState("");
   const [targetEvaluation, setTargetEvaluation] = useState("");
   const [currentComment, setCurrentComment] = useState("");
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
-  // Filter domains and objectives based on selection
-  const filteredDomains = domains.filter(d => d.axisId === selectedAxis);
-  const filteredObjectives = objectives.filter(o => {
-    if (selectedDomain) {
-      return o.axisId === selectedAxis && o.domainId === selectedDomain;
-    }
-    return o.axisId === selectedAxis;
-  });
 
   const handleAxisClick = (axisId) => {
     setSelectedAxis(axisId);
@@ -49,7 +32,14 @@ const GCMMTable = () => {
   };
 
   const handleSaveEvaluation = async () => {
-    if (!selectedObjective) return;
+    if (!selectedObjective) {
+      toast({
+        title: "Error",
+        description: "No objective selected",
+        type: "error"
+      });
+      return;
+    }
 
     try {
       await saveObjectiveEvaluation(
@@ -64,12 +54,28 @@ const GCMMTable = () => {
         await refreshData();
       }
 
-      alert("Evaluation saved successfully!");
+      toast({
+        title: "Success",
+        description: "Evaluation saved successfully",
+        type: "success"
+      });
     } catch (error) {
       console.error("Error saving evaluation:", error);
-      alert(error.message || "Error saving evaluation");
+      toast({
+        title: "Error",
+        description: error.message || "Error saving evaluation",
+        type: "error"
+      });
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -238,6 +244,7 @@ const GCMMTable = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };

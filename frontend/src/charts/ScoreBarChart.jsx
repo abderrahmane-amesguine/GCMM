@@ -41,6 +41,14 @@ const renderCustomBarLabel = ({ x, y, width, value }) => {
 const ScoreBarChart = ({ data }) => {
   // Calculate the average score to display a reference line
   const averageScore = data.reduce((sum, entry) => sum + entry.score, 0) / data.length;
+
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-gray-500">Aucune donnée disponible pour le graphique.</p>
+      </div>
+    );
+  }
   
   return (
     <div className="h-full w-full">
