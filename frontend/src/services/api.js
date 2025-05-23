@@ -283,6 +283,42 @@ export const getSampleData = () => {
   };
 };
 
+/**
+ * Download GCMM template Excel file
+ */
+export const downloadGCMMTemplate = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/template`);
+    
+    if (!response.ok) {
+      throw new Error(`Template download failed: ${response.status} ${response.statusText}`);
+    }
+    
+    const contentType = response.headers.get('Content-Type');
+    if (!contentType || !contentType.includes('spreadsheet')) {
+      throw new Error('Server did not return an Excel file');
+    }
+    
+    const contentDisposition = response.headers.get('Content-Disposition');
+    const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/);
+    const filename = filenameMatch ? filenameMatch[1] : 'GCMM_Template.xlsx';
+    
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    return { success: true, message: 'Template downloaded successfully' };
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default {
   fetchGCMMData,
   fetchAxes,
@@ -293,5 +329,6 @@ export default {
   exportGCMMToExcel,
   exportAxisToExcel,
   generateAxisReport,
-  getSampleData
+  getSampleData,
+  downloadGCMMTemplate
 };

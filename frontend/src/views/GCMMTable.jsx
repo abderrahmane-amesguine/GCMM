@@ -4,8 +4,8 @@ import { saveObjectiveEvaluation } from '../services/api';
 import { toast } from '../components/ui/Toast';
 import FileUploadModal from '../components/FileUploadModal';
 
-const GCMMTable = () => {
-  const { axes, domains, objectives, loading, refreshData } = useContext(DataContext);
+const GCMMTable = ({ onNavigate }) => {
+  const { axes, domains, objectives, loading, refreshData, updateObjective, hasUnsavedChanges } = useContext(DataContext);
   const [selectedAxis, setSelectedAxis] = useState(null);
   const [selectedDomain, setSelectedDomain] = useState(null);
   const [selectedObjective, setSelectedObjective] = useState(null);

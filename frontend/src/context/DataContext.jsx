@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
 import { fetchGCMMData, uploadExcelFile } from '../services/api';
 import { toast } from '../components/ui/Toast';
 
@@ -19,6 +19,32 @@ export const DataProvider = ({ children }) => {
   
   const [globalScore, setGlobalScore] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [originalData, setOriginalData] = useState(null);
+
+  // Track changes
+  const trackChanges = useCallback(() => {
+    if (originalData) {
+      const currentDataStr = JSON.stringify({
+        axes: data.axes,
+        domains: data.domains,
+        objectives: data.objectives
+      });
+      const originalDataStr = JSON.stringify({
+        axes: originalData.axes,
+        domains: originalData.domains,
+        objectives: originalData.objectives
+      });
+      
+      const hasChanges = currentDataStr !== originalDataStr;
+      setHasUnsavedChanges(hasChanges);
+    }
+  }, [data, originalData]);
+
+  // Call trackChanges whenever data changes
+  useEffect(() => {
+    trackChanges();
+  }, [data, trackChanges]);
 
   // Function to load data from API
   const loadData = async () => {
@@ -26,21 +52,40 @@ export const DataProvider = ({ children }) => {
       setLoading(true);
       const response = await fetchGCMMData();
       
-      setData(prevData => ({
-        ...prevData,
+      const newData = {
         axes: response.axes || [],
         domains: response.domains || [],
         objectives: response.objectives || [],
         radarData: response.radarData || [],
         loaded: true
+      };
+
+      setData(prevData => ({
+        ...prevData,
+        ...newData
       }));
       
+      // Store original data for comparison
+      setOriginalData({
+        axes: response.axes || [],
+        domains: response.domains || [],
+        objectives: response.objectives || []
+      });
+      
       setGlobalScore(response.globalScore || 0);
+      setHasUnsavedChanges(false);
+      
+      toast({
+        title: "Données chargées",
+        description: "Les données GCMM ont été chargées avec succès",
+        type: "success"
+      });
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to load data from the server. Please try again later.",
-        type: "error"
+        title: "Erreur de chargement",
+        description: "Impossible de charger les données. Veuillez réessayer.",
+        type: "error",
+        duration: 7000
       });
     } finally {
       setLoading(false);
@@ -52,35 +97,65 @@ export const DataProvider = ({ children }) => {
     loadData();
   }, []);
 
-  // Function to handle file upload
-  const handleFileUpload = async (file) => {
+  // Function to handle file upload with unsaved changes check
+  const handleFileUpload = async (file, forceUpload = false) => {
+    // Check for unsaved changes
+    if (hasUnsavedChanges && !forceUpload) {
+      return new Promise((resolve, reject) => {
+        const confirmUpload = window.confirm(
+          "Vous avez des modifications non sauvegardées. Voulez-vous continuer et perdre ces modifications?"
+        );
+        
+        if (confirmUpload) {
+          handleFileUploadInternal(file).then(resolve).catch(reject);
+        } else {
+          reject(new Error("Upload cancelled by user"));
+        }
+      });
+    }
+    
+    return handleFileUploadInternal(file);
+  };
+
+  // Internal file upload function
+  const handleFileUploadInternal = async (file) => {
     try {
       setLoading(true);
+      toast({
+        title: "Téléchargement en cours",
+        description: "Traitement du fichier...",
+        type: "info"
+      });
+
       const response = await uploadExcelFile(file);
       await loadData(); // Reload data after successful upload
       
       toast({
-        title: "Success",
-        description: `File uploaded and processed successfully. ${response.processedRows} rows processed.`,
-        type: "success"
+        title: "Import réussi",
+        description: `${response.processedRows} lignes ont été traitées avec succès`,
+        type: "success",
+        duration: 5000
       });
     } catch (error) {
-      let errorMessage = "Failed to upload file. ";
+      let errorMessage = "Impossible d'importer le fichier. ";
       
-      // Get the detailed error message from the error object
       if (error.message && error.message.includes("Missing required columns")) {
         errorMessage += error.message;
-      } else if (error.message) {
+      } else if (error.message && error.message !== "Upload cancelled by user") {
         errorMessage += error.message;
+      } else if (error.message === "Upload cancelled by user") {
+        return; // Don't show error for user cancellation
       } else {
-        errorMessage += "Please try again.";
+        errorMessage += "Veuillez vérifier le format du fichier.";
       }
       
       toast({
-        title: "Error",
+        title: "Erreur d'import",
         description: errorMessage,
-        type: "error"
+        type: "error",
+        duration: 7000
       });
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -97,15 +172,44 @@ export const DataProvider = ({ children }) => {
     }));
   };
 
+  // Update objective in local state
+  const updateObjective = (objectiveId, updates) => {
+    setData(prevData => ({
+      ...prevData,
+      objectives: prevData.objectives.map(obj => 
+        obj.id === objectiveId ? { ...obj, ...updates } : obj
+      )
+    }));
+  };
+
+  // Mark data as saved
+  const markDataAsSaved = () => {
+    setOriginalData({
+      axes: data.axes,
+      domains: data.domains,
+      objectives: data.objectives
+    });
+    setHasUnsavedChanges(false);
+    
+    toast({
+      title: "Modifications sauvegardées",
+      description: "Toutes les modifications ont été enregistrées",
+      type: "success"
+    });
+  };
+
   return (
     <DataContext.Provider
       value={{
         ...data,
         globalScore,
         loading,
+        hasUnsavedChanges,
         handleFileUpload,
         handleNavigate,
-        refreshData: loadData
+        refreshData: loadData,
+        updateObjective,
+        markDataAsSaved
       }}
     >
       {children}

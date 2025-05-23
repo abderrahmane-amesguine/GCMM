@@ -6,12 +6,12 @@ const ScoreIndicator = ({ score, showLabel = true, size = 'md', className = '' }
   const badgeClass = getScoreBadgeClass(parsedScore);
   const label = getScoreLabel(parsedScore);
   
-  // Generate icon based on score
+  // Generate icon based on score with animations
   const getScoreIcon = (score) => {
     if (score < 2) {
       return (
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10" />
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 transition-transform duration-300 hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" className="animate-pulse" />
           <line x1="15" y1="9" x2="9" y2="15" />
           <line x1="9" y1="9" x2="15" y2="15" />
         </svg>
@@ -32,10 +32,10 @@ const ScoreIndicator = ({ score, showLabel = true, size = 'md', className = '' }
           <circle cx="16" cy="12" r="1" />
         </svg>
       );
-    } else {
+  } else {
       return (
-        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 transition-all duration-300 hover:scale-125 hover:rotate-12" viewBox="0 0 24 24" fill="currentColor" strokeWidth="2">
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2"></path>
         </svg>
       );
     }

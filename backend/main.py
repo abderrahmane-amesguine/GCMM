@@ -646,3 +646,74 @@ async def generate_axis_report(axis_id: int):
     except Exception as e:
         print(f"Error during report generation: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/template")
+async def download_template():
+    """Download a template Excel file for GCMM data."""
+    try:
+        # Create template data
+        template_data = [
+            {
+                "#Axis": 0,
+                "Axis": "",
+                "#Domain": "",
+                "Domain": "",
+                "Domain Description": "",
+                "Obj. ID": "",
+                "Objective": "",
+                "Description": "",
+                "Level 1 (Ad hoc)": "",
+                "Level 2 (Initiated)": "",
+                "Level 3 (Defined)": "",
+                "Level 4 (Managed)": "",
+                "Level 5 (Optimized)": "",
+                "Profil": 0,
+                "Target Profil": 0,
+                "Comment": "Initial assessment - need to develop formal policies",
+                "Actionable Recommendation for Level 1": "",
+                "Strategic Recommendation for Level 1": "",
+                "Actionable Recommendation for Level 2": "",
+                "Strategic Recommendation for Level 2": "",
+                "Actionable Recommendation for Level 3": "",
+                "Strategic Recommendation for Level 3": "",
+                "Actionable Recommendation for Level 4": "",
+                "Strategic Recommendation for Level 4": ""
+            }
+        ]
+        
+        # Create DataFrame
+        df = pd.DataFrame(template_data)
+        
+        # Create Excel file
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False, sheet_name='GCMM Template')
+            
+            # Get the worksheet
+            worksheet = writer.sheets['GCMM Template']
+            
+            # Adjust column widths
+            for column in worksheet.columns:
+                max_length = 0
+                column_letter = column[0].column_letter
+                for cell in column:
+                    try:
+                        if len(str(cell.value)) > max_length:
+                            max_length = len(str(cell.value))
+                    except:
+                        pass
+                adjusted_width = min(max_length + 2, 50)
+                worksheet.column_dimensions[column_letter].width = adjusted_width
+        
+        excel_data = output.getvalue()
+        
+        headers = {
+            'Content-Disposition': 'attachment; filename="GCMM_Template.xlsx"',
+            'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        }
+        
+        return Response(content=excel_data, headers=headers)
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

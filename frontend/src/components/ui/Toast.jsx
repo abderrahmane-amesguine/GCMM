@@ -101,8 +101,22 @@ export const ToastProvider = ({ children }) => {
     setToasts(prevToasts => prevToasts.filter(toast => toast.id !== id));
   }, []);
 
+  // Register the global toast function
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.toast = ({ title, description, type, duration }) => {
+        addToast({ title, description, type, duration });
+      };
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        delete window.toast;
+      }
+    };
+  }, [addToast]);
+
   return (
-    <ToastContext.Provider value={{ addToast, removeToast }}>
+    <ToastContext.Provider value={{ addToast, removeToast, toasts }}>
       {children}
     </ToastContext.Provider>
   );
@@ -110,8 +124,7 @@ export const ToastProvider = ({ children }) => {
 
 // Toaster component that displays all toast notifications
 export const Toaster = ({ position = 'bottom-right' }) => {
-  const { removeToast } = useToast();
-  const [mountedToasts, setMountedToasts] = useState([]);
+  const { toasts, removeToast } = useToast();
 
   const getPositionClasses = () => {
     switch (position) {
@@ -130,7 +143,7 @@ export const Toaster = ({ position = 'bottom-right' }) => {
   return (
     <div className={`${getPositionClasses()} z-50 w-80 max-w-full pointer-events-none`}>
       <div className="pointer-events-auto">
-        {mountedToasts.map((toast) => (
+        {toasts.map((toast) => (
           <Toast
             key={toast.id}
             {...toast}
@@ -153,7 +166,8 @@ export const useToast = () => {
 // Export a toast function that can be used outside of React components
 export const toast = ({ title, description, type = 'info', duration = 5000 }) => {
   if (typeof window !== 'undefined' && window.toast) {
-    return window.toast({ title, description, type, duration });
+    window.toast({ title, description, type, duration });
+    return;
   }
   // Fallback for when the window.toast is not available
   console.log(`Toast: ${type} - ${title} - ${description}`);
