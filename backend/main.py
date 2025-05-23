@@ -655,7 +655,7 @@ async def download_template():
         # Create template data
         template_data = [
             {
-                "#Axis": 0,
+                "#Axis": "",
                 "Axis": "",
                 "#Domain": "",
                 "Domain": "",
@@ -668,9 +668,9 @@ async def download_template():
                 "Level 3 (Defined)": "",
                 "Level 4 (Managed)": "",
                 "Level 5 (Optimized)": "",
-                "Profil": 0,
-                "Target Profil": 0,
-                "Comment": "Initial assessment - need to develop formal policies",
+                "Profil": "",
+                "Target Profil": "",
+                "Comment": "",
                 "Actionable Recommendation for Level 1": "",
                 "Strategic Recommendation for Level 1": "",
                 "Actionable Recommendation for Level 2": "",

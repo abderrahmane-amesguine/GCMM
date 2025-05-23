@@ -11,8 +11,7 @@ import ObjectiveView from './views/ObjectiveView';
 import GCMMTable from './views/GCMMTable';
 import { Toaster, ToastProvider, toast } from './components/ui/Toast';
 import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
-import LoadingOverlay from './components/LoadingOverlay';
-import ConfirmationDialog from './components/ConfirmationDialog';
+import { downloadGCMMTemplate, exportGCMMToExcel } from './services/api';
 
 // App content component that uses the DataContext
 const AppContent = () => {
@@ -96,7 +95,7 @@ const AppContent = () => {
     try {
       await handleFileUpload(file);
       setIsFileUploadOpen(false);
-      setActiveView('gcmm-table');
+      setActiveView('dashboard');
       setViewParams({});
     } catch (error) {
       // Error is already handled in context

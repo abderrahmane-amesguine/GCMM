@@ -13,6 +13,9 @@ const GCMMTable = ({ onNavigate }) => {
   const [targetEvaluation, setTargetEvaluation] = useState("");
   const [currentComment, setCurrentComment] = useState("");
 
+  filteredDomains = domains.filter(domain => domain.axisId === selectedAxis);
+  filteredObjectives = objectives.filter(objective => objective.domainId === selectedDomain);
+
   const handleAxisClick = (axisId) => {
     setSelectedAxis(axisId);
     setSelectedDomain(null);

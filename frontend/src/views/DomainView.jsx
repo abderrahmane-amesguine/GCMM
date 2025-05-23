@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
-import { ArrowLeft, BarChart2, Layers, Check, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, BarChart2, Layers, Check, AlertTriangle, Activity } from 'lucide-react';
 import ScoreIndicator from '../components/ScoreIndicator';
 import { DataContext } from '../context/DataContext';
+import ObjectivesRadarChart from '../charts/ObjectivesRadarChart';
 
 const DomainView = ({ axisId, domainId, onNavigate }) => {
   const { axes, domains, objectives } = useContext(DataContext);
@@ -73,6 +74,19 @@ const DomainView = ({ axisId, domainId, onNavigate }) => {
           </div>
           <p className="text-3xl font-bold">{highScoreObjectives.length}</p>
           <p className="text-gray-500 text-sm mt-1">Objectives scoring 4 or above</p>
+        </div>
+      </div>
+
+      {/* Radar Chart */}
+      <div className="bg-white rounded-xl shadow-md p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-bold flex items-center">
+            <Activity className="mr-2" />
+            Objectives Performance
+          </h3>
+        </div>
+        <div className="h-[400px]">
+          <ObjectivesRadarChart objectives={domainObjectives} axisColor={axis.color} />
         </div>
       </div>
 
