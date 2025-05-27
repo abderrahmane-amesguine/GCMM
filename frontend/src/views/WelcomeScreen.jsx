@@ -1,157 +1,219 @@
-import React, { useState } from 'react';
-import { Shield, Upload, FileSpreadsheet, CheckCircle, AlertCircle, ArrowRight, BookOpen, Users, Target } from 'lucide-react';
-import FileUploadModal from '../components/FileUploadModal';
+import { Button } from "../components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
+import { Shield, FileText, Users, BarChart3, ArrowRight, CheckCircle } from "lucide-react"
 
-const WelcomeScreen = ({ onFileUpload, onDownloadTemplate }) => {
-  const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    
-    const file = e.dataTransfer.files[0];
-    if (file && (file.name.endsWith('.xlsx') || file.name.endsWith('.xls'))) {
-      onFileUpload(file);
-    }
-  };
-
-  const features = [
-    {
-      icon: <Target className="w-6 h-6 text-blue-600" />,
-      title: "Évaluation Complète",
-      description: "Analysez votre maturité cybersécurité sur 5 axes principaux"
-    },
-    {
-      icon: <Users className="w-6 h-6 text-green-600" />,
-      title: "Collaboration Efficace",
-      description: "Travaillez en équipe pour améliorer votre posture de sécurité"
-    },
-    {
-      icon: <BookOpen className="w-6 h-6 text-purple-600" />,
-      title: "Rapports Détaillés",
-      description: "Générez des rapports professionnels et des plans d'action"
-    }
-  ];
-
+function WelcomeScreen() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center p-4">
-      <div className="max-w-4xl w-full">
-        {/* Logo and Title */}
-        <div className="text-center mb-10 animate-fadeIn">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-600 rounded-full shadow-lg mb-6">
-            <Shield className="w-12 h-12 text-white" />
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            NCSec Platform
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Global Cybersecurity Maturity Model - Évaluez et améliorez votre maturité en cybersécurité
-          </p>
-        </div>
-
-        {/* Upload Card */}
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden animate-slideIn">
-          <div 
-            className={`p-12 text-center transition-all duration-300 ${
-              isDragging ? 'bg-blue-50 border-2 border-blue-400 border-dashed' : ''
-            }`}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            <div className="mb-8">
-              <div className="inline-flex items-center justify-center w-24 h-24 bg-blue-100 rounded-full mb-6">
-                <FileSpreadsheet className="w-12 h-12 text-blue-600" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Navbar */}
+      <nav className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo and Name */}
+            <div className="flex items-center space-x-3">
+              <div className="bg-blue-600 p-2 rounded-lg">
+                <Shield className="h-6 w-6 text-white" />
               </div>
-              <h2 className="text-2xl font-semibold text-gray-900 mb-3">
-                Commencez votre évaluation
-              </h2>
-              <p className="text-gray-600 max-w-md mx-auto">
-                Importez votre fichier Excel NCSec pour démarrer l'analyse de votre maturité en cybersécurité
+              <span className="text-xl font-bold text-gray-900">NCSec Platform</span>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center space-x-3">
+              <Button variant="outline" className="hidden sm:inline-flex text-blue-600 hover:bg-blue-600 hover:text-white">
+                Import File
+              </Button>
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white">Start Evaluation</Button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 ">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="max-w-3xl mx-auto">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+              Streamline Your <span className="text-blue-600">Cybersecurity Maturity</span> Assessment
+            </h1>
+            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+              Evaluate, track, and improve your organization's cybersecurity posture with our comprehensive platform.
+              Accessible and actionable for teams of all sizes.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg text-white px-8 py-3">
+                Start New Evaluation
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button size="lg" variant="outline" className="text-lg px-8 py-3 text-blue-600 hover:bg-blue-600 hover:text-white">
+                Import Existing File
+                <FileText className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Overview */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose NCSec Platform?</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Our platform makes cybersecurity maturity assessment simple, collaborative, and actionable.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Comprehensive Assessment</h3>
+              <p className="text-gray-600">
+                Evaluate your cybersecurity maturity across all critical domains with industry-standard frameworks.
               </p>
             </div>
 
-            <div className="space-y-4">
-              <button
-                onClick={() => setIsFileUploadOpen(true)}
-                className="inline-flex items-center px-8 py-4 bg-blue-600 text-white font-medium rounded-xl shadow-lg hover:bg-blue-700 hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
-              >
-                <Upload className="mr-3" size={20} />
-                Importer votre fichier NCSec
-              </button>
-
-              <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
-                <CheckCircle size={16} className="text-green-500" />
-                <span>Formats acceptés: .xlsx, .xls</span>
+            <div className="text-center">
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="h-8 w-8 text-green-600" />
               </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Team Collaboration</h3>
+              <p className="text-gray-600">
+                Work together with your team members to ensure accurate assessments and shared understanding.
+              </p>
             </div>
 
-            <div className="mt-8 p-4 bg-amber-50 rounded-lg border border-amber-200">
-              <div className="flex items-start space-x-3">
-                <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                <div className="text-left">
-                  <p className="text-sm text-amber-800 font-medium">
-                    Nouveau sur la plateforme?
-                  </p>
-                  <p className="text-sm text-amber-700 mt-1">
-                    <button 
-                      onClick={onDownloadTemplate}
-                      className="underline hover:text-amber-800 transition-colors"
-                    >
-                      Téléchargez notre template Excel
-                    </button> pour commencer votre évaluation
-                  </p>
-                </div>
+            <div className="text-center">
+              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BarChart3 className="h-8 w-8 text-purple-600" />
               </div>
-            </div>
-          </div>
-
-          {/* Features Section */}
-          <div className="bg-gray-50 px-12 py-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {features.map((feature, index) => (
-                <div key={index} className="text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 bg-white rounded-lg shadow-sm mb-3">
-                    {feature.icon}
-                  </div>
-                  <h3 className="font-medium text-gray-900 mb-1">{feature.title}</h3>
-                  <p className="text-sm text-gray-600">{feature.description}</p>
-                </div>
-              ))}
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Actionable Reports</h3>
+              <p className="text-gray-600">
+                Generate detailed reports with clear recommendations to improve your security posture.
+              </p>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Help Text */}
-        <div className="text-center mt-8 text-gray-600">
-          <p className="text-sm">
-            Besoin d'aide? Consultez notre{' '}
-            <a href="#" className="text-blue-600 hover:text-blue-700 font-medium">
-              guide d'utilisation
-            </a>
+      {/* How It Works Guide */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">How It Works</h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Get started with your cybersecurity maturity assessment in just a few simple steps.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 items-center">
+            <div className="space-y-6">
+              <div className="flex items-start space-x-4">
+                <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-semibold text-sm">
+                  1
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Choose Your Starting Point</h3>
+                  <p className="text-gray-600">
+                    Import an existing NCSec file to continue previous work, or start a fresh evaluation from scratch.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-semibold text-sm">
+                  2
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Complete the Assessment</h3>
+                  <p className="text-gray-600">
+                    Follow our guided process to evaluate your organization's cybersecurity maturity across all key
+                    areas.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-semibold text-sm">
+                  3
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Collaborate & Improve</h3>
+                  <p className="text-gray-600">
+                    Work with your team members and generate comprehensive reports with actionable recommendations.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <Card className="lg:ml-8">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                  Ready to Get Started?
+                </CardTitle>
+                <CardDescription>
+                  Choose how you'd like to begin your cybersecurity maturity assessment.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" size="lg">
+                  <FileText className="mr-2 h-4 w-4" />
+                  Import Existing NCSec File
+                </Button>
+                <Button variant="outline" className="w-full text-blue-600 hover:bg-blue-600 hover:text-white" size="lg">
+                  <Shield className="mr-2 h-4 w-4" />
+                  Start New Evaluation
+                </Button>
+                <p className="text-sm text-gray-500 text-center">
+                  Both options will guide you through the complete assessment process.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-600">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">Strengthen Your Cybersecurity Posture Today</h2>
+          <p className="text-xl text-blue-100 mb-8">
+            Join organizations worldwide who trust NCSec Platform to assess and improve their cybersecurity maturity.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-3">
+              Start Your Assessment
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-3"
+            >
+              Learn More
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="flex items-center justify-center space-x-3 mb-4">
+            <div className="bg-blue-600 p-2 rounded-lg">
+              <Shield className="h-5 w-5 text-white" />
+            </div>
+            <span className="text-lg font-semibold">NCSec Platform</span>
+          </div>
+          <p className="text-gray-400">
+            © 2024 NCSec Platform. Streamlining cybersecurity maturity assessments for organizations worldwide.
           </p>
         </div>
-      </div>
-
-      {/* File Upload Modal */}
-      <FileUploadModal
-        isOpen={isFileUploadOpen}
-        onClose={() => setIsFileUploadOpen(false)}
-        onFileUpload={onFileUpload}
-      />
+      </footer>
     </div>
-  );
-};
+  )
+}
 
 export default WelcomeScreen;
