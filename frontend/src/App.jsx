@@ -9,6 +9,7 @@ import AxisView from './views/AxisView';
 import DomainView from './views/DomainView';
 import ObjectiveView from './views/ObjectiveView';
 import GCMMTable from './views/GCMMTable';
+import GCMMBuilder from './views/GCMMBuilder';
 import { Toaster, ToastProvider, toast } from './components/ui/Toast';
 import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
 import { downloadGCMMTemplate, exportGCMMToExcel } from './services/api';
@@ -136,9 +137,8 @@ const AppContent = () => {
     setActiveView(view);
     setViewParams(params);
   };
-
-  // Show welcome screen if no data
-  if (!loading && !hasData) {
+  // Show welcome screen if no data, except for gcmm-builder
+  if (!loading && !hasData && activeView !== 'gcmm-builder') {
     return (
       <>
         <WelcomeScreen
@@ -160,13 +160,13 @@ const AppContent = () => {
       </div>
     );
   }
-
   const renderView = () => {
     switch (activeView) {
+      case 'gcmm-builder':
+        return <GCMMBuilder onNavigate={handleNavigate} />;
       case 'gcmm-table':
         return <GCMMTable onNavigate={handleNavigate} />;
       case 'gcmm':
-        console.log("Rendering Dashboard");
         return <Dashboard onNavigate={handleNavigate} />;
       case 'axis':
         return <AxisView axisId={viewParams.axisId} onNavigate={handleNavigate} />;

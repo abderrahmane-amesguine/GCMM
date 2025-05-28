@@ -12,6 +12,7 @@
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
+    "gcmm": "file:",
     "lucide-react": "^0.511.0",
     "papaparse": "^5.5.3",
     "react": "^19.1.0",

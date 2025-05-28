@@ -700,3 +700,151 @@ async def download_template():
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Pydantic models for request validation
+class ObjectiveLevel(BaseModel):
+    description: str
+
+class Objective(BaseModel):
+    id: str
+    name: str
+    description: str
+    levels: dict[str, ObjectiveLevel]
+    profile: int
+    targetProfile: int
+    comment: str | None = None
+
+class Domain(BaseModel):
+    id: str
+    name: str
+    description: str
+    objectives: list[Objective] = []
+
+class Axis(BaseModel):
+    id: str
+    name: str
+    color: str
+    description: str
+    domains: list[Domain] = []
+
+class GCMMData(BaseModel):
+    axes: list[Axis]
+
+@app.post("/api/data")
+async def save_gcmm_data(data: GCMMData):
+    """Save GCMM data to the backend."""
+    try:
+        # Update the in-memory storage
+        global gcmm_data
+         
+        # Transform the data to match our storage format
+        formatted_data = {
+            "axes": [],
+            "domains": [],
+            "objectives": [],
+            "globalScore": 0
+        }
+        # Process axes
+        try:
+            for axis in data.axes:
+                axis_data = {
+                    "id": str(axis.id),  # Ensure ID is string
+                    "name": axis.name,
+                    "color": axis.color,
+                    "description": axis.description,
+                    "score": 0
+                }
+                formatted_data["axes"].append(axis_data)
+
+                # Process domains for this axis
+                for domain in axis.domains:
+                    domain_data = {
+                        "id": str(domain.id),  # Ensure ID is string
+                        "name": domain.name,
+                        "description": domain.description,
+                        "axisId": str(axis.id),  # Ensure axisId is string
+                        "score": 0
+                    }
+                    formatted_data["domains"].append(domain_data)
+
+                    # Process objectives for this domain
+                    for objective in domain.objectives:
+                        # Convert levels dict to list format expected by frontend
+                        levels_list = []
+                        for level_num in range(1, 6):
+                            level_key = str(level_num)
+                            level_data = objective.levels.get(level_key, ObjectiveLevel(description=""))
+                            levels_list.append({
+                                "level": level_num,
+                                "description": level_data.description,
+                                "actionable": "",  # Add empty actionable field
+                                "strategic": ""    # Add empty strategic field
+                            })
+
+                        objective_data = {
+                            "id": str(objective.id),  # Ensure ID is string
+                            "name": objective.name,
+                            "description": objective.description,
+                            "axisId": str(axis.id),  # Ensure axisId is string
+                            "domainId": str(domain.id),  # Ensure domainId is string
+                            "levels": levels_list,
+                            "profile": objective.profile,
+                            "target_profile": objective.targetProfile,
+                            "comment": objective.comment or "",
+                            "score": objective.profile
+                        }
+                        formatted_data["objectives"].append(objective_data)
+        except Exception as e:
+            print(f"Error in data transformation: {str(e)}")  # Debug print
+            raise
+
+        # Calculate scores
+        try:
+            # Calculate domain scores
+            for domain in formatted_data["domains"]:
+                domain_objectives = [o for o in formatted_data["objectives"] 
+                                  if o["axisId"] == domain["axisId"] 
+                                  and o["domainId"] == domain["id"]]
+                if domain_objectives:
+                    domain["score"] = sum(o["profile"] for o in domain_objectives) / len(domain_objectives)
+            
+            # Calculate axis scores
+            for axis in formatted_data["axes"]:
+                axis_objectives = [o for o in formatted_data["objectives"] 
+                                 if o["axisId"] == axis["id"]]
+                if axis_objectives:
+                    axis["score"] = sum(o["profile"] for o in axis_objectives) / len(axis_objectives)
+
+            # Calculate global score
+            if formatted_data["axes"]:
+                formatted_data["globalScore"] = sum(axis["score"] for axis in formatted_data["axes"]) / len(formatted_data["axes"])
+            
+            # Add radar data
+            formatted_data["radarData"] = [
+                {
+                    "axis": f"Axe {axis['id']}: {axis['name']}",
+                    "score": axis["score"],
+                    "fullMark": 5,
+                    "color": axis["color"]
+                }
+                for axis in formatted_data["axes"]
+            ]
+        except Exception as e:
+            print(f"Error in score calculation: {str(e)}")  # Debug print
+            raise
+
+        # Update storage
+        gcmm_data.update(formatted_data)
+
+        return JSONResponse(content={
+            "message": "GCMM data saved successfully",
+            "data": formatted_data
+        })
+    except Exception as e:
+        print(f"ERROR in save_gcmm_data: {str(e)}")  # Debug print
+        import traceback
+        print("Traceback:", traceback.format_exc())  # Debug print full traceback
+        raise HTTPException(status_code=500, detail=str(e))
+
+class ObjectiveId(BaseModel):
+    objectiveId: str

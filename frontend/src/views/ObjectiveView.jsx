@@ -15,6 +15,26 @@ const ObjectiveView = ({ axisId, domainId, objectiveId, onNavigate }) => {
     return <div>Objective not found</div>;
   }
 
+  const handleDelete = async () => {
+    try {
+      await deleteObjective(objectiveId);
+      await refreshData();
+      toast({
+        title: "Objectif supprimé",
+        description: "L'objectif a été supprimé avec succès",
+        type: "success"
+      });
+      // Navigate back to domain view
+      onNavigate('domain', { axisId: axis.id, domainId: domain.id });
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: error.message || "Une erreur s'est produite lors de la suppression de l'objectif",
+        type: "error"
+      });
+    }
+  };
+
   return (
     <div className="space-y-8">
       {/* Header section */}
@@ -32,8 +52,7 @@ const ObjectiveView = ({ axisId, domainId, objectiveId, onNavigate }) => {
               {axis.name} &gt; {domain.name}
             </div>
             <h2 className="text-2xl font-bold">{objective.name}</h2>
-          </div>
-        </div>
+          </div>        </div>
         <ScoreIndicator score={objective.profile} size="lg" showLabel={true} />
       </div>
 
@@ -86,8 +105,7 @@ const ObjectiveView = ({ axisId, domainId, objectiveId, onNavigate }) => {
           <h3 className="text-lg font-semibold mb-4">Comments</h3>
           <p className="text-gray-600 whitespace-pre-wrap">{objective.comment}</p>
         </div>
-      )}
-    </div>
+      )}    </div>
   );
 };
 

@@ -281,6 +281,40 @@ export const downloadGCMMTemplate = async () => {
   }
 };
 
+/**
+ * Save GCMM data to the backend
+ * @param {Object} data - The GCMM data to save
+ * @returns {Promise<Object>} Save response
+ */
+export const saveGCMMData = async (data) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/data`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      // Try to get error message from response
+      let errorMessage;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.detail || `Save failed with status ${response.status}`;
+      } catch {
+        errorMessage = `Save failed with status ${response.status}`;
+      }
+      throw new Error(errorMessage);
+    }
+
+    return response.json();
+  } catch (error) {
+    throw new Error(`Failed to save GCMM data: ${error.message}`);
+  }
+};
+
 export default {
   fetchGCMMData,
   uploadExcelFile,
@@ -289,5 +323,6 @@ export default {
   exportAxisToExcel,
   generateAxisReport,
   getSampleData,
-  downloadGCMMTemplate
+  downloadGCMMTemplate,
+  saveGCMMData
 };

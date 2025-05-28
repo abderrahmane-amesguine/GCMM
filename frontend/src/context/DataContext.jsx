@@ -198,6 +198,79 @@ export const DataProvider = ({ children }) => {
     });
   };
 
+  // Save new GCMM structure
+  const saveNewGCMMStructure = async (structure) => {
+    try {
+      setLoading(true);
+      
+      // Transform the structure to match the expected format
+      const newData = {
+        axes: structure.axes.map(axis => ({
+          ...axis,
+          score: 0,
+          scoreHistory: [],
+          progress: 0
+        })),
+        domains: structure.axes.flatMap(axis => 
+          axis.domains.map(domain => ({
+            ...domain,
+            axisId: axis.id,
+            score: 0,
+            scoreHistory: [],
+            progress: 0
+          }))
+        ),
+        objectives: structure.axes.flatMap(axis => 
+          axis.domains.flatMap(domain => 
+            domain.objectives.map(objective => ({
+              ...objective,
+              axisId: axis.id,
+              domainId: domain.id,
+              score: 0,
+              scoreHistory: [],
+              progress: 0,
+              criteria: objective.criteria || []
+            }))
+          )
+        ),
+        loaded: true
+      };
+
+      // Update the context data
+      setData(prevData => ({
+        ...prevData,
+        ...newData
+      }));
+
+      // Store as original data
+      setOriginalData({
+        axes: newData.axes,
+        domains: newData.domains,
+        objectives: newData.objectives
+      });
+
+      setHasUnsavedChanges(false);
+      setGlobalScore(0);
+
+      toast({
+        title: "Structure créée",
+        description: "La nouvelle structure GCMM a été créée avec succès",
+        type: "success"
+      });
+
+      return true;
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Impossible de créer la structure GCMM. Veuillez réessayer.",
+        type: "error"
+      });
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -205,11 +278,9 @@ export const DataProvider = ({ children }) => {
         globalScore,
         loading,
         hasUnsavedChanges,
+        loadData,
         handleFileUpload,
-        handleNavigate,
-        refreshData: loadData,
-        updateObjective,
-        markDataAsSaved
+        saveNewGCMMStructure
       }}
     >
       {children}

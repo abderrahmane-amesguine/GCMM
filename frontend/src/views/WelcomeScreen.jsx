@@ -1,10 +1,11 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "../components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
-import { Shield, FileText, Users, BarChart3, ArrowRight, CheckCircle } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "../components/ui/card"
+import { Shield, FileText, Users, BarChart3, ArrowRight, CheckCircle, Download, BookOpen, X } from "lucide-react"
 
 function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
   const fileInputRef = useRef();
+  const [isLearnMoreOpen, setIsLearnMoreOpen] = useState(false);
 
   // Trigger file input dialog
   const handleImportClick = () => {
@@ -17,11 +18,108 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
       onFileUpload(e.target.files[0]);
     }
   };
-
   // Navigation for evaluation
   const handleStartEvaluation = () => {
-    console.log("Starting evaluation");
-    onNavigate("gcmm");
+    console.log("Starting new assessment");
+    onNavigate("gcmm-builder");
+  };
+
+  // Template download handler
+  const handleTemplateDownload = () => {
+    onDownloadTemplate();
+  };
+
+  // Learn more modal handlers
+  const openLearnMore = () => setIsLearnMoreOpen(true);
+  const closeLearnMore = () => setIsLearnMoreOpen(false);
+
+  const LearnMoreModal = () => {
+    if (!isLearnMoreOpen) return null;
+
+    return (
+      <div className="fixed inset-0 z-50 overflow-y-auto">
+        <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+          {/* Backdrop */}
+          <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" onClick={closeLearnMore}></div>
+
+          {/* Modal panel */}
+          <div className="relative inline-block w-full max-w-2xl p-6 my-8 bg-white rounded-lg shadow-xl transform transition-all">
+            {/* Close button */}
+            <button
+              onClick={closeLearnMore}
+              className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-500 hover:text-blue-600"
+            >
+              <X size={20} />
+            </button>
+
+            <div className="text-left">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <BookOpen className="mr-2 h-6 w-6 text-blue-600" />
+                Getting Started Guide
+              </h3>
+
+              <div className="prose prose-blue max-w-none">
+                <section className="mb-8">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">What is NCSec Platform?</h4>
+                  <p className="text-gray-600 mb-4">
+                    NCSec Platform is a comprehensive cybersecurity maturity assessment tool that helps organizations evaluate
+                    and improve their security posture. Our platform uses industry-standard frameworks to provide detailed
+                    insights and actionable recommendations.
+                  </p>
+                </section>
+
+                <section className="mb-8">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">Key Features</h4>
+                  <ul className="space-y-2 text-gray-600">
+                    <li className="flex items-start">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
+                      Comprehensive assessment across multiple security domains
+                    </li>
+                    <li className="flex items-start">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
+                      Collaborative evaluation process with team members
+                    </li>
+                    <li className="flex items-start">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
+                      Detailed reports and recommendations
+                    </li>
+                    <li className="flex items-start">
+                      <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
+                      Progress tracking and improvement monitoring
+                    </li>
+                  </ul>
+                </section>
+
+                <section className="mb-8">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">Getting Started Template</h4>
+                  <p className="text-gray-600 mb-4">
+                    Download our template to get started with your cybersecurity maturity assessment. The template includes:
+                  </p>
+                  <ul className="space-y-2 text-gray-600 mb-4">
+                    <li className="flex items-start">
+                      <ArrowRight className="h-5 w-5 text-blue-500 mr-2 mt-0.5" />
+                      Pre-configured assessment framework
+                    </li>
+                    <li className="flex items-start">
+                      <ArrowRight className="h-5 w-5 text-blue-500 mr-2 mt-0.5" />
+                      Detailed instructions and guidelines
+                    </li>
+                    <li className="flex items-start">
+                      <ArrowRight className="h-5 w-5 text-blue-500 mr-2 mt-0.5" />
+                      Sample data and examples
+                    </li>
+                  </ul>
+                  <Button onClick={handleTemplateDownload} className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white">
+                    <Download className="mr-2 h-4 w-4" />
+                    Download Template
+                  </Button>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -36,13 +134,15 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
                 <Shield className="h-6 w-6 text-white" />
               </div>
               <span className="text-xl font-bold text-gray-900">NCSec Platform</span>
-            </div>
-
-            {/* Action Buttons */}
+            </div>            {/* Action Buttons */}
             <div className="flex items-center space-x-3">
-              <Button onClick={handleImportClick} variant="outline" className="text-md px-4 py-3 text-blue-600 hover:bg-blue-600 hover:text-white">
+              <Button 
+                onClick={handleImportClick} 
+                variant="outline" 
+                className="text-md px-4 py-3 text-blue-600 hover:bg-blue-600 hover:text-white group transition-all"
+              >
                 Import File
-                <FileText className="h-4 w-4" />
+                <FileText className="h-4 w-4 group-hover:scale-110 transition-transform" />
               </Button>
               <input
                 type="file"
@@ -51,9 +151,12 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
                 accept=".xlsx,.xls"
                 onChange={handleFileChange}
               />
-              <Button onClick={handleStartEvaluation} className="bg-blue-600 hover:bg-blue-700 text-md text-white px-4 py-3">
+              <Button 
+                onClick={handleStartEvaluation} 
+                className="bg-blue-600 hover:bg-blue-700 text-md text-white px-4 py-3 group transition-all"
+              >
                 Start Evaluation
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
           </div>
@@ -70,15 +173,23 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
               Evaluate, track, and improve your organization's cybersecurity posture with our comprehensive platform.
               Accessible and actionable for teams of all sizes.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button onClick={handleStartEvaluation} size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg text-white px-8 py-3">
+            </p>            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                onClick={handleStartEvaluation} 
+                size="lg" 
+                className="bg-blue-600 hover:bg-blue-700 text-lg text-white px-8 py-3 group transition-all"
+              >
                 Start New Evaluation
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button onClick={handleImportClick} size="lg" variant="outline" className="text-lg px-8 py-3 text-blue-600 hover:bg-blue-600 hover:text-white">
+              <Button 
+                onClick={handleImportClick} 
+                size="lg" 
+                variant="outline" 
+                className="text-lg px-8 py-3 text-blue-600 hover:bg-blue-600 hover:text-white group transition-all"
+              >
                 Import Existing File
-                <FileText className="ml-2 h-5 w-5" />
+                <FileText className="ml-2 h-5 w-5 group-hover:scale-110 transition-transform" />
               </Button>
             </div>
           </div>
@@ -189,13 +300,21 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
                   Choose how you'd like to begin your cybersecurity maturity assessment.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <Button onClick={handleImportClick} className="w-full bg-blue-600 hover:bg-blue-700 text-white" size="lg">
-                  <FileText className="mr-2 h-4 w-4" />
+              <CardContent className="space-y-4">                <Button 
+                  onClick={handleImportClick} 
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white group transition-all" 
+                  size="lg"
+                >
+                  <FileText className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
                   Import Existing NCSec File
                 </Button>
-                <Button onClick={handleStartEvaluation} variant="outline" className="w-full text-blue-600 hover:bg-blue-600 hover:text-white" size="lg">
-                  <Shield className="mr-2 h-4 w-4" />
+                <Button 
+                  onClick={handleStartEvaluation} 
+                  variant="outline" 
+                  className="w-full text-blue-600 hover:bg-blue-600 hover:text-white group transition-all" 
+                  size="lg"
+                >
+                  <Shield className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
                   Start New Evaluation
                 </Button>
                 <p className="text-sm text-gray-500 text-center">
@@ -213,22 +332,32 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
           <h2 className="text-3xl font-bold text-white mb-4">Strengthen Your Cybersecurity Posture Today</h2>
           <p className="text-xl text-blue-100 mb-8">
             Join organizations worldwide who trust NCSec Platform to assess and improve their cybersecurity maturity.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-3">
+          </p>          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              size="lg" 
+              onClick={handleStartEvaluation}
+              className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-3 group transition-all"
+            >
               Start Your Assessment
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-3"
+              onClick={openLearnMore}
+              className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-3 group transition-all"
             >
               Learn More
+              <BookOpen className="ml-2 h-5 w-5 group-hover:scale-110 transition-transform" />
             </Button>
           </div>
+          {/* Learn More Modal */}
+          <LearnMoreModal />
         </div>
       </section>
+
+      {/* Learn More Modal */}
+      <LearnMoreModal />
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8 px-4 sm:px-6 lg:px-8">

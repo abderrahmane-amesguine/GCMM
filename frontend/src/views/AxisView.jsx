@@ -31,9 +31,9 @@ const AxisView = ({ axisId, onNavigate }) => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-xl shadow-md">
         <div className="flex items-center">
           <button
-            onClick={() => onNavigate('gcmm-table')}
+            onClick={() => onNavigate('gcmm')}
             className="mr-4 p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all text-gray-600"
-            aria-label="Back to Table"
+            aria-label="Back to Dashboard"
           >
             <ArrowLeft size={18} />
           </button>
@@ -89,7 +89,7 @@ const AxisView = ({ axisId, onNavigate }) => {
             className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors"
           >
             <Printer size={16} />
-            <span>Imprimer</span>
+            <span>Rapport</span>
           </button>
         </div>
       </div>      {/* Score and statistics */}
