@@ -16,14 +16,15 @@ const DomainView = ({ axisId, domainId, onNavigate }) => {
   }
 
   // Get objectives for this domain
-  const domainObjectives = objectives.filter(o => o.domainId === domain.id)
-    .sort((a, b) => b.evaluation - a.evaluation);
+  const domainObjectives = objectives.filter(o => {
+    return o.domainId === domain.id && o.axisId === axis.id;
+  }).sort((a, b) => b.profile - a.profile);
 
   // Calculate statistics
   const objectiveCount = domainObjectives.length;
-  const avgScore = domain.score;
-  const lowScoreObjectives = domainObjectives.filter(o => o.evaluation < 2);
-  const highScoreObjectives = domainObjectives.filter(o => o.evaluation >= 4);
+  const avgScore = domainObjectives.reduce((sum, objective) => sum + objective.profile, 0) / objectiveCount;
+  const lowScoreObjectives = domainObjectives.filter(o => o.profile <= 2);
+  const highScoreObjectives = domainObjectives.filter(o => o.profile >= 4);
 
   return (
     <div className="space-y-8">
@@ -48,7 +49,7 @@ const DomainView = ({ axisId, domainId, onNavigate }) => {
       </div>
 
       {/* Statistics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-white rounded-xl shadow-md p-6">
           <div className="flex items-center text-blue-600 mb-2">
             <Layers className="mr-2" size={20} />
@@ -74,6 +75,24 @@ const DomainView = ({ axisId, domainId, onNavigate }) => {
           </div>
           <p className="text-3xl font-bold">{highScoreObjectives.length}</p>
           <p className="text-gray-500 text-sm mt-1">Objectives scoring 4 or above</p>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-md p-6">
+          {
+            avgScore >= 3 ? (
+              <div className="flex items-center text-green-600 mb-2">
+                <Check className="mr-2" size={20} />
+                <h3 className="font-semibold">Score Moyenne</h3>
+              </div>
+            ) : (
+              <div className="flex items-center text-red-600 mb-2">
+                <AlertTriangle className="mr-2" size={20} />
+                <h3 className="font-semibold">Score Moyenne</h3>
+              </div>
+            )
+          }
+          <p className="text-3xl font-bold">{avgScore.toFixed(2)}</p>
+          <p className="text-gray-500 text-sm mt-1">Average score for this domain</p>
         </div>
       </div>
 
@@ -103,10 +122,10 @@ const DomainView = ({ axisId, domainId, onNavigate }) => {
             <div
               key={objective.id}
               className="p-6 hover:bg-gray-50 transition-colors cursor-pointer"
-              onClick={() => onNavigate('objective', { 
-                axisId: axis.id, 
-                domainId: domain.id, 
-                objectiveId: objective.id 
+              onClick={() => onNavigate('objective', {
+                axisId: axis.id,
+                domainId: domain.id,
+                objectiveId: objective.id
               })}
             >
               <div className="flex items-center justify-between gap-4">
@@ -114,7 +133,7 @@ const DomainView = ({ axisId, domainId, onNavigate }) => {
                   <h4 className="font-semibold mb-1">{objective.name}</h4>
                   <p className="text-sm text-gray-500">{objective.description}</p>
                 </div>
-                <ScoreIndicator score={objective.evaluation} size="md" />
+                <ScoreIndicator score={objective.profile} size="md" />
               </div>
             </div>
           ))}

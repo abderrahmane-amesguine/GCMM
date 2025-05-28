@@ -25,7 +25,6 @@ const CustomTooltip = ({ active, payload }) => {
 
 const DomainRadarChart = ({ domains, axisColor }) => {
   // Prepare data for the radar chart
-  console.log(domains);
   const formattedData = domains.map(domain => ({
     name: domain.name,
     score: domain.score,

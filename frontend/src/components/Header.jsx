@@ -47,7 +47,7 @@ const Header = ({ toggleSidebar, switchView, activeView }) => {
               <Shield className="h-8 w-8 text-blue-600" />
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent">
-                  GCMM Platform
+                  NCSec Platform
                 </h1>
                 <p className="text-sm text-gray-500">Cybersecurity Maturity Model</p>
               </div>

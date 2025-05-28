@@ -18,44 +18,6 @@ export const fetchGCMMData = async () => {
 };
 
 /**
- * Fetch all axes from the backend
- * @returns {Promise<Array>} List of axes
- */
-export const fetchAxes = async () => {
-  const response = await fetch(`${API_BASE_URL}/axes`);
-  if (!response.ok) {
-    throw new Error(`API request failed with status ${response.status}`);
-  }
-  return response.json();
-};
-
-/**
- * Fetch domains for a specific axis
- * @param {number} axisId - The axis ID
- * @returns {Promise<Array>} List of domains for the axis
- */
-export const fetchDomains = async (axisId) => {
-  const response = await fetch(`${API_BASE_URL}/domains/${axisId}`);
-  if (!response.ok) {
-    throw new Error(`API request failed with status ${response.status}`);
-  }
-  return response.json();
-};
-
-/**
- * Fetch objectives for a specific domain
- * @param {string} domainId - The domain ID
- * @returns {Promise<Array>} List of objectives for the domain
- */
-export const fetchObjectives = async (domainId) => {
-  const response = await fetch(`${API_BASE_URL}/objectives/${domainId}`);
-  if (!response.ok) {
-    throw new Error(`API request failed with status ${response.status}`);
-  }
-  return response.json();
-};
-
-/**
  * Upload an Excel file to the backend
  * @param {File} file - The Excel file to upload
  * @returns {Promise<Object>} Upload response
@@ -321,9 +283,6 @@ export const downloadGCMMTemplate = async () => {
 
 export default {
   fetchGCMMData,
-  fetchAxes,
-  fetchDomains,
-  fetchObjectives,
   uploadExcelFile,
   saveObjectiveEvaluation,
   exportGCMMToExcel,

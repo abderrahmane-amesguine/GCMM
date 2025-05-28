@@ -326,23 +326,6 @@ async def get_data():
     cleaned_data = handle_nan_values(gcmm_data)
     return JSONResponse(content=cleaned_data)
 
-@app.get("/api/axes")
-async def get_axes():
-    cleaned_axes = handle_nan_values(gcmm_data["axes"])
-    return JSONResponse(content=cleaned_axes)
-
-@app.get("/api/domains/{axis_id}")
-async def get_domains(axis_id: int):
-    domains = [d for d in gcmm_data["domains"] if d["axisId"] == axis_id]
-    cleaned_domains = handle_nan_values(domains)
-    return JSONResponse(content=cleaned_domains)
-
-@app.get("/api/objectives/{domain_id}")
-async def get_objectives(domain_id: str):
-    objectives = [o for o in gcmm_data["objectives"] if o["domainId"] == domain_id]
-    cleaned_objectives = handle_nan_values(objectives)
-    return JSONResponse(content=cleaned_objectives)
-
 class ObjectiveEvaluation(BaseModel):
     objectiveId: str
     profile: int

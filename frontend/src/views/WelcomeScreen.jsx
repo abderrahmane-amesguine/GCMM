@@ -1,8 +1,29 @@
+import React, { useRef } from "react";
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
 import { Shield, FileText, Users, BarChart3, ArrowRight, CheckCircle } from "lucide-react"
 
-function WelcomeScreen() {
+function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
+  const fileInputRef = useRef();
+
+  // Trigger file input dialog
+  const handleImportClick = () => {
+    fileInputRef.current.click();
+  };
+
+  // Handle file selection
+  const handleFileChange = (e) => {
+    if (e.target.files[0]) {
+      onFileUpload(e.target.files[0]);
+    }
+  };
+
+  // Navigation for evaluation
+  const handleStartEvaluation = () => {
+    console.log("Starting evaluation");
+    onNavigate("gcmm");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Navbar */}
@@ -19,10 +40,21 @@ function WelcomeScreen() {
 
             {/* Action Buttons */}
             <div className="flex items-center space-x-3">
-              <Button variant="outline" className="hidden sm:inline-flex text-blue-600 hover:bg-blue-600 hover:text-white">
+              <Button onClick={handleImportClick} variant="outline" className="text-md px-4 py-3 text-blue-600 hover:bg-blue-600 hover:text-white">
                 Import File
+                <FileText className="h-4 w-4" />
               </Button>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">Start Evaluation</Button>
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: "none" }}
+                accept=".xlsx,.xls"
+                onChange={handleFileChange}
+              />
+              <Button onClick={handleStartEvaluation} className="bg-blue-600 hover:bg-blue-700 text-md text-white px-4 py-3">
+                Start Evaluation
+                <ArrowRight className="h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>
@@ -40,11 +72,11 @@ function WelcomeScreen() {
               Accessible and actionable for teams of all sizes.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg text-white px-8 py-3">
+              <Button onClick={handleStartEvaluation} size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg text-white px-8 py-3">
                 Start New Evaluation
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8 py-3 text-blue-600 hover:bg-blue-600 hover:text-white">
+              <Button onClick={handleImportClick} size="lg" variant="outline" className="text-lg px-8 py-3 text-blue-600 hover:bg-blue-600 hover:text-white">
                 Import Existing File
                 <FileText className="ml-2 h-5 w-5" />
               </Button>
@@ -158,11 +190,11 @@ function WelcomeScreen() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white" size="lg">
+                <Button onClick={handleImportClick} className="w-full bg-blue-600 hover:bg-blue-700 text-white" size="lg">
                   <FileText className="mr-2 h-4 w-4" />
                   Import Existing NCSec File
                 </Button>
-                <Button variant="outline" className="w-full text-blue-600 hover:bg-blue-600 hover:text-white" size="lg">
+                <Button onClick={handleStartEvaluation} variant="outline" className="w-full text-blue-600 hover:bg-blue-600 hover:text-white" size="lg">
                   <Shield className="mr-2 h-4 w-4" />
                   Start New Evaluation
                 </Button>

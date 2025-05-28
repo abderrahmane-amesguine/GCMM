@@ -23,13 +23,6 @@ const AppContent = () => {
   const context = useContext(DataContext);
   const { handleFileUpload, loading, axes, hasUnsavedChanges } = context;
 
-  const [confirmDialog, setConfirmDialog] = useState({
-    isOpen: false,
-    title: '',
-    message: '',
-    onConfirm: () => { }
-  });
-
   const openFileUpload = () => {
     if (hasUnsavedChanges) {
       const confirmUpload = window.confirm(
@@ -77,7 +70,7 @@ const AppContent = () => {
       description: 'Aller au tableau de bord'
     },
     {
-      key: 't',
+      key: 'g',
       ctrl: true,
       action: () => handleNavigate('gcmm-table'),
       description: 'Aller à la table GCMM'
@@ -151,8 +144,8 @@ const AppContent = () => {
         <WelcomeScreen
           onFileUpload={onFileUpload}
           onDownloadTemplate={handleDownloadTemplate}
+          onNavigate={handleNavigate}
         />
-        <Toaster position="top-right" />
       </>
     );
   }
@@ -173,6 +166,7 @@ const AppContent = () => {
       case 'gcmm-table':
         return <GCMMTable onNavigate={handleNavigate} />;
       case 'gcmm':
+        console.log("Rendering Dashboard");
         return <Dashboard onNavigate={handleNavigate} />;
       case 'axis':
         return <AxisView axisId={viewParams.axisId} onNavigate={handleNavigate} />;
@@ -225,11 +219,6 @@ const AppContent = () => {
 
 // Main App component with providers
 const App = () => {
-  // Set up global toast function
-  useEffect(() => {
-    window.toast = toast;
-  }, []);
-
   return (
     <ToastProvider>
       <DataProvider>
