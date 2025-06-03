@@ -845,6 +845,3 @@ async def save_gcmm_data(data: GCMMData):
         import traceback
         print("Traceback:", traceback.format_exc())  # Debug print full traceback
         raise HTTPException(status_code=500, detail=str(e))
-
-class ObjectiveId(BaseModel):
-    objectiveId: str

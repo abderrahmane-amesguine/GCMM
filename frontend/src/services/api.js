@@ -3,7 +3,7 @@ import { axisColors } from '../utils/colors';
 /**
  * API service for fetching GCMM data from the backend
  */
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'https://ncsec.vercel.app/api';
 
 /**
  * Fetch all GCMM data from the backend

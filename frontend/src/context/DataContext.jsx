@@ -271,6 +271,32 @@ export const DataProvider = ({ children }) => {
     }
   };
 
+  // Utility function to handle export with confirmation
+  const handleExportAction = async (exportFunction, options = {}) => {
+    if (hasUnsavedChanges) {
+      const confirmExport = window.confirm(
+        "Vous avez des modifications non sauvegardées. Voulez-vous exporter les données actuelles ?"
+      );
+      if (!confirmExport) return;
+    }
+    
+    try {
+      await exportFunction();
+      toast({
+        title: "Export réussi",
+        description: options.successMessage || "Les données ont été exportées avec succès",
+        type: "success"
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur d'export",
+        description: options.errorMessage || "Impossible d'exporter les données",
+        type: "error",
+        duration: 7000
+      });
+      throw error;
+    }
+  };
   return (
     <DataContext.Provider
       value={{
@@ -280,7 +306,9 @@ export const DataProvider = ({ children }) => {
         hasUnsavedChanges,
         loadData,
         handleFileUpload,
-        saveNewGCMMStructure
+        saveNewGCMMStructure,
+        handleExportAction,
+        handleExportAction
       }}
     >
       {children}

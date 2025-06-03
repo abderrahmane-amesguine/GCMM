@@ -95,6 +95,11 @@ const AppContent = () => {
       // Error is already handled in context
       if (error.message !== "Upload cancelled by user") {
         console.error('Upload error:', error);
+        toast({
+          title: "Erreur d'import",
+          description: "Une erreur s'est produite lors de l'importation du fichier",
+          type: "error"
+        });
       }
     }
   };
@@ -115,17 +120,23 @@ const AppContent = () => {
       });
     }
   };
+  const exportData = async () => {
+    const exportJsonData = () => {
+      const dataStr = JSON.stringify(context);
+      const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
+      const exportFileDefaultName = 'gcmm-data.json';
 
-  const exportData = () => {
-    const dataStr = JSON.stringify(context);
-    const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
-    const exportFileDefaultName = 'gcmm-data.json';
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+    };
 
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-
+    await context.handleExportAction(exportJsonData, {
+      successMessage: "Les données ont été exportées au format JSON",
+      errorMessage: "Impossible d'exporter les données au format JSON"
+    });
+    
     toast({
       title: "Export réussi",
       description: "Les données ont été exportées au format JSON",

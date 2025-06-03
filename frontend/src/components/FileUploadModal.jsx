@@ -1,12 +1,17 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useContext } from 'react';
 import { X, UploadCloud, CheckCircle, File, Trash2 } from 'lucide-react';
 import { toast } from './ui/Toast';
+import { DataContext } from '../context/DataContext';
+import ConfirmationDialog from './ConfirmationDialog';
 
 const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
   const [file, setFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const fileInputRef = useRef(null);
-  
+  const { hasUnsavedChanges } = useContext(DataContext);
+  const pendingFileRef = useRef(null);
+
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -72,6 +77,7 @@ const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
     }
   };
   
+  // Handle file submission with confirmation if needed
   const handleSubmit = async () => {
     if (!file) {
       toast({
@@ -82,8 +88,18 @@ const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
       return;
     }
 
+    if (hasUnsavedChanges) {
+      pendingFileRef.current = file;
+      setShowConfirmation(true);
+    } else {
+      await processFileUpload(file);
+    }
+  };
+
+  // Process the actual file upload
+  const processFileUpload = async (fileToUpload) => {
     try {
-      await onFileUpload(file);
+      await onFileUpload(fileToUpload);
       setFile(null);
       onClose();
       toast({
@@ -92,12 +108,27 @@ const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
         type: "success"
       });
     } catch (error) {
-      toast({
-        title: "Upload Failed",
-        description: error.message || "Error uploading file",
-        type: "error"
-      });
+      if (error.message !== "Upload cancelled by user") {
+        toast({
+          title: "Upload Failed",
+          description: error.message || "Error uploading file",
+          type: "error"
+        });
+      }
     }
+  };
+
+  // Confirmation dialog handlers
+  const handleConfirmUpload = async () => {
+    if (pendingFileRef.current) {
+      await processFileUpload(pendingFileRef.current);
+      pendingFileRef.current = null;
+    }
+  };
+
+  const handleCancelUpload = () => {
+    pendingFileRef.current = null;
+    setShowConfirmation(false);
   };
   
   const clearFile = () => {
@@ -124,9 +155,8 @@ const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
         <div 
           className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" 
           onClick={onClose}
-        ></div>
+        />
         
-        {/* Modal panel */}
         <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           {/* Header */}
           <div className="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
@@ -237,11 +267,23 @@ const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
               onClick={handleSubmit}
               disabled={!file}
             >
-              Importer
+              {hasUnsavedChanges ? "Continuer avec l'import" : "Importer"}
             </button>
           </div>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      {showConfirmation && (
+        <ConfirmationDialog
+          isOpen={showConfirmation}
+          onClose={() => setShowConfirmation(false)}
+          onConfirm={handleConfirmUpload}
+          onCancel={handleCancelUpload}
+          title="Unsaved Changes"
+          message="You have unsaved changes. Are you sure you want to upload the file?"
+        />
+      )}
     </div>
   );
 };

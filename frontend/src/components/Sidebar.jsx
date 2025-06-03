@@ -8,9 +8,12 @@ const Sidebar = ({ isOpen, toggleSidebar, openFileUpload, exportData, switchView
   const { axes = [] } = context;
 
   const handleExport = async () => {
+    const { handleExportAction } = context;
     try {
-      await exportGCMMToExcel();
-      // Close sidebar after successful export
+      await handleExportAction(exportGCMMToExcel, {
+        successMessage: "Les données GCMM ont été exportées avec succès",
+        errorMessage: "Impossible d'exporter les données GCMM",
+      });
       toggleSidebar();
     } catch (error) {
       console.error('Export failed:', error);
