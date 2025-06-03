@@ -127,7 +127,7 @@ async def upload_file(file: UploadFile = File(...)):
             )
 
         # Validate the structure of the Excel file
-        validate_excel_structure(df)
+        # validate_excel_structure(df)
 
         # Skip header row
         rows = df.iloc[0:].values.tolist()
