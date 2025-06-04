@@ -2,8 +2,10 @@ import React, { useContext } from 'react';
 import { ArrowLeft, Target, CheckCircle } from 'lucide-react';
 import ScoreIndicator from '../components/ScoreIndicator';
 import { DataContext } from '../context/DataContext';
+import { useTranslation } from 'react-i18next';
 
 const ObjectiveView = ({ axisId, domainId, objectiveId, onNavigate }) => {
+  const { t } = useTranslation();
   const { axes, domains, objectives } = useContext(DataContext);
 
   // Get the current objective and its related data
@@ -12,28 +14,8 @@ const ObjectiveView = ({ axisId, domainId, objectiveId, onNavigate }) => {
   const axis = axes.find(a => a.id === axisId);
 
   if (!objective || !domain || !axis) {
-    return <div>Objective not found</div>;
+    return <div>{t('objectiveView.notFound')}</div>;
   }
-
-  const handleDelete = async () => {
-    try {
-      await deleteObjective(objectiveId);
-      await refreshData();
-      toast({
-        title: "Objectif supprimé",
-        description: "L'objectif a été supprimé avec succès",
-        type: "success"
-      });
-      // Navigate back to domain view
-      onNavigate('domain', { axisId: axis.id, domainId: domain.id });
-    } catch (error) {
-      toast({
-        title: "Erreur",
-        description: error.message || "Une erreur s'est produite lors de la suppression de l'objectif",
-        type: "error"
-      });
-    }
-  };
 
   return (
     <div className="space-y-8">
@@ -43,33 +25,34 @@ const ObjectiveView = ({ axisId, domainId, objectiveId, onNavigate }) => {
           <button
             onClick={() => onNavigate('domain', { axisId: axis.id, domainId: domain.id })}
             className="mr-4 p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all text-gray-600"
-            aria-label="Back to Domain"
+            aria-label={t('objectiveView.backToDomain')}
+            style={{color: `${axis.color}`}}
           >
             <ArrowLeft size={18} />
           </button>
           <div>
             <div className="text-sm text-gray-500 mb-1">
-              {axis.name} &gt; {domain.name}
+              {axis.name}{t('objectiveView.navigation.separator')}{domain.name}
             </div>
-            <h2 className="text-2xl font-bold">{objective.name}</h2>
+            <h2 className="text-2xl font-bold" style={{color: `${axis.color}`}}>{objective.name}</h2>
           </div>        </div>
         <ScoreIndicator score={objective.profile} size="lg" showLabel={true} />
       </div>
 
       {/* Description */}
       <div className="bg-white rounded-xl shadow-md p-6">
-        <h3 className="text-lg font-semibold flex items-center mb-4">
+        <h3 className="text-lg font-semibold flex items-center mb-4" style={{color: `${axis.color}`}}>
           <Target className="mr-2" />
-          Description
+          {t('objectiveView.sections.description.title')}
         </h3>
         <p className="text-gray-600 whitespace-pre-wrap">{objective.description}</p>
       </div>
 
       {/* Maturity Levels */}
       <div className="bg-white rounded-xl shadow-md p-6">
-        <h3 className="text-lg font-semibold flex items-center mb-4">
+        <h3 className="text-lg font-semibold flex items-center mb-4" style={{color: `${axis.color}`}}>
           <CheckCircle className="mr-2" />
-          Maturity Levels
+          {t('objectiveView.sections.maturityLevels.title')}
         </h3>
         <div className="space-y-6">
           {objective.levels.map((level, index) => (

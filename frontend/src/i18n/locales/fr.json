@@ -246,5 +246,46 @@
       "placeholder": "Entrez votre commentaire ici...",
       "saveProfile": "Enregistrés le profil"
     }
+  },
+  "domainView": {
+    "notFound": "Domaine non trouvé",
+    "backToAxis": "Retour à l'axe",
+    "statistics": {
+      "objectives": {
+        "title": "Objectifs",
+        "total": "Total des objectifs dans ce domaine",
+        "needImprovement": "Nécessite une amélioration",
+        "needImprovementDesc": "Objectifs avec un score inférieur à 2",
+        "highPerformance": "Haute performance",
+        "highPerformanceDesc": "Objectifs avec un score de 4 ou plus",
+        "averageScore": "Score moyen",
+        "averageScoreDesc": "Score moyen pour ce domaine"
+      }
+    },
+    "radarChart": {
+      "title": "Vue d'ensemble du domaine",
+      "description": "Distribution des scores des objectifs"
+    },
+    "objectivesList": {
+      "title": "Objectifs",
+      "viewDetails": "Voir les détails"
+    }
+  },
+  "objectiveView": {
+    "notFound": "Objectif non trouvé",
+    "backToDomain": "Retour au domaine",
+    "navigation": {
+      "separator": " > "
+    },
+    "sections": {
+      "description": {
+        "title": "Description"
+      },
+      "maturityLevels": {
+        "title": "Niveaux de maturité",
+        "current": "Niveau actuel",
+        "target": "Niveau cible"
+      }
+    }
   }
 }

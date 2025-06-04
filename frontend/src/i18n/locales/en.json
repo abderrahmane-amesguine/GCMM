@@ -247,5 +247,46 @@
       "placeholder": "Add your comments here...",
       "saveProfile": "Save Profile"
     }
+  },
+  "domainView": {
+    "notFound": "Domain not found",
+    "backToAxis": "Back to Axis",
+    "statistics": {
+      "objectives": {
+        "title": "Objectives",
+        "total": "Total objectives in this domain",
+        "needImprovement": "Need Improvement",
+        "needImprovementDesc": "Objectives scoring below 2",
+        "highPerformance": "High Performance",
+        "highPerformanceDesc": "Objectives scoring 4 or above",
+        "averageScore": "Average Score",
+        "averageScoreDesc": "Average score for this domain"
+      }
+    },
+    "radarChart": {
+      "title": "Domain Overview",
+      "description": "Objective scores distribution"
+    },
+    "objectivesList": {
+      "title": "Objectives",
+      "viewDetails": "View details"
+    }
+  },
+  "objectiveView": {
+    "notFound": "Objective not found",
+    "backToDomain": "Back to Domain",
+    "navigation": {
+      "separator": " > "
+    },
+    "sections": {
+      "description": {
+        "title": "Description"
+      },
+      "maturityLevels": {
+        "title": "Maturity Levels",
+        "current": "Current Level",
+        "target": "Target Level"
+      }
+    }
   }
 }
