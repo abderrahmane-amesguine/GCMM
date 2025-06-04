@@ -55,7 +55,7 @@ const ScoreBarChart = ({ data }) => {
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={data}
-          margin={{ top: 20, right: 20, left: 30, bottom: 20 }} 
+          margin={{ top: 0, right: 0, left: 0, bottom: 20 }} 
         >
           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
           <XAxis 
@@ -67,13 +67,12 @@ const ScoreBarChart = ({ data }) => {
             width={100}
             height={60}
             angle={-45} // Rotate labels
-            textAnchor="end" // Align rotated text
-          />
-          <YAxis 
+            textAnchor="end"
+          />          <YAxis 
             domain={[0, 5]} 
             tick={{ fill: '#475569', fontSize: 10 }}
-            tickLine={false}
-            axisLine={false}
+            tickLine={true}
+            axisLine={true}
             tickCount={6}
           />
           <Tooltip content={<CustomTooltip />} />
@@ -82,11 +81,11 @@ const ScoreBarChart = ({ data }) => {
             stroke="#94A3B8" 
             strokeDasharray="3 3"
             label={{ 
-              value: `Moyenne: ${averageScore.toFixed(2)}`, 
+              value: `${averageScore.toFixed(2)}`, 
               fill: '#64748B',
               fontSize: 12,
               position: 'left',
-              offset: 10
+              offset: 20
             }}
           />
           <Bar 

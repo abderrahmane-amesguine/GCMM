@@ -101,10 +101,10 @@ const DomainView = ({ axisId, domainId, onNavigate }) => {
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold flex items-center">
             <Activity className="mr-2" />
-            Objectives Performance
+            {domain.name}
           </h3>
         </div>
-        <div className="h-[400px]">
+        <div className="h-full">
           <ObjectivesRadarChart objectives={domainObjectives} axisColor={axis.color} />
         </div>
       </div>

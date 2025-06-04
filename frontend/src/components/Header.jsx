@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Menu, Shield, AlertCircle, Info, Table, BarChart2, FileSpreadsheet } from 'lucide-react';
 import { DataContext } from '../context/DataContext';
 import { getScoreBadgeClass } from '../utils/colors';
-import { exportGCMMToExcel } from '../services/api';
+import { exportNCSecMMToExcel } from '../services/api';
 import { toast } from './ui/Toast';
 
 const Header = ({ toggleSidebar, switchView, activeView }) => {
@@ -11,10 +11,10 @@ const Header = ({ toggleSidebar, switchView, activeView }) => {
 
   const handleExport = async () => {
     try {
-      await exportGCMMToExcel();
+      await exportNCSecMMToExcel();
       toast({
         title: "Export réussi",
-        description: "Le fichier GCMM a été exporté avec succès.",
+        description: "Le fichier NCSecMM a été exporté avec succès.",
         type: "success"
       });
     } catch (error) {
@@ -58,22 +58,22 @@ const Header = ({ toggleSidebar, switchView, activeView }) => {
             <div className="hidden sm:flex items-center space-x-2">
               <button
                 className={`px-3 py-1.5 text-sm flex items-center gap-1 rounded-lg transition-all duration-300 ${
-                  activeView === 'gcmm-table' 
+                  activeView === 'NCSecMM-table' 
                     ? 'bg-blue-100 text-blue-700 font-medium shadow-sm' 
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
-                onClick={() => switchView('gcmm-table')}
+                onClick={() => switchView('NCSecMM-table')}
               >
                 <Table size={16} className="transition-transform group-hover:scale-110" />
-                <span>GCMM Table</span>
+                <span>NCSec Table</span>
               </button>
               <button
                 className={`px-3 py-1.5 text-sm flex items-center gap-1 rounded-lg transition-all duration-300 ${
-                  activeView === 'gcmm' 
+                  activeView === 'NCSecMM' 
                     ? 'bg-blue-100 text-blue-700 font-medium shadow-sm' 
                     : 'text-gray-700 hover:bg-gray-100'
                 }`}
-                onClick={() => switchView('gcmm')}
+                onClick={() => switchView('NCSecMM')}
               >
                 <BarChart2 size={16} className="transition-transform group-hover:scale-110" />
                 <span>Dashboard</span>
@@ -129,7 +129,7 @@ const Header = ({ toggleSidebar, switchView, activeView }) => {
                       <div key={axis.id} className="flex justify-between items-center group/item hover:bg-gray-50 p-1 rounded transition-colors">
                         <span className="text-sm flex items-center">
                           <span className="w-3 h-3 rounded-full mr-2 transition-transform group-hover/item:scale-110" style={{ backgroundColor: axis.color }}></span>
-                          Axe {axis.id}
+                          {axis.name}
                         </span>
                         <span className="font-medium group-hover/item:text-blue-600 transition-colors">{axis.score.toFixed(1)}/5</span>
                       </div>

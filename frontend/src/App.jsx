@@ -8,17 +8,17 @@ import Dashboard from './views/Dashboard';
 import AxisView from './views/AxisView';
 import DomainView from './views/DomainView';
 import ObjectiveView from './views/ObjectiveView';
-import GCMMTable from './views/GCMMTable';
-import GCMMBuilder from './views/GCMMBuilder';
+import NCSecMMTable from './views/NCSecMMTable';
+import NCSecMMBuilder from './views/NCSecMMBuilder';
 import { Toaster, ToastProvider, toast } from './components/ui/Toast';
 import useKeyboardShortcuts from './hooks/useKeyboardShortcuts';
-import { downloadGCMMTemplate, exportGCMMToExcel } from './services/api';
+import { downloadNCSecMMTemplate, exportNCSecMMToExcel } from './services/api';
 
 // App content component that uses the DataContext
 const AppContent = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isFileUploadOpen, setIsFileUploadOpen] = useState(false);
-  const [activeView, setActiveView] = useState('gcmm');
+  const [activeView, setActiveView] = useState('NCSecMM');
   const [viewParams, setViewParams] = useState({});
 
   const context = useContext(DataContext);
@@ -47,7 +47,7 @@ const AppContent = () => {
       ctrl: true,
       action: async () => {
         try {
-          await exportGCMMToExcel();
+          await exportNCSecMMToExcel();
           context.markDataAsSaved();
           toast({
             title: "Export réussi",
@@ -67,14 +67,14 @@ const AppContent = () => {
     {
       key: 'd',
       ctrl: true,
-      action: () => handleNavigate('gcmm'),
+      action: () => handleNavigate('NCSecMM'),
       description: 'Aller au tableau de bord'
     },
     {
       key: 'g',
       ctrl: true,
-      action: () => handleNavigate('gcmm-table'),
-      description: 'Aller à la table GCMM'
+      action: () => handleNavigate('NCSecMM-table'),
+      description: 'Aller à la table NCSecMM'
     }
   ]);
 
@@ -106,10 +106,10 @@ const AppContent = () => {
 
   const handleDownloadTemplate = async () => {
     try {
-      await downloadGCMMTemplate();
+      await downloadNCSecMMTemplate();
       toast({
         title: "Template téléchargé",
-        description: "Le fichier template GCMM a été téléchargé avec succès",
+        description: "Le fichier template NCSecMM a été téléchargé avec succès",
         type: "success"
       });
     } catch (error) {
@@ -120,36 +120,13 @@ const AppContent = () => {
       });
     }
   };
-  const exportData = async () => {
-    const exportJsonData = () => {
-      const dataStr = JSON.stringify(context);
-      const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
-      const exportFileDefaultName = 'gcmm-data.json';
-
-      const linkElement = document.createElement('a');
-      linkElement.setAttribute('href', dataUri);
-      linkElement.setAttribute('download', exportFileDefaultName);
-      linkElement.click();
-    };
-
-    await context.handleExportAction(exportJsonData, {
-      successMessage: "Les données ont été exportées au format JSON",
-      errorMessage: "Impossible d'exporter les données au format JSON"
-    });
-    
-    toast({
-      title: "Export réussi",
-      description: "Les données ont été exportées au format JSON",
-      type: "success"
-    });
-  };
 
   const handleNavigate = (view, params = {}) => {
     setActiveView(view);
     setViewParams(params);
   };
-  // Show welcome screen if no data, except for gcmm-builder
-  if (!loading && !hasData && activeView !== 'gcmm-builder') {
+  // Show welcome screen if no data, except for NCSecMM-builder
+  if (!loading && !hasData && activeView !== 'NCSecMM-builder') {
     return (
       <>
         <WelcomeScreen
@@ -173,11 +150,11 @@ const AppContent = () => {
   }
   const renderView = () => {
     switch (activeView) {
-      case 'gcmm-builder':
-        return <GCMMBuilder onNavigate={handleNavigate} />;
-      case 'gcmm-table':
-        return <GCMMTable onNavigate={handleNavigate} />;
-      case 'gcmm':
+      case 'NCSecMM-builder':
+        return <NCSecMMBuilder onNavigate={handleNavigate} />;
+      case 'NCSecMM-table':
+        return <NCSecMMTable onNavigate={handleNavigate} />;
+      case 'NCSecMM':
         return <Dashboard onNavigate={handleNavigate} />;
       case 'axis':
         return <AxisView axisId={viewParams.axisId} onNavigate={handleNavigate} />;
@@ -207,7 +184,6 @@ const AppContent = () => {
           isOpen={isSidebarOpen}
           toggleSidebar={toggleSidebar}
           openFileUpload={openFileUpload}
-          exportData={exportData}
           switchView={handleNavigate}
           activeView={activeView}
           viewParams={viewParams}

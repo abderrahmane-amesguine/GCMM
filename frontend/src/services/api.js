@@ -1,15 +1,19 @@
 import { axisColors } from '../utils/colors';
 
 /**
- * API service for fetching GCMM data from the backend
+ * API service for fetching NCSecMM data from the backend
  */
 const API_BASE_URL = 'https://ncsec.vercel.app/api';
 
 /**
- * Fetch all GCMM data from the backend
- * @returns {Promise<Object>} The complete GCMM data
+ * Fetch all NCSecMM data from the backend
+ * @returns{
+      { axis: 'Organization', score: 2.5, fullMark: 5, color: axisColors[2] },
+      { axis: 'Capacity', score: 2.4, fullMark: 5, color: axisColors[3] },
+      { axis: 'Cooperation', score: 2.1, fullMark: 5, color: axisColors[4] }
+  } The complete NCSecMM data
  */
-export const fetchGCMMData = async () => {
+export const fetchNCSecMMData = async () => {
   const response = await fetch(`${API_BASE_URL}/data`);
   if (!response.ok) {
     throw new Error(`API request failed with status ${response.status}`);
@@ -86,9 +90,9 @@ export const saveObjectiveEvaluation = async (objectiveId, profile, target_profi
 };
 
 /**
- * Export GCMM data to an Excel file
+ * Export NCSecMM data to an Excel file
  */
-export const exportGCMMToExcel = async () => {
+export const exportNCSecMMToExcel = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/export`);
     
@@ -106,7 +110,7 @@ export const exportGCMMToExcel = async () => {
     // Get the filename from the Content-Disposition header
     const contentDisposition = response.headers.get('Content-Disposition');
     const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/);
-    const filename = filenameMatch ? filenameMatch[1] : 'GCMM_Export.xlsx';
+    const filename = filenameMatch ? filenameMatch[1] : 'NCSecMM_Export.xlsx';
     
     const blob = await response.blob();
     
@@ -150,7 +154,7 @@ export const exportAxisToExcel = async (axisId) => {
     
     const contentDisposition = response.headers.get('Content-Disposition');
     const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/);
-    const filename = filenameMatch ? filenameMatch[1] : `GCMM_Axis_${axisId}_Export.xlsx`;
+    const filename = filenameMatch ? filenameMatch[1] : `NCSecMM_Axis_${axisId}_Export.xlsx`;
     
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
@@ -187,7 +191,7 @@ export const generateAxisReport = async (axisId) => {
     
     const contentDisposition = response.headers.get('Content-Disposition');
     const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/);
-    const filename = filenameMatch ? filenameMatch[1] : `GCMM_Axis_${axisId}_Report.docx`;
+    const filename = filenameMatch ? filenameMatch[1] : `NCSecMM_Axis_${axisId}_Report.docx`;
     
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
@@ -206,49 +210,9 @@ export const generateAxisReport = async (axisId) => {
 };
 
 /**
- * Creates a sample data structure for testing without an API
- * @returns {Object} Sample GCMM data
+ * Download NCSecMM template Excel file
  */
-export const getSampleData = () => {
-  return {
-    globalScore: 2.6,
-    axes: [
-      { id: 1, name: 'Legal', score: 2.8, color: axisColors[0] },
-      { id: 2, name: 'Technologies', score: 3.2, color: axisColors[1] },
-      { id: 3, name: 'Organization', score: 2.5, color: axisColors[2] },
-      { id: 4, name: 'Capacity', score: 2.4, color: axisColors[3] },
-      { id: 5, name: 'Cooperation', score: 2.1, color: axisColors[4] }
-    ],
-    domains: [
-      { id: '3.1', name: 'Strategy', axisId: 3, score: 2.7 },
-      { id: '3.2', name: 'Committees', axisId: 3, score: 2.3 },
-      { id: '3.3', name: 'Cert/Csirt', axisId: 3, score: 2.8 },
-      { id: '3.4', name: 'xxxx', axisId: 3, score: 2.4 },
-      { id: '3.5', name: 'xxxx', axisId: 3, score: 2.2 },
-      { id: '3.6', name: 'xxxx', axisId: 3, score: 2.6 }
-    ],
-    objectives: [
-      { id: '3.2.63', name: 'xxxx', axisId: 3, domainId: '3.2', score: 2.1, levels: ['Ad hoc', 'Initiated', 'Defined', 'Managed', 'Optimized'] },
-      { id: '3.2.64', name: 'xxx', axisId: 3, domainId: '3.2', score: 2.3, levels: ['Ad hoc', 'Initiated', 'Defined', 'Managed', 'Optimized'] },
-      { id: '3.2.65', name: 'Exec Committee', axisId: 3, domainId: '3.2', score: 2.5, levels: ['Ad hoc', 'Initiated', 'Defined', 'Managed', 'Optimized'] },
-      { id: '3.2.66', name: 'xxx', axisId: 3, domainId: '3.2', score: 2.0, levels: ['Ad hoc', 'Initiated', 'Defined', 'Managed', 'Optimized'] },
-      { id: '3.2.67', name: 'xxxx', axisId: 3, domainId: '3.2', score: 2.6, levels: ['Ad hoc', 'Initiated', 'Defined', 'Managed', 'Optimized'] }
-    ],
-    radarData: [
-      { axis: 'Axe 1: Legal', score: 2.8, fullMark: 5, color: axisColors[0] },
-      { axis: 'Axe 2: Technologies', score: 3.2, fullMark: 5, color: axisColors[1] },
-      { axis: 'Axe 3: Organization', score: 2.5, fullMark: 5, color: axisColors[2] },
-      { axis: 'Axe 4: Capacity', score: 2.4, fullMark: 5, color: axisColors[3] },
-      { axis: 'Axe 5: Cooperation', score: 2.1, fullMark: 5, color: axisColors[4] }
-    ],
-    loaded: true
-  };
-};
-
-/**
- * Download GCMM template Excel file
- */
-export const downloadGCMMTemplate = async () => {
+export const downloadNCSecMMTemplate = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/template`);
     
@@ -263,7 +227,7 @@ export const downloadGCMMTemplate = async () => {
     
     const contentDisposition = response.headers.get('Content-Disposition');
     const filenameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/);
-    const filename = filenameMatch ? filenameMatch[1] : 'GCMM_Template.xlsx';
+    const filename = filenameMatch ? filenameMatch[1] : 'NCSecMM_Template.xlsx';
     
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
@@ -282,11 +246,11 @@ export const downloadGCMMTemplate = async () => {
 };
 
 /**
- * Save GCMM data to the backend
- * @param {Object} data - The GCMM data to save
+ * Save NCSecMM data to the backend
+ * @param {Object} data - The NCSecMM data to save
  * @returns {Promise<Object>} Save response
  */
-export const saveGCMMData = async (data) => {
+export const saveNCSecMMData = async (data) => {
   try {
     const response = await fetch(`${API_BASE_URL}/data`, {
       method: 'POST',
@@ -311,18 +275,17 @@ export const saveGCMMData = async (data) => {
 
     return response.json();
   } catch (error) {
-    throw new Error(`Failed to save GCMM data: ${error.message}`);
+    throw new Error(`Failed to save NCSecMM data: ${error.message}`);
   }
 };
 
 export default {
-  fetchGCMMData,
+  fetchNCSecMMData,
   uploadExcelFile,
   saveObjectiveEvaluation,
-  exportGCMMToExcel,
+  exportNCSecMMToExcel,
   exportAxisToExcel,
   generateAxisReport,
-  getSampleData,
-  downloadGCMMTemplate,
-  saveGCMMData
+  downloadNCSecMMTemplate,
+  saveNCSecMMData
 };

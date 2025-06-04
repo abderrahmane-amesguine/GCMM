@@ -3,9 +3,9 @@ import { Shield, Save, ChevronRight, Plus, Trash2, Edit2 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
 import { toast } from '../components/ui/Toast';
-import { saveGCMMData, fetchGCMMData } from '../services/api';
+import { saveNCSecMMData, fetchNCSecMMData } from '../services/api';
 
-function GCMMBuilder({ onNavigate }) {
+function NCSecMMBuilder({ onNavigate }) {
     const [axes, setAxes] = useState([]);
     const [currentAxis, setCurrentAxis] = useState(null);
     const [currentDomain, setCurrentDomain] = useState(null);
@@ -239,7 +239,7 @@ function GCMMBuilder({ onNavigate }) {
         }
 
         try {
-            const gcmmData = {
+            const NCSecMMData = {
                 axes: axes.map(axis => ({
                     ...axis,
                     domains: axis.domains.map(domain => ({
@@ -250,19 +250,19 @@ function GCMMBuilder({ onNavigate }) {
             };
 
             // Save the data
-            await saveGCMMData(gcmmData);
+            await saveNCSecMMData(NCSecMMData);
             
             // Fetch the latest data to ensure everything is synced
-            await fetchGCMMData();
+            await fetchNCSecMMData();
             
-            toast({ title: "Success", description: "GCMM structure saved successfully", type: "success" });
+            toast({ title: "Success", description: "NCSecMM structure saved successfully", type: "success" });
             
             // Navigate after data is loaded
-            onNavigate('gcmm');
+            onNavigate('NCSecMM');
         } catch (error) {
             toast({ 
                 title: "Error", 
-                description: error.message || "Failed to save GCMM structure", 
+                description: error.message || "Failed to save NCSecMM structure", 
                 type: "error" 
             });
         }
@@ -332,7 +332,7 @@ function GCMMBuilder({ onNavigate }) {
                     <div className="flex items-center gap-3">
                         <Shield className="h-8 w-8 text-blue-600" />
                         <div>
-                            <h1 className="text-2xl font-bold text-gray-900">GCMM Builder</h1>
+                            <h1 className="text-2xl font-bold text-gray-900">NCSecMM Builder</h1>
                             <p className="text-gray-600">Create your cybersecurity maturity model from scratch</p>
                         </div>
                     </div>
@@ -704,4 +704,4 @@ function GCMMBuilder({ onNavigate }) {
     );
 }
 
-export default GCMMBuilder;
+export default NCSecMMBuilder;

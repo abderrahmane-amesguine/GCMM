@@ -9,10 +9,9 @@ import { getScoreBadgeClass } from '../utils/colors';
 const Dashboard = ({ onNavigate }) => {
   const context = useContext(DataContext) || {};
   const { axes = [], domains = [], objectives = [], globalScore = 0 } = context;
-
   // Données pour le graphique à barres
   const barChartData = axes.map(axis => ({
-    name: `Axe ${axis.id}`,
+    name: `${axis.name.split(' ')[0]}`,
     score: axis.score,
     color: axis.color
   }));
@@ -53,11 +52,9 @@ const Dashboard = ({ onNavigate }) => {
             <div className="text-2xl font-bold mt-1">{lowScoreObjectives}</div>
           </div>
         </div>
-      </div>
-
-      {/* Charts section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="card transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+      </div>      {/* Charts section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="card transition-all duration-300 hover:shadow-xl hover:-translate-y-1 lg:col-span-2">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-semibold text-gray-800 flex items-center">
               <PieChart className="w-5 h-5 mr-2 text-blue-600" />

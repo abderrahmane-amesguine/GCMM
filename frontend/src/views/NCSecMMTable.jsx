@@ -3,7 +3,7 @@ import { DataContext } from '../context/DataContext';
 import { saveObjectiveEvaluation } from '../services/api';
 import { toast } from '../components/ui/Toast';
 
-const GCMMTable = ({ onNavigate }) => {
+const NCSecMMTable = ({ onNavigate }) => {
   const { axes, domains, objectives, loading, refreshData } = useContext(DataContext);
   const [selectedAxis, setSelectedAxis] = useState(null);
   const [selectedDomain, setSelectedDomain] = useState(null);
@@ -96,7 +96,7 @@ const GCMMTable = ({ onNavigate }) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Main GCMM table with hierarchical selection */}
+      {/* Main NCSecMM table with hierarchical selection */}
       <div className="grid grid-cols-3 gap-4 mb-8">
         {/* Axes List */}
         <div className="border border-gray-300 rounded-lg overflow-hidden shadow-lg">
@@ -110,7 +110,7 @@ const GCMMTable = ({ onNavigate }) => {
                 onClick={() => handleAxisClick(axis.id)}
                 className={`p-2 border-b border-gray-200 cursor-pointer hover:bg-gray-50 ${selectedAxis === axis.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''}`}
               >
-                <h3 className="font-medium">Axe {axis.id}: {axis.name}</h3>
+                <h3 className="font-medium">{axis.name}</h3>
                 <p className="text-sm text-gray-600">Score: {axis.score.toFixed(2)}/5</p>
               </div>
             ))}
@@ -253,4 +253,4 @@ const GCMMTable = ({ onNavigate }) => {
   );
 };
 
-export default GCMMTable;
+export default NCSecMMTable;

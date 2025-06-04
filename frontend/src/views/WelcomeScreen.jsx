@@ -21,7 +21,7 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
   // Navigation for evaluation
   const handleStartEvaluation = () => {
     console.log("Starting new assessment");
-    onNavigate("gcmm-builder");
+    onNavigate("NCSecMM-builder");
   };
 
   // Template download handler

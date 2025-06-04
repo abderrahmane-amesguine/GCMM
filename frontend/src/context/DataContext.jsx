@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
-import { fetchGCMMData, uploadExcelFile } from '../services/api';
+import { fetchNCSecMMData, uploadExcelFile } from '../services/api';
 import { toast } from '../components/ui/Toast';
 
 export const DataContext = createContext();
@@ -11,7 +11,7 @@ export const DataProvider = ({ children }) => {
     objectives: [],
     radarData: [],
     loaded: false,
-    currentView: 'gcmm-table',
+    currentView: 'NCSecMM-table',
     selectedAxis: null,
     selectedDomain: null,
     selectedObjective: null
@@ -50,8 +50,12 @@ export const DataProvider = ({ children }) => {
   const loadData = async () => {
     try {
       setLoading(true);
-      const response = await fetchGCMMData();
-      
+      const response = await fetchNCSecMMData();
+      response.radarData = response.radarData.map((data) => {
+        data.axis = data.axis.split(':')[1].trim();
+        return data;
+      }) || []; 
+
       const newData = {
         axes: response.axes || [],
         domains: response.domains || [],
@@ -77,7 +81,7 @@ export const DataProvider = ({ children }) => {
       
       toast({
         title: "Données chargées",
-        description: "Les données GCMM ont été chargées avec succès",
+        description: "Les données NSCecMM ont été chargées avec succès",
         type: "success"
       });
     } catch (error) {
@@ -198,8 +202,8 @@ export const DataProvider = ({ children }) => {
     });
   };
 
-  // Save new GCMM structure
-  const saveNewGCMMStructure = async (structure) => {
+  // Save new NCSecMM structure
+  const saveNewNCSecMMStructure = async (structure) => {
     try {
       setLoading(true);
       
@@ -254,7 +258,7 @@ export const DataProvider = ({ children }) => {
 
       toast({
         title: "Structure créée",
-        description: "La nouvelle structure GCMM a été créée avec succès",
+        description: "La nouvelle structure NCSecMM a été créée avec succès",
         type: "success"
       });
 
@@ -262,7 +266,7 @@ export const DataProvider = ({ children }) => {
     } catch (error) {
       toast({
         title: "Erreur",
-        description: "Impossible de créer la structure GCMM. Veuillez réessayer.",
+        description: "Impossible de créer la structure NCSecMM. Veuillez réessayer.",
         type: "error"
       });
       return false;
@@ -306,8 +310,7 @@ export const DataProvider = ({ children }) => {
         hasUnsavedChanges,
         loadData,
         handleFileUpload,
-        saveNewGCMMStructure,
-        handleExportAction,
+        saveNewNCSecMMStructure,
         handleExportAction
       }}
     >

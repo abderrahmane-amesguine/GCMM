@@ -1,18 +1,18 @@
 import React, { useContext } from 'react';
 import { X, Upload, Download, Home, Shield, Activity, Table, FileText, Settings } from 'lucide-react';
 import { DataContext } from '../context/DataContext';
-import { exportGCMMToExcel } from '../services/api';
+import { exportNCSecMMToExcel } from '../services/api';
 
-const Sidebar = ({ isOpen, toggleSidebar, openFileUpload, exportData, switchView, activeView, viewParams }) => {
+const Sidebar = ({ isOpen, toggleSidebar, openFileUpload, switchView, activeView, viewParams }) => {
   const context = useContext(DataContext) || {};
   const { axes = [] } = context;
 
   const handleExport = async () => {
     const { handleExportAction } = context;
     try {
-      await handleExportAction(exportGCMMToExcel, {
-        successMessage: "Les données GCMM ont été exportées avec succès",
-        errorMessage: "Impossible d'exporter les données GCMM",
+      await handleExportAction(exportNCSecMMToExcel, {
+        successMessage: "Les données NCSecMM ont été exportées avec succès",
+        errorMessage: "Impossible d'exporter les données NCSecMM",
       });
       toggleSidebar();
     } catch (error) {
@@ -36,7 +36,7 @@ const Sidebar = ({ isOpen, toggleSidebar, openFileUpload, exportData, switchView
           <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-blue-50 to-blue-100">
             <div className="flex items-center gap-2">
               <Shield className="text-blue-600" size={22} />
-              <h2 className="text-xl font-bold text-blue-800">GCMM Platform</h2>
+              <h2 className="text-xl font-bold text-blue-800">NCSecMM Platform</h2>
             </div>
             <button
               onClick={toggleSidebar}
@@ -51,19 +51,19 @@ const Sidebar = ({ isOpen, toggleSidebar, openFileUpload, exportData, switchView
             <div className="space-y-1">
               <SidebarItem
                 icon={<Table size={18} />}
-                label="GCMM Table"
-                isActive={activeView === 'gcmm-table'}
+                label="NCSecMM Table"
+                isActive={activeView === 'NCSecMM-table'}
                 onClick={() => {
-                  switchView('gcmm-table');
+                  switchView('NCSecMM-table');
                   toggleSidebar();
                 }}
               />
               <SidebarItem
                 icon={<Home size={18} />}
                 label="Dashboard"
-                isActive={activeView === 'gcmm'}
+                isActive={activeView === 'NCSecMM'}
                 onClick={() => {
-                  switchView('gcmm');
+                  switchView('NCSecMM');
                   toggleSidebar();
                 }}
               />
@@ -77,7 +77,7 @@ const Sidebar = ({ isOpen, toggleSidebar, openFileUpload, exportData, switchView
                 <SidebarItem
                   key={axis.id}
                   icon={<Shield size={18} />}
-                  label={`Axe ${axis.id}: ${axis.name}`}
+                  label={axis.name}
                   isActive={activeView === 'axis' && viewParams?.axisId === axis.id}
                   onClick={() => {
                     switchView('axis', { axisId: axis.id, axisColor : axis.color });
@@ -111,16 +111,7 @@ const Sidebar = ({ isOpen, toggleSidebar, openFileUpload, exportData, switchView
                 <span className="font-medium">Exporter</span>
               </button>
             </div>
-
-            <div className="mt-4 pt-3 border-t border-gray-200">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <FileText size={14} className="text-gray-500 mr-2" />
-                  <span className="text-xs text-gray-600">Documentation</span>
-                </div>
-                <span className="text-xs text-gray-500">v1.0.0</span>
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>
@@ -146,7 +137,6 @@ const SidebarItem = ({ icon, label, isActive, onClick, borderColor, score }) => 
       };
     }
     
-    // For non-axis items (like Dashboard, GCMM Table)
     return {
       background: 'linear-gradient(to right, #3b82f6, #6366f1)'
     };
@@ -156,6 +146,7 @@ const SidebarItem = ({ icon, label, isActive, onClick, borderColor, score }) => 
     <button
       onClick={onClick}
       className={`w-full flex items-center px-4 py-3 mb-2 rounded-2xl
+        h-10
                   transition-all duration-200 ease-in-out
                   hover:scale-[1.02]
                   focus:outline-none focus:ring-2 focus:ring-blue-200

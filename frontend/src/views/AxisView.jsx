@@ -31,7 +31,7 @@ const AxisView = ({ axisId, onNavigate }) => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-xl shadow-md">
         <div className="flex items-center">
           <button
-            onClick={() => onNavigate('gcmm')}
+            onClick={() => onNavigate('NCSecMM')}
             className="mr-4 p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all text-gray-600"
             aria-label="Back to Dashboard"
           >
@@ -92,7 +92,8 @@ const AxisView = ({ axisId, onNavigate }) => {
             <span>Rapport</span>
           </button>
         </div>
-      </div>      {/* Score and statistics */}
+      </div>
+      {/* Score and statistics */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow p-6 h-full">
           <h3 className="text-xl font-semibold mb-4 flex items-center">
@@ -167,7 +168,7 @@ const AxisView = ({ axisId, onNavigate }) => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
             </svg>
-            Performance par Domaines
+            {axis.name}
           </h3>
           <DomainRadarChart domains={axisDomains} axisColor={axis.color} />
         </div>
