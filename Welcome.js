@@ -2,10 +2,8 @@ import React, { useRef, useState } from "react";
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "../components/ui/card"
 import { Shield, FileText, Users, BarChart3, ArrowRight, CheckCircle, Download, BookOpen, X } from "lucide-react"
-import { useTranslation } from 'react-i18next';
 
 function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
-  const { t } = useTranslation();
   const fileInputRef = useRef();
   const [isLearnMoreOpen, setIsLearnMoreOpen] = useState(false);
 
@@ -20,9 +18,9 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
       onFileUpload(e.target.files[0]);
     }
   };
-
   // Navigation for evaluation
   const handleStartEvaluation = () => {
+    console.log("Starting new assessment");
     onNavigate("NCSecMM-builder");
   };
 
@@ -57,61 +55,63 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
             <div className="text-left">
               <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
                 <BookOpen className="mr-2 h-6 w-6 text-blue-600" />
-                {t('welcomeScreen.gettingStartedGuide')}
+                Getting Started Guide
               </h3>
 
               <div className="prose prose-blue max-w-none">
                 <section className="mb-8">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">{t('welcomeScreen.whatIsNCSec')}</h4>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">What is NCSec Platform?</h4>
                   <p className="text-gray-600 mb-4">
-                    {t('welcomeScreen.ncssecDescription')}
+                    NCSec Platform is a comprehensive cybersecurity maturity assessment tool that helps organizations evaluate
+                    and improve their security posture. Our platform uses industry-standard frameworks to provide detailed
+                    insights and actionable recommendations.
                   </p>
                 </section>
 
                 <section className="mb-8">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">{t('welcomeScreen.keyFeatures')}</h4>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">Key Features</h4>
                   <ul className="space-y-2 text-gray-600">
                     <li className="flex items-start">
                       <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-                      {t('welcomeScreen.comprehensiveAssessment')}
+                      Comprehensive assessment across multiple security domains
                     </li>
                     <li className="flex items-start">
                       <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-                      {t('welcomeScreen.collaborativeEvaluation')}
+                      Collaborative evaluation process with team members
                     </li>
                     <li className="flex items-start">
                       <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-                      {t('welcomeScreen.detailedReports')}
+                      Detailed reports and recommendations
                     </li>
                     <li className="flex items-start">
                       <CheckCircle className="h-5 w-5 text-green-500 mr-2 mt-0.5" />
-                      {t('welcomeScreen.progressTracking')}
+                      Progress tracking and improvement monitoring
                     </li>
                   </ul>
                 </section>
 
                 <section className="mb-8">
-                  <h4 className="text-lg font-semibold text-gray-900 mb-3">{t('welcomeScreen.gettingStartedTemplate')}</h4>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-3">Getting Started Template</h4>
                   <p className="text-gray-600 mb-4">
-                    {t('welcomeScreen.templateDescription')}
+                    Download our template to get started with your cybersecurity maturity assessment. The template includes:
                   </p>
                   <ul className="space-y-2 text-gray-600 mb-4">
                     <li className="flex items-start">
                       <ArrowRight className="h-5 w-5 text-blue-500 mr-2 mt-0.5" />
-                      {t('welcomeScreen.preConfiguredFramework')}
+                      Pre-configured assessment framework
                     </li>
                     <li className="flex items-start">
                       <ArrowRight className="h-5 w-5 text-blue-500 mr-2 mt-0.5" />
-                      {t('welcomeScreen.detailedInstructions')}
+                      Detailed instructions and guidelines
                     </li>
                     <li className="flex items-start">
                       <ArrowRight className="h-5 w-5 text-blue-500 mr-2 mt-0.5" />
-                      {t('welcomeScreen.sampleData')}
+                      Sample data and examples
                     </li>
                   </ul>
                   <Button onClick={handleTemplateDownload} className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white">
                     <Download className="mr-2 h-4 w-4" />
-                    {t('welcomeScreen.downloadTemplate')}
+                    Download Template
                   </Button>
                 </section>
               </div>
@@ -134,16 +134,15 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
                 <Shield className="h-6 w-6 text-white" />
               </div>
               <span className="text-xl font-bold text-gray-900">NCSec Platform</span>
-            </div>
-            {/* Action Buttons */}
+            </div>            {/* Action Buttons */}
             <div className="flex items-center space-x-3">
               <Button 
                 onClick={handleImportClick} 
                 variant="outline" 
                 className="text-md px-4 py-3 text-blue-600 hover:bg-blue-600 hover:text-white group transition-all"
               >
-                {t('welcomeScreen.importFile')}
-                <FileText className="ml-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+                Import File
+                <FileText className="h-4 w-4 group-hover:scale-110 transition-transform" />
               </Button>
               <input
                 type="file"
@@ -156,8 +155,8 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
                 onClick={handleStartEvaluation} 
                 className="bg-blue-600 hover:bg-blue-700 text-md text-white px-4 py-3 group transition-all"
               >
-                {t('welcomeScreen.startEvaluation')}
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                Start Evaluation
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
           </div>
@@ -165,22 +164,22 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 ">
         <div className="max-w-7xl mx-auto text-center">
           <div className="max-w-3xl mx-auto">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-              {t('welcomeScreen.streamlineYourAssessment')}
+              Streamline Your <span className="text-blue-600">Cybersecurity Maturity</span> Assessment
             </h1>
             <p className="text-xl text-gray-600 mb-8 leading-relaxed">
-              {t('welcomeScreen.evaluateTrackImprove')}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              Evaluate, track, and improve your organization's cybersecurity posture with our comprehensive platform.
+              Accessible and actionable for teams of all sizes.
+            </p>            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 onClick={handleStartEvaluation} 
                 size="lg" 
                 className="bg-blue-600 hover:bg-blue-700 text-lg text-white px-8 py-3 group transition-all"
               >
-                {t('welcomeScreen.startNewEvaluation')}
+                Start New Evaluation
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button 
@@ -189,7 +188,7 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
                 variant="outline" 
                 className="text-lg px-8 py-3 text-blue-600 hover:bg-blue-600 hover:text-white group transition-all"
               >
-                {t('welcomeScreen.importExistingFile')}
+                Import Existing File
                 <FileText className="ml-2 h-5 w-5 group-hover:scale-110 transition-transform" />
               </Button>
             </div>
@@ -201,9 +200,9 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('welcomeScreen.whyChooseNCSec')}</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Choose NCSec Platform?</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              {t('welcomeScreen.platformBenefits')}
+              Our platform makes cybersecurity maturity assessment simple, collaborative, and actionable.
             </p>
           </div>
 
@@ -212,9 +211,9 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Shield className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('welcomeScreen.comprehensiveAssessment')}</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Comprehensive Assessment</h3>
               <p className="text-gray-600">
-                {t('welcomeScreen.evaluateAcrossDomains')}
+                Evaluate your cybersecurity maturity across all critical domains with industry-standard frameworks.
               </p>
             </div>
 
@@ -222,19 +221,19 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
               <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="h-8 w-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('welcomeScreen.teamCollaboration')}</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Team Collaboration</h3>
               <p className="text-gray-600">
-                {t('welcomeScreen.workTogether')}
+                Work together with your team members to ensure accurate assessments and shared understanding.
               </p>
             </div>
 
             <div className="text-center">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <BarChart3 className="h-8 w-8 text-orange-600" />
+              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <BarChart3 className="h-8 w-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('welcomeScreen.detailedReports')}</h3>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Actionable Reports</h3>
               <p className="text-gray-600">
-                {t('welcomeScreen.progressTracking')}
+                Generate detailed reports with clear recommendations to improve your security posture.
               </p>
             </div>
           </div>
@@ -245,9 +244,9 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">{t('welcomeScreen.howItWorks.title')}</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">How It Works</h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              {t('welcomeScreen.howItWorks.description')}
+              Get started with your cybersecurity maturity assessment in just a few simple steps.
             </p>
           </div>
 
@@ -258,8 +257,10 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
                   1
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('welcomeScreen.howItWorks.step1.title')}</h3>
-                  <p className="text-gray-600">{t('welcomeScreen.howItWorks.step1.description')}</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Choose Your Starting Point</h3>
+                  <p className="text-gray-600">
+                    Import an existing NCSec file to continue previous work, or start a fresh evaluation from scratch.
+                  </p>
                 </div>
               </div>
 
@@ -268,8 +269,11 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
                   2
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('welcomeScreen.howItWorks.step2.title')}</h3>
-                  <p className="text-gray-600">{t('welcomeScreen.howItWorks.step2.description')}</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Complete the Assessment</h3>
+                  <p className="text-gray-600">
+                    Follow our guided process to evaluate your organization's cybersecurity maturity across all key
+                    areas.
+                  </p>
                 </div>
               </div>
 
@@ -278,8 +282,10 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
                   3
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('welcomeScreen.howItWorks.step3.title')}</h3>
-                  <p className="text-gray-600">{t('welcomeScreen.howItWorks.step3.description')}</p>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Collaborate & Improve</h3>
+                  <p className="text-gray-600">
+                    Work with your team members and generate comprehensive reports with actionable recommendations.
+                  </p>
                 </div>
               </div>
             </div>
@@ -288,20 +294,19 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                  {t('welcomeScreen.howItWorks.getStarted.title')}
+                  Ready to Get Started?
                 </CardTitle>
                 <CardDescription>
-                  {t('welcomeScreen.howItWorks.getStarted.description')}
+                  Choose how you'd like to begin your cybersecurity maturity assessment.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <Button 
+              <CardContent className="space-y-4">                <Button 
                   onClick={handleImportClick} 
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white group transition-all" 
                   size="lg"
                 >
                   <FileText className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
-                  {t('welcomeScreen.howItWorks.getStarted.importButton')}
+                  Import Existing NCSec File
                 </Button>
                 <Button 
                   onClick={handleStartEvaluation} 
@@ -310,10 +315,10 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
                   size="lg"
                 >
                   <Shield className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
-                  {t('welcomeScreen.howItWorks.getStarted.startButton')}
+                  Start New Evaluation
                 </Button>
                 <p className="text-sm text-gray-500 text-center">
-                  {t('welcomeScreen.howItWorks.getStarted.helpText')}
+                  Both options will guide you through the complete assessment process.
                 </p>
               </CardContent>
             </Card>
@@ -324,17 +329,16 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
       {/* CTA Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-blue-600">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">{t('welcomeScreen.cta.title')}</h2>
+          <h2 className="text-3xl font-bold text-white mb-4">Strengthen Your Cybersecurity Posture Today</h2>
           <p className="text-xl text-blue-100 mb-8">
-            {t('welcomeScreen.cta.description')}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            Join organizations worldwide who trust NCSec Platform to assess and improve their cybersecurity maturity.
+          </p>          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
               onClick={handleStartEvaluation}
               className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-3 group transition-all"
             >
-              {t('welcomeScreen.cta.startButton')}
+              Start Your Assessment
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
             <Button
@@ -343,12 +347,17 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
               onClick={openLearnMore}
               className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-3 group transition-all"
             >
-              {t('welcomeScreen.cta.learnMore')}
+              Learn More
               <BookOpen className="ml-2 h-5 w-5 group-hover:scale-110 transition-transform" />
             </Button>
           </div>
+          {/* Learn More Modal */}
+          <LearnMoreModal />
         </div>
       </section>
+
+      {/* Learn More Modal */}
+      <LearnMoreModal />
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8 px-4 sm:px-6 lg:px-8">
@@ -357,18 +366,15 @@ function WelcomeScreen({ onFileUpload, onDownloadTemplate, onNavigate }) {
             <div className="bg-blue-600 p-2 rounded-lg">
               <Shield className="h-5 w-5 text-white" />
             </div>
-            <span className="text-lg font-semibold">{t('welcomeScreen.footer.platformName')}</span>
+            <span className="text-lg font-semibold">NCSec Platform</span>
           </div>
           <p className="text-gray-400">
-            {t('welcomeScreen.footer.copyright')}
+            © 2024 NCSec Platform. Streamlining cybersecurity maturity assessments for organizations worldwide.
           </p>
         </div>
       </footer>
-
-      {/* Learn More Modal */}
-      <LearnMoreModal />
     </div>
-  );
+  )
 }
 
 export default WelcomeScreen;

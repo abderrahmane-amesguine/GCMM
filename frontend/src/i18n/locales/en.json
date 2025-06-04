@@ -1,0 +1,179 @@
+{
+  "welcome": {
+    "title": "Welcome to GCMM",
+    "description": "Get started by uploading your file"
+  },
+  "common": {
+    "upload": "Upload",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  },
+  "header": {
+    "title": "NCSec Platform",
+    "subtitle": "Cybersecurity Maturity Model",
+    "buttons": {
+      "ncsecTable": "NCSec Table",
+      "dashboard": "Dashboard",
+      "export": "Export"
+    },
+    "score": {
+      "title": "Global Score",
+      "details": "Score Details",
+      "outOf": "/5"
+    },
+    "unsavedChanges": "Unsaved Changes"
+  },
+  "sidebar": {
+    "title": "NCSecMM Platform",
+    "menu": {
+      "dashboard": "Dashboard",
+      "tableView": "NCSecMM Table",
+      "axes": "Axes",
+      "importData": "Import",
+      "exportData": "Export",
+      "settings": "Settings"
+    },
+    "export": {
+      "success": "NCSecMM data exported successfully",
+      "error": "Unable to export NCSecMM data"
+    }
+  },
+  "welcomeScreen": {
+    "importFile": "Import File",
+    "startEvaluation": "Start Evaluation",
+    "startingAssessment": "Starting new assessment",
+    "streamlineYourAssessment": "Streamline Your Security Assessment",
+    "evaluateTrackImprove": "Evaluate, track, and improve your organization's security maturity with our comprehensive assessment tool.",
+    "startNewEvaluation": "Start New Evaluation",
+    "importExistingFile": "Import Existing File",
+    "whyChooseNCSec": "Why Choose NCSec?",
+    "platformBenefits": "Our platform provides a comprehensive approach to security maturity assessment with powerful features designed for your success.",
+    "comprehensiveAssessment": "Comprehensive Assessment",
+    "evaluateAcrossDomains": "Evaluate your security posture across multiple domains with our detailed framework.",
+    "teamCollaboration": "Team Collaboration",
+    "workTogether": "Work together with your team to complete assessments and track progress.",
+    "gettingStartedGuide": "Getting Started Guide",
+    "whatIsNCSec": "What is NCSec?",
+    "ncssecDescription": "NCSec is a comprehensive security maturity assessment platform designed to help organizations evaluate and improve their security posture.",
+    "keyFeatures": "Key Features",
+    "collaborativeEvaluation": "Collaborative evaluation process",
+    "detailedReports": "Detailed reporting and analytics",
+    "progressTracking": "Progress tracking over time",
+    "gettingStartedTemplate": "Getting Started with the Template",
+    "templateDescription": "Download our template to get started quickly with your assessment:",
+    "preConfiguredFramework": "Pre-configured assessment framework",
+    "detailedInstructions": "Detailed instructions and guidance",
+    "sampleData": "Sample data for reference",
+    "downloadTemplate": "Download Template",
+    "howItWorks": {
+      "title": "How It Works",
+      "description": "Get started with your cybersecurity maturity assessment in just a few simple steps.",
+      "step1": {
+        "title": "Choose Your Starting Point",
+        "description": "Import an existing NCSec file to continue previous work, or start a fresh evaluation from scratch."
+      },
+      "step2": {
+        "title": "Complete the Assessment",
+        "description": "Follow our guided process to evaluate your organization's cybersecurity maturity across all key areas."
+      },
+      "step3": {
+        "title": "Collaborate & Improve",
+        "description": "Work with your team members and generate comprehensive reports with actionable recommendations."
+      },
+      "getStarted": {
+        "title": "Ready to Get Started?",
+        "description": "Choose how you'd like to begin your cybersecurity maturity assessment.",
+        "importButton": "Import Existing NCSec File",
+        "startButton": "Start New Evaluation",
+        "helpText": "Both options will guide you through the complete assessment process."
+      }
+    },
+    "cta": {
+      "title": "Strengthen Your Cybersecurity Posture Today",
+      "description": "Join organizations worldwide who trust NCSec Platform to assess and improve their cybersecurity maturity.",
+      "startButton": "Start Your Assessment",
+      "learnMore": "Learn More"
+    },
+    "footer": {
+      "platformName": "NCSec Platform",
+      "copyright": "© 2024 NCSec Platform. Streamlining cybersecurity maturity assessments for organizations worldwide."
+    }
+  },
+  "export": {
+    "success": "Export Successful",
+    "successDescription": "The NCSecMM file has been exported successfully.",
+    "error": "Export Error",
+    "errorDescription": "An error occurred while exporting the file.",
+    "button": "Export"
+  },
+  "language": {
+    "switchTo": "Switch to {{lang}}",
+    "current": "Current language: {{lang}}",
+    "en": "English",
+    "fr": "French"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Cybersecurity Maturity Overview",
+    "metrics": {
+      "axes": "Axes",
+      "domains": "Domains",
+      "objectives": "Objectives",
+      "objectivesToImprove": "Objectives to Improve"
+    },
+    "charts": {
+      "axisRadar": "Axis Radar",
+      "scoresByAxis": "Scores by Axis"
+    },
+    "sections": {
+      "evaluationAxes": "Evaluation Axes",
+      "viewDetails": "View Details",
+      "improvement": {
+        "needed": "Needs Improvement",
+        "good": "Good Progress",
+        "excellent": "Excellent"
+      }
+    }
+  },
+  "tooltips": {
+    "menu": "Toggle Menu",
+    "tableView": "Switch to Table View",
+    "analyticsView": "Switch to Analytics View",
+    "export": "Export Data"
+  },
+  "fileUpload": {
+    "title": "Upload File",
+    "dragDropText": "Drag and drop your file here, or",
+    "browseFiles": "browse files",
+    "fileSelected": "File Selected",
+    "fileReadyToUpload": "File is ready to be uploaded",
+    "invalidFileType": "Invalid File Type",
+    "invalidFileTypeMessage": "Please upload an Excel (.xlsx, .xls) or CSV file",
+    "fileTooLarge": "File Too Large",
+    "fileTooLargeMessage": "File size should be less than 5MB",
+    "noFileSelected": "No File Selected",
+    "noFileSelectedMessage": "Please select a file to upload",
+    "removeFile": "Remove file"
+  },
+  "confirmDialog": {
+    "warning": {
+      "title": "Warning",
+      "message": "Are you sure you want to proceed?"
+    },
+    "info": {
+      "title": "Information",
+      "message": "Please confirm your action"
+    },
+    "question": {
+      "title": "Confirmation",
+      "message": "Would you like to proceed?"
+    },
+    "buttons": {
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    }
+  }
+}

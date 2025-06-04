@@ -1,0 +1,179 @@
+{
+  "welcome": {
+    "title": "Bienvenue sur GCMM",
+    "description": "Commencez par télécharger votre fichier"
+  },
+  "common": {
+    "upload": "Télécharger",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès"
+  },
+  "header": {
+    "title": "Plateforme NCSecMM",
+    "subtitle": "Modèle de Maturité Cybersécurité",
+    "buttons": {
+      "ncsecTable": "Table NCSecMM",
+      "dashboard": "Tableau de bord",
+      "export": "Exporter"
+    },
+    "score": {
+      "title": "Score Global",
+      "details": "Détails du score",
+      "outOf": "/5"
+    },
+    "unsavedChanges": "Modifications non enregistrées"
+  },
+  "sidebar": {
+    "title": "NCSecMM Plateforme",
+    "menu": {
+      "dashboard": "Tableau de bord",
+      "tableView": "tableau NCSecMM",
+      "axes": "Axes",
+      "importData": "Importer",
+      "exportData": "Exporter",
+      "settings": "Paramètres"
+    },
+    "export": {
+      "success": "Les données NCSecMM ont été exportées avec succès",
+      "error": "Impossible d'exporter les données NCSecMM"
+    }
+  },
+  "welcomeScreen": {
+    "importFile": "Importer un fichier",
+    "startEvaluation": "Démarrer l'évaluation",
+    "startingAssessment": "Démarrage d'une nouvelle évaluation",
+    "streamlineYourAssessment": "Simplifiez votre évaluation de sécurité",
+    "evaluateTrackImprove": "Évaluez, suivez et améliorez la maturité de la sécurité de votre organisation avec notre outil d'évaluation complet.",
+    "startNewEvaluation": "Nouvelle évaluation",
+    "importExistingFile": "Importer un fichier existant",
+    "whyChooseNCSec": "Pourquoi choisir NCSec ?",
+    "platformBenefits": "Notre plateforme offre une approche complète de l'évaluation de la maturité en sécurité avec des fonctionnalités puissantes conçues pour votre succès.",
+    "comprehensiveAssessment": "Évaluation complète",
+    "evaluateAcrossDomains": "Évaluez votre posture de sécurité à travers plusieurs domaines avec notre cadre détaillé.",
+    "teamCollaboration": "Collaboration d'équipe",
+    "workTogether": "Travaillez ensemble avec votre équipe pour compléter les évaluations et suivre les progrès.",
+    "gettingStartedGuide": "Guide de démarrage",
+    "whatIsNCSec": "Qu'est-ce que NCSec ?",
+    "ncssecDescription": "NCSec est une plateforme complète d'évaluation de la maturité en sécurité conçue pour aider les organisations à évaluer et améliorer leur posture de sécurité.",
+    "keyFeatures": "Fonctionnalités clés",
+    "collaborativeEvaluation": "Processus d'évaluation collaboratif",
+    "detailedReports": "Rapports détaillés et analyses",
+    "progressTracking": "Suivi des progrès dans le temps",
+    "gettingStartedTemplate": "Commencer avec le modèle",
+    "templateDescription": "Téléchargez notre modèle pour démarrer rapidement votre évaluation :",
+    "preConfiguredFramework": "Cadre d'évaluation préconfiguré",
+    "detailedInstructions": "Instructions et conseils détaillés",
+    "sampleData": "Données d'exemple pour référence",
+    "downloadTemplate": "Télécharger le modèle",
+    "howItWorks": {
+      "title": "Comment ça marche",
+      "description": "Commencez votre évaluation de maturité en cybersécurité en quelques étapes simples.",
+      "step1": {
+        "title": "Choisissez votre point de départ",
+        "description": "Importez un fichier NCSec existant pour continuer un travail précédent, ou commencez une nouvelle évaluation."
+      },
+      "step2": {
+        "title": "Complétez l'évaluation",
+        "description": "Suivez notre processus guidé pour évaluer la maturité en cybersécurité de votre organisation dans tous les domaines clés."
+      },
+      "step3": {
+        "title": "Collaborez et améliorez",
+        "description": "Travaillez avec les membres de votre équipe et générez des rapports complets avec des recommandations concrètes."
+      },
+      "getStarted": {
+        "title": "Prêt à commencer ?",
+        "description": "Choisissez comment vous souhaitez commencer votre évaluation de maturité en cybersécurité.",
+        "importButton": "Importer un fichier NCSec existant",
+        "startButton": "Démarrer une nouvelle évaluation",
+        "helpText": "Les deux options vous guideront à travers le processus complet d'évaluation."
+      }
+    },
+    "cta": {
+      "title": "Renforcez votre posture de cybersécurité aujourd'hui",
+      "description": "Rejoignez les organisations du monde entier qui font confiance à NCSec Platform pour évaluer et améliorer leur maturité en cybersécurité.",
+      "startButton": "Commencer votre évaluation",
+      "learnMore": "En savoir plus"
+    },
+    "footer": {
+      "platformName": "NCSec Platform",
+      "copyright": "© 2024 NCSec Platform. Rationalisation des évaluations de maturité en cybersécurité pour les organisations du monde entier."
+    }
+  },
+  "export": {
+    "success": "Export réussi",
+    "successDescription": "Le fichier NCSecMM a été exporté avec succès.",
+    "error": "Erreur d'export",
+    "errorDescription": "Une erreur s'est produite lors de l'export du fichier.",
+    "button": "Exporter"
+  },
+  "language": {
+    "switchTo": "Passer en {{lang}}",
+    "current": "Langue actuelle : {{lang}}",
+    "en": "Anglais",
+    "fr": "Français"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "subtitle": "Aperçu de la maturité cybersécurité",
+    "metrics": {
+      "axes": "Axes",
+      "domains": "Domaines",
+      "objectives": "Objectifs",
+      "objectivesToImprove": "Objectifs à améliorer"
+    },
+    "charts": {
+      "axisRadar": "Radar des axes",
+      "scoresByAxis": "Scores par axe"
+    },
+    "sections": {
+      "evaluationAxes": "Axes d'évaluation",
+      "viewDetails": "Voir les détails",
+      "improvement": {
+        "needed": "À améliorer",
+        "good": "Bonne progression",
+        "excellent": "Excellent"
+      }
+    }
+  },
+  "tooltips": {
+    "menu": "Basculer le menu",
+    "tableView": "Passer à la vue tableau",
+    "analyticsView": "Passer à la vue analytique",
+    "export": "Exporter les données"
+  },
+  "fileUpload": {
+    "title": "Télécharger un fichier",
+    "dragDropText": "Glissez et déposez votre fichier ici, ou",
+    "browseFiles": "parcourir les fichiers",
+    "fileSelected": "Fichier sélectionné",
+    "fileReadyToUpload": "Le fichier est prêt à être téléchargé",
+    "invalidFileType": "Type de fichier invalide",
+    "invalidFileTypeMessage": "Veuillez télécharger un fichier Excel (.xlsx, .xls) ou CSV",
+    "fileTooLarge": "Fichier trop volumineux",
+    "fileTooLargeMessage": "La taille du fichier doit être inférieure à 5 Mo",
+    "noFileSelected": "Aucun fichier sélectionné",
+    "noFileSelectedMessage": "Veuillez sélectionner un fichier à télécharger",
+    "removeFile": "Supprimer le fichier"
+  },
+  "confirmDialog": {
+    "warning": {
+      "title": "Avertissement",
+      "message": "Êtes-vous sûr de vouloir continuer ?"
+    },
+    "info": {
+      "title": "Information",
+      "message": "Veuillez confirmer votre action"
+    },
+    "question": {
+      "title": "Confirmation",
+      "message": "Souhaitez-vous continuer ?"
+    },
+    "buttons": {
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
+    }
+  }
+}

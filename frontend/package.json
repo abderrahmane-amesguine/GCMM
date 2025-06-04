@@ -13,10 +13,13 @@
     "@radix-ui/react-slot": "^1.2.3",
     "class-variance-authority": "^0.7.1",
     "gcmm": "file:",
+    "i18next": "^25.2.1",
+    "i18next-browser-languagedetector": "^8.1.0",
     "lucide-react": "^0.511.0",
     "papaparse": "^5.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-i18next": "^15.5.2",
     "recharts": "^2.15.3",
     "tailwind-merge": "^3.3.0",
     "xlsx": "^0.18.5"

@@ -1,6 +1,7 @@
 // frontend/src/components/ConfirmationDialog.jsx
 import React from 'react';
 import { AlertTriangle, Info, HelpCircle, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const ConfirmationDialog = ({ 
   isOpen, 
@@ -8,10 +9,12 @@ const ConfirmationDialog = ({
   onConfirm, 
   title, 
   message, 
-  confirmText = "Confirmer", 
-  cancelText = "Annuler",
+  confirmText, 
+  cancelText,
   type = "warning" // warning, info, question
 }) => {
+  const { t } = useTranslation();
+
   if (!isOpen) return null;
 
   const getIcon = () => {
@@ -40,6 +43,10 @@ const ConfirmationDialog = ({
     }
   };
 
+  // Use provided text or fallback to translations
+  const finalConfirmText = confirmText || t('confirmDialog.buttons.confirm');
+  const finalCancelText = cancelText || t('confirmDialog.buttons.cancel');
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
@@ -56,11 +63,11 @@ const ConfirmationDialog = ({
               </div>
               <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                 <h3 className="text-lg leading-6 font-medium text-gray-900">
-                  {title}
+                  {title || t(`confirmDialog.${type}.title`)}
                 </h3>
                 <div className="mt-2">
                   <p className="text-sm text-gray-500">
-                    {message}
+                    {message || t(`confirmDialog.${type}.message`)}
                   </p>
                 </div>
               </div>
@@ -75,14 +82,14 @@ const ConfirmationDialog = ({
                 onClose();
               }}
             >
-              {confirmText}
+              {finalConfirmText}
             </button>
             <button
               type="button"
               className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
               onClick={onClose}
             >
-              {cancelText}
+              {finalCancelText}
             </button>
           </div>
         </div>

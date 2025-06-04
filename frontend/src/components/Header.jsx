@@ -4,8 +4,10 @@ import { DataContext } from '../context/DataContext';
 import { getScoreBadgeClass } from '../utils/colors';
 import { exportNCSecMMToExcel } from '../services/api';
 import { toast } from './ui/Toast';
+import { useTranslation } from 'react-i18next';
 
 const Header = ({ toggleSidebar, switchView, activeView }) => {
+  const { t } = useTranslation();
   const context = useContext(DataContext) || {};
   const { globalScore = 0, loaded = false, axes = [], hasUnsavedChanges = false, markDataAsSaved } = context;
 
@@ -39,17 +41,16 @@ const Header = ({ toggleSidebar, switchView, activeView }) => {
             <button
               onClick={toggleSidebar}
               className="mr-4 p-2 rounded-lg hover:bg-blue-100 transition-all focus:outline-none focus:ring-2 focus:ring-blue-300 hover:rotate-180 duration-300"
-              aria-label="Menu"
+              aria-label={t('tooltips.menu')}
             >
               <Menu size={24} className="text-blue-700 transform transition-transform" />
             </button>
             <div className="flex items-center gap-3">
               <Shield className="h-8 w-8 text-blue-600" />
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent">
-                  NCSec Platform
+                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent">                  {t('header.title')}
                 </h1>
-                <p className="text-sm text-gray-500">Cybersecurity Maturity Model</p>
+                <p className="text-sm text-gray-500">{t('header.subtitle')}</p>
               </div>
             </div>
           </div>
@@ -65,7 +66,7 @@ const Header = ({ toggleSidebar, switchView, activeView }) => {
                 onClick={() => switchView('NCSecMM-table')}
               >
                 <Table size={16} className="transition-transform group-hover:scale-110" />
-                <span>NCSec Table</span>
+                <span>{t('header.buttons.ncsecTable')}</span>
               </button>
               <button
                 className={`px-3 py-1.5 text-sm flex items-center gap-1 rounded-lg transition-all duration-300 ${
@@ -76,18 +77,17 @@ const Header = ({ toggleSidebar, switchView, activeView }) => {
                 onClick={() => switchView('NCSecMM')}
               >
                 <BarChart2 size={16} className="transition-transform group-hover:scale-110" />
-                <span>Dashboard</span>
+                <span>{t('header.buttons.dashboard')}</span>
               </button>
             </div>
 
             {loaded && (
               <div className="group relative">
                 <div className={`flex items-center gap-2 ${badgeClass} px-4 py-2 rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl cursor-help transform hover:-translate-y-1`}>
-                  <div>
-                    <div className="text-xs uppercase font-semibold tracking-wider">Score Global</div>
+                  <div>                    <div className="text-xs uppercase font-semibold tracking-wider">{t('header.score.title')}</div>
                     <div className="flex items-baseline gap-1">
                       <span className="text-2xl font-extrabold">{displayScore}</span>
-                      <span className="text-sm font-medium opacity-80">/5</span>
+                      <span className="text-sm font-medium opacity-80">{t('header.score.outOf')}</span>
                     </div>
                   </div>
                   <div className="h-10 w-10 relative">
@@ -122,7 +122,7 @@ const Header = ({ toggleSidebar, switchView, activeView }) => {
 
                 <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg p-4 border border-gray-200 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 translate-y-2">
                   <h3 className="font-semibold mb-2 flex items-center gap-1">
-                    <Info size={14} /> Détails du score
+                    <Info size={14} /> {t('header.score.details')}
                   </h3>
                   <div className="space-y-2">
                     {loaded && axes.map(axis => (
@@ -144,7 +144,7 @@ const Header = ({ toggleSidebar, switchView, activeView }) => {
               className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-all duration-300 hover:shadow-md"
             >
               <FileSpreadsheet size={18} />
-              <span className="font-medium">Export</span>
+              <span className="font-medium">{t('header.buttons.export')}</span>
             </button>
           </div>
         </div>

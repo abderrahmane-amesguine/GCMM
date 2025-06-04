@@ -3,8 +3,10 @@ import { X, UploadCloud, CheckCircle, File, Trash2 } from 'lucide-react';
 import { toast } from './ui/Toast';
 import { DataContext } from '../context/DataContext';
 import ConfirmationDialog from './ConfirmationDialog';
+import { useTranslation } from 'react-i18next';
 
 const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
+  const { t } = useTranslation();
   const [file, setFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -45,8 +47,8 @@ const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
 
     if (!validTypes.includes(file.type)) {
       toast({
-        title: "Invalid File Type",
-        description: "Please upload an Excel (.xlsx, .xls) or CSV file",
+        title: t('fileUpload.invalidFileType'),
+        description: t('fileUpload.invalidFileTypeMessage'),
         type: "error"
       });
       return false;
@@ -55,8 +57,8 @@ const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (file.size > maxSize) {
       toast({
-        title: "File Too Large",
-        description: "File size should be less than 5MB",
+        title: t('fileUpload.fileTooLarge'),
+        description: t('fileUpload.fileTooLargeMessage'),
         type: "error"
       });
       return false;
@@ -70,19 +72,19 @@ const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
     if (validateFile(selectedFile)) {
       setFile(selectedFile);
       toast({
-        title: "File Selected",
-        description: "File is ready to be uploaded",
+        title: t('fileUpload.fileSelected'),
+        description: t('fileUpload.fileReadyToUpload'),
         type: "info"
       });
     }
   };
-  
+
   // Handle file submission with confirmation if needed
   const handleSubmit = async () => {
     if (!file) {
       toast({
-        title: "No File Selected",
-        description: "Please select a file to upload",
+        title: t('fileUpload.noFileSelected'),
+        description: t('fileUpload.noFileSelectedMessage'),
         type: "warning"
       });
       return;
@@ -150,140 +152,103 @@ const FileUploadModal = ({ isOpen, onClose, onFileUpload }) => {
   if (!isOpen) return null;
   
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-        <div 
-          className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" 
-          onClick={onClose}
-        />
-        
-        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          {/* Header */}
-          <div className="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
-            <h3 className="text-lg font-medium text-gray-900">Importer un fichier</h3>
-            <button 
-              onClick={onClose} 
-              className="text-gray-400 hover:text-gray-600 focus:outline-none"
-            >
-              <X size={20} />
-            </button>
-          </div>
-          
-          {/* Body */}
-          <div className="px-6 py-5">
-            {!file ? (
-              <div 
-                className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-                  dragActive 
-                    ? 'border-blue-500 bg-blue-50' 
-                    : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'
-                }`}
-                onDragEnter={handleDrag}
-                onDragLeave={handleDrag}
-                onDragOver={handleDrag}
-                onDrop={handleDrop}
-              >
-                <UploadCloud className="mx-auto mb-4 text-blue-500" size={48} />
-                <p className="text-gray-700 font-medium mb-2">
-                  Glissez-déposez votre fichier ici
-                </p>
-                <p className="text-gray-500 text-sm mb-4">
-                  ou cliquez pour parcourir vos fichiers
-                </p>
-                <div>
-                  <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1 rounded mr-2">
-                    .xlsx
-                  </span>
-                  <span className="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1 rounded">
-                    .xls
-                  </span>
-                </div>
-                <input 
-                  type="file" 
-                  className="hidden" 
-                  ref={fileInputRef}
-                  id="fileUpload" 
-                  accept=".xlsx,.xls"
-                  onChange={handleFileChange}
-                />
-                <button 
-                  type="button"
-                  onClick={() => fileInputRef.current.click()}
-                  className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  Parcourir les fichiers
-                </button>
-              </div>
-            ) : (
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                    <File size={20} className="text-blue-600" />
-                  </div>
-                  <div className="ml-3 flex-1 truncate">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          {file.name}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {formatFileSize(file.size)}
-                        </p>
-                      </div>
-                      <button 
-                        onClick={clearFile}
-                        className="ml-2 flex-shrink-0 text-gray-400 hover:text-red-500"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                    <div className="mt-2 w-full bg-gray-200 rounded-full h-1.5">
-                      <div className="bg-green-500 h-1.5 rounded-full w-full"></div>
-                    </div>
-                    <div className="flex items-center mt-1">
-                      <CheckCircle size={14} className="text-green-500 mr-1.5" />
-                      <span className="text-xs text-green-600">Prêt à importer</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-          
-          {/* Footer */}
-          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+    <div className="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+          <div className="absolute top-0 right-0 pt-4 pr-4">
             <button
               type="button"
-              className="mr-3 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               onClick={onClose}
+              className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Annuler
+              <span className="sr-only">{t('common.cancel')}</span>
+              <X className="h-6 w-6" aria-hidden="true" />
+            </button>
+          </div>
+
+          <div className="sm:flex sm:items-start">
+            <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
+              <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                {t('fileUpload.title')}
+              </h3>
+              <div className="mt-4">
+                <div 
+                  className={`max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-md ${
+                    dragActive ? 'border-indigo-500 bg-indigo-50' : 'border-gray-300'
+                  }`}
+                  onDragEnter={handleDrag}
+                  onDragLeave={handleDrag}
+                  onDragOver={handleDrag}
+                  onDrop={handleDrop}
+                >
+                  <div className="space-y-1 text-center">
+                    {!file ? (
+                      <>
+                        <UploadCloud className="mx-auto h-12 w-12 text-gray-400" />
+                        <div className="flex text-sm text-gray-600">
+                          <label className="relative cursor-pointer rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                            <span>{t('fileUpload.dragDropText')}</span>
+                            <input
+                              ref={fileInputRef}
+                              type="file"
+                              className="sr-only"
+                              onChange={handleFileChange}
+                              accept=".xlsx,.xls,.csv"
+                            />
+                          </label>
+                          <p className="pl-1">{t('fileUpload.browseFiles')}</p>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex items-center space-x-2">
+                        <File className="h-6 w-6 text-indigo-600" />
+                        <span className="text-sm text-gray-900">{file.name}</span>
+                        <button
+                          type="button"
+                          onClick={() => setFile(null)}
+                          className="text-sm text-red-600 hover:text-red-500"
+                        >
+                          <Trash2 className="h-5 w-5" aria-label={t('fileUpload.removeFile')} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm"
+            >
+              {t('common.upload')}
             </button>
             <button
               type="button"
-              className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white ${
-                file ? 'bg-blue-600 hover:bg-blue-700' : 'bg-blue-400 cursor-not-allowed'
-              } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
-              onClick={handleSubmit}
-              disabled={!file}
+              onClick={onClose}
+              className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
             >
-              {hasUnsavedChanges ? "Continuer avec l'import" : "Importer"}
+              {t('common.cancel')}
             </button>
           </div>
         </div>
       </div>
-
-      {/* Confirmation Dialog */}
-      {showConfirmation && (
-        <ConfirmationDialog
-          isOpen={showConfirmation}
-          onClose={() => setShowConfirmation(false)}
-          onConfirm={handleConfirmUpload}
-          onCancel={handleCancelUpload}
-          title="Unsaved Changes"
-          message="You have unsaved changes. Are you sure you want to upload the file?"
-        />
-      )}
+      <ConfirmationDialog
+        isOpen={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        onConfirm={async () => {
+          await processFileUpload(pendingFileRef.current);
+          setShowConfirmation(false);
+        }}
+        title={t('confirmDialog.warning.title')}
+        message={t('confirmDialog.warning.message')}
+        type="warning"
+      />
     </div>
   );
 };
