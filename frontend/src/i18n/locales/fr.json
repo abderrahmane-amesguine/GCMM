@@ -35,11 +35,11 @@
     "title": "NCSecMM Plateforme",
     "menu": {
       "dashboard": "Tableau de bord",
-      "tableView": "tableau NCSecMM",
+      "tableView": "Tableau NCSecMM",
       "axes": "Axes",
       "importData": "Importer",
       "exportData": "Exporter",
-      "settings": "Paramètres"
+      "close": "Fermer"
     },
     "export": {
       "success": "Les données NCSecMM ont été exportées avec succès",
@@ -179,6 +179,72 @@
     "buttons": {
       "confirm": "Confirmer",
       "cancel": "Annuler"
+    }
+  },
+  "axisView": {
+    "notFound": "Axe non trouvé",
+    "backToDashboard": "Retour au tableau de bord",
+    "actions": {
+      "export": "Exporter",
+      "report": "Rapport",
+      "exportSuccess": "Export réussi",
+      "exportDescription": "Les données de l'axe {{name}} ont été exportées avec succès",
+      "exportError": "Erreur d'export",
+      "exportErrorDescription": "Une erreur s'est produite lors de l'export des données",
+      "reportSuccess": "Rapport généré",
+      "reportDescription": "Le rapport pour l'axe {{name}} a été généré avec succès",
+      "reportError": "Erreur de génération",
+      "reportErrorDescription": "Une erreur s'est produite lors de la génération du rapport."
+    },
+    "sections": {
+      "evaluation": "Évaluation de l'axe",
+      "domains": "Domaines",
+      "objectives": {
+        "title": "Objectifs",
+        "lowScore": "Objectifs à faible score",
+        "highScore": "Objectifs à haut score"
+      },
+      "details": "Voire details"
+    }
+  },
+  "scoreLabel": {
+    "Poor": "Faible",
+    "Average": "Moyen",
+    "Good": "Bon",
+    "Excellent": "Excellent"
+  },
+  "NCSecTable": {
+    "toast": {
+      "titleError": "Erreur",
+      "descriptionErrorObj": "Erreur lors de la récupération des objectifs",
+      "descriptionErrorInput": "Erreur lors de la récupération des entrées",
+      "descriptionError": "Erreur lors de l'enregistrement de l'évaluation",
+      "titleSuccess": "Succès",
+      "descriptionSuccess": "Évaluation enregistrée avec succès"
+    },
+    "columns": {
+      "axis": "Axes",
+      "domain": "Domaines",
+      "objective": "Objectifs",
+      "score": "Score",
+      "level": "Niveau"
+    },
+    "objDetails": {
+      "title": "Détails de l'objectif",
+      "axis": "Axe",
+      "domain": "Domaine",
+      "objective": "Objectif",
+      "description": "Description",
+      "id": "ID de l'objectif",
+      "MaturityLevels": "Niveaux De Maturité",
+      "Profile": {
+        "title": "Définir votre profil actuel",
+        "currentProfile": "Profil Actuel",
+        "targetProfile": "Profil Cible"
+      },
+      "comment": "Commentaire",
+      "placeholder": "Entrez votre commentaire ici...",
+      "saveProfile": "Enregistrés le profil"
     }
   }
 }

@@ -39,7 +39,7 @@
       "axes": "Axes",
       "importData": "Import",
       "exportData": "Export",
-      "settings": "Settings"
+      "close": "Close"
     },
     "export": {
       "success": "NCSecMM data exported successfully",
@@ -179,6 +179,73 @@
     "buttons": {
       "confirm": "Confirm",
       "cancel": "Cancel"
+    }
+  },
+  "axisView": {
+    "notFound": "Axis not found",
+    "backToDashboard": "Back to Dashboard",
+    "actions": {
+      "export": "Export",
+      "report": "Report",
+      "exportSuccess": "Export successful",
+      "exportDescription": "The data for axis {{name}} has been exported successfully",
+      "exportError": "Export error",
+      "exportErrorDescription": "An error occurred while exporting the data",
+      "reportSuccess": "Report generated",
+      "reportDescription": "The report for axis {{name}} has been generated successfully",
+      "reportError": "Generation error",
+      "reportErrorDescription": "An error occurred while generating the report"
+    },
+    "sections": {
+      "evaluation": "Axis Evaluation",
+      "domains": "Domains",
+      "objectives": {
+        "title": "Objectives",
+        "count": "Total objectives",
+        "lowScore": "Low score objectives",
+        "highScore": "High score objectives"
+      },
+      "details": "View details"
+    }
+  },
+  "scoreLabel": {
+    "Poor": "Poor",
+    "Average": "Average",
+    "Good": "Good",
+    "Excellent": "Excellent"
+  },
+  "NCSecTable": {
+    "toast": {
+      "titleError": "Error",
+      "descriptionErrorObj": "No objective selected",
+      "descriptionErrorInput": "Please enter valid profile values (1-5, target >= current)",
+      "descriptionError": "Error saving evaluation",
+      "titleSuccess": "Success",
+      "descriptionSuccess": "Evaluation saved successfully"
+    },
+    "columns": {
+      "axis": "Axis",
+      "domain": "Domains",
+      "objective": "Objectives",
+      "score": "Score",
+      "level": "Level"
+    },
+    "objDetails": {
+      "title": "Objective Details",
+      "axis": "Axis",
+      "domain": "Domain",
+      "objective": "Objective",
+      "description": "Description",
+      "id": "Objective ID",
+      "MaturityLevels": "Maturity Levels",
+      "Profile": {
+        "title": "Set Your Current Profile",
+        "currentProfile": "Current Profile",
+        "targetProfile": "Target Profile"
+      },
+      "comment": "Comment",
+      "placeholder": "Add your comments here...",
+      "saveProfile": "Save Profile"
     }
   }
 }

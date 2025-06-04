@@ -23,10 +23,12 @@ export const getScoreBadgeClass = (score) => {
   return 'bg-green-100 text-green-800';
 };
 
+import { useTranslation } from "react-i18next";
 // Fonction pour obtenir le texte de l'évaluation en fonction du score
 export const getScoreLabel = (score) => {
-  if (score < 2) return 'Faible';
-  if (score < 3) return 'Moyen';
-  if (score < 4) return 'Bon';
-  return 'Excellent';
+  const { t } = useTranslation();
+  if (score < 2) return t('scoreLabel.Poor');
+  if (score < 3) return t('scoreLabel.Average');
+  if (score < 4) return t('scoreLabel.Good');
+  return t('scoreLabel.Excellent');
 };

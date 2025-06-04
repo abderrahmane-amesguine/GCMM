@@ -2,8 +2,10 @@ import React, { useContext, useState } from 'react';
 import { DataContext } from '../context/DataContext';
 import { saveObjectiveEvaluation } from '../services/api';
 import { toast } from '../components/ui/Toast';
+import { useTranslation } from 'react-i18next';
 
-const NCSecMMTable = ({ onNavigate }) => {
+const NCSecMMTable = () => {
+  const { t } = useTranslation();
   const { axes, domains, objectives, loading, refreshData } = useContext(DataContext);
   const [selectedAxis, setSelectedAxis] = useState(null);
   const [selectedDomain, setSelectedDomain] = useState(null);
@@ -44,8 +46,8 @@ const NCSecMMTable = ({ onNavigate }) => {
   const handleSaveEvaluation = async () => {
     if (!selectedObjective) {
       toast({
-        title: "Error",
-        description: "No objective selected",
+        title: t("NCSecTable.toast.titleError"),
+        description: t("NCSecTable.toast.descriptionErrorObj"),
         type: "error"
       });
       return;
@@ -55,8 +57,8 @@ const NCSecMMTable = ({ onNavigate }) => {
     const targ = Number(targetEvaluation);
     if (!curr || !targ || curr < 1 || curr > 5 || targ < curr || targ > 5) {
       toast({
-        title: "Invalid Input",
-        description: "Please enter valid profile values (1-5, target >= current)",
+        title: t("NCSecTable.toast.titleError"),
+        description: t("NCSecTable.toast.descriptionErrorInput"),
         type: "error"
       });
       return;
@@ -72,15 +74,15 @@ const NCSecMMTable = ({ onNavigate }) => {
         await refreshData();
       }
       toast({
-        title: "Success",
-        description: "Evaluation saved successfully",
+        title: t("NCSecTable.toast.titleSuccess"),
+        description: t("NCSecTable.toast.descriptionSuccess"),
         type: "success"
       });
     } catch (error) {
       console.error("Error saving evaluation:", error);
       toast({
-        title: "Error",
-        description: error.message || "Error saving evaluation",
+        title: t("NCSecTable.toast.titleError"),
+        description: t("NCSecTable.toast.descriptionError"),
         type: "error"
       });
     }
@@ -101,7 +103,7 @@ const NCSecMMTable = ({ onNavigate }) => {
         {/* Axes List */}
         <div className="border border-gray-300 rounded-lg overflow-hidden shadow-lg">
           <div className="bg-white p-4 font-semibold border-b border-gray-300">
-            <h2 className="text-lg">Axes</h2>
+            <h2 className="text-lg">{t('NCSecTable.columns.axis')}</h2>
           </div>
           <div className="bg-white">
             {axes.map(axis => (
@@ -111,7 +113,7 @@ const NCSecMMTable = ({ onNavigate }) => {
                 className={`p-2 border-b border-gray-200 cursor-pointer hover:bg-gray-50 ${selectedAxis === axis.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''}`}
               >
                 <h3 className="font-medium">{axis.name}</h3>
-                <p className="text-sm text-gray-600">Score: {axis.score.toFixed(2)}/5</p>
+                <p className="text-sm text-gray-600">{t('NCSecTable.columns.score')}: {axis.score.toFixed(2)}/5</p>
               </div>
             ))}
           </div>
@@ -120,7 +122,7 @@ const NCSecMMTable = ({ onNavigate }) => {
         {selectedAxis && (
           <div className="border border-gray-300 rounded-lg overflow-hidden shadow-lg">
             <div className="bg-white p-4 font-semibold border-b border-gray-300">
-              <h2 className="text-lg">Domains</h2>
+              <h2 className="text-lg">{t('NCSecTable.columns.domain')}</h2>
             </div>
             <div className="bg-white">
               {filteredDomains.map(domain => (
@@ -130,7 +132,7 @@ const NCSecMMTable = ({ onNavigate }) => {
                   className={`p-2 border-b border-gray-200 cursor-pointer hover:bg-gray-50 ${selectedDomain === domain.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''}`}
                 >
                   <h3 className="font-medium">{domain.name}</h3>
-                  <p className="text-sm text-gray-600">Score: {domain.score.toFixed(2)}/5</p>
+                  <p className="text-sm text-gray-600">{t('NCSecTable.columns.score')}: {domain.score.toFixed(2)}/5</p>
                 </div>
               ))}
             </div>
@@ -140,7 +142,7 @@ const NCSecMMTable = ({ onNavigate }) => {
         {(selectedAxis && selectedDomain) && (
           <div className="border border-gray-300 rounded-lg overflow-hidden shadow-lg">
             <div className="bg-white p-4 font-semibold border-b border-gray-300">
-              <h2 className="text-lg">Objectives</h2>
+              <h2 className="text-lg">{t('NCSecTable.columns.objective')}</h2>
             </div>
             <div className="bg-white">
               {filteredObjectives.map(objective => (
@@ -150,7 +152,7 @@ const NCSecMMTable = ({ onNavigate }) => {
                   className={`p-2 border-b border-gray-200 cursor-pointer hover:bg-gray-50 ${selectedObjective?.id === objective.id ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''}`}
                 >
                   <h3 className="font-medium">{objective.name}</h3>
-                  <p className="text-sm text-gray-600">Level: {objective.profile}/5</p>
+                  <p className="text-sm text-gray-600">{t('NCSecTable.columns.level')}: {objective.profile}/5</p>
                 </div>
               ))}
             </div>
@@ -161,23 +163,23 @@ const NCSecMMTable = ({ onNavigate }) => {
       {selectedObjective && (
         <div className="border border-gray-300 rounded-lg overflow-hidden shadow-lg">
           <div className="bg-white p-4 font-semibold border-b border-gray-300">
-            <h2 className="text-lg">Objective Details <span className='font-bold text-blue-600'>{selectedObjective.id}</span></h2>
+            <h2 className="text-lg">{t('NCSecTable.objDetails.title')} <span className='font-bold text-blue-600'>{selectedObjective.id}</span></h2>
           </div>
           <div className="bg-white p-4">
             <div className="grid grid-cols-12 gap-4 mb-6">
-              <div className="col-span-2 font-semibold">ID:</div>
+              <div className="col-span-2 font-semibold">{t('NCSecTable.objDetails.id')}:</div>
               <div className="col-span-10">{selectedObjective.id}</div>
-              <div className="col-span-2 font-semibold">Axis:</div>
+              <div className="col-span-2 font-semibold">{t('NCSecTable.objDetails.axis')}:</div>
               <div className="col-span-10">{axes.find(a => a.id === selectedObjective.axisId)?.name}</div>
-              <div className="col-span-2 font-semibold">Domain:</div>
+              <div className="col-span-2 font-semibold">{t('NCSecTable.objDetails.domain')}:</div>
               <div className="col-span-10">{domains.find(d => d.id === selectedObjective.domainId)?.name}</div>
-              <div className="col-span-2 font-semibold">Objective:</div>
+              <div className="col-span-2 font-semibold">{t('NCSecTable.objDetails.objective')}:</div>
               <div className="col-span-10">{selectedObjective.name}</div>
-              <div className="col-span-2 font-semibold">Description:</div>
+              <div className="col-span-2 font-semibold">{t('NCSecTable.objDetails.description')}:</div>
               <div className="col-span-10">{selectedObjective.description}</div>
             </div>
             <div className="mb-6">
-              <h3 className="font-semibold mb-4">Maturity Levels</h3>
+              <h3 className="font-semibold mb-4">{t('NCSecTable.objDetails.MaturityLevels')}</h3>
               <div className="grid grid-cols-5 gap-4">
                 {selectedObjective.levels.map((level, index) => (
                   <div
@@ -187,19 +189,19 @@ const NCSecMMTable = ({ onNavigate }) => {
                         : 'bg-gray-50 border-gray-200'
                       }`}
                   >
-                    <div className="font-medium mb-2">Level {index + 1}</div>
+                    <div className="font-medium mb-2">{t('NCSecTable.columns.level')} {index + 1}</div>
                     <p className="text-sm text-gray-600">{level.description}</p>
                   </div>
                 ))}
               </div>
             </div>
             <div className="border-t border-gray-200 pt-6">
-              <h3 className="font-semibold mb-4">Set Your Current Profile</h3>
+              <h3 className="font-semibold mb-4">{t('NCSecTable.objDetails.Profile.title')}</h3>
               <div className="space-y-4">
                 <div className='flex justify-between'>
                   <div className='w-1/2'>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Current Profil (1-5)
+                      {t('NCSecTable.objDetails.Profile.currentProfile')} (1-5)
                     </label>
                     <input
                       type="number"
@@ -212,7 +214,7 @@ const NCSecMMTable = ({ onNavigate }) => {
                   </div>
                   <div className='w-1/2'>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Target Profil ({currentEvaluation}-5)
+                      {t('NCSecTable.objDetails.Profile.targetProfile')} ({currentEvaluation}-5)
                     </label>
                     <input
                       type="number"
@@ -227,13 +229,13 @@ const NCSecMMTable = ({ onNavigate }) => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Comments
+                    {t('NCSecTable.objDetails.comment')}
                   </label>
                   <textarea
                     value={currentComment}
                     onChange={e => setCurrentComment(e.target.value)}
                     className="border border-gray-300 rounded-md px-3 py-2 w-full h-32"
-                    placeholder="Add your comments here..."
+                    placeholder={t('NCSecTable.objDetails.placeholder')}
                   />
                 </div>
                 <div className="flex justify-end">
@@ -241,7 +243,7 @@ const NCSecMMTable = ({ onNavigate }) => {
                     onClick={handleSaveEvaluation}
                     className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
                   >
-                    Save Profil
+                    {t('NCSecTable.objDetails.saveProfile')}
                   </button>
                 </div>
               </div>

@@ -1,6 +1,4 @@
-import React from 'react';
 import { getScoreBadgeClass, getScoreLabel } from '../utils/colors';
-
 const ScoreIndicator = ({ score, showLabel = true, size = 'md', className = '' }) => {
   const parsedScore = parseFloat(score);
   const badgeClass = getScoreBadgeClass(parsedScore);

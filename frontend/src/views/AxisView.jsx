@@ -5,10 +5,12 @@ import ScoreIndicator from '../components/ScoreIndicator';
 import { DataContext } from '../context/DataContext';
 import { exportAxisToExcel, generateAxisReport } from '../services/api';
 import { toast } from '../components/ui/Toast';
+import { useTranslation } from 'react-i18next';
 
 const AxisView = ({ axisId, onNavigate }) => {
+  const { t } = useTranslation();
   const { axes, domains, objectives } = useContext(DataContext);
-
+  
   const axis = axes.find(a => a.id === axisId);
   if (!axis) return <div>Axe non trouvé</div>;
 
@@ -50,16 +52,15 @@ const AxisView = ({ axisId, onNavigate }) => {
           <button
             onClick={async () => {
               try {
-                await exportAxisToExcel(axisId);
-                toast({
-                  title: "Export réussi",
-                  description: `Les données de l'axe ${axis.name} ont été exportées avec succès.`,
+                await exportAxisToExcel(axisId);                toast({
+                  title: t('axisView.actions.exportSuccess'),
+                  description: t('axisView.actions.exportDescription', { name: axis.name }),
                   type: "success"
                 });
               } catch (error) {
                 toast({
-                  title: "Erreur d'export",
-                  description: "Une erreur s'est produite lors de l'export des données.",
+                  title: t('axisView.actions.exportError'),
+                  description: t('axisView.actions.exportErrorDescription', { name: axis.name }),
                   type: "error"
                 });
               }
@@ -67,21 +68,21 @@ const AxisView = ({ axisId, onNavigate }) => {
             className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors"
           >
             <Download size={16} />
-            <span>Exporter</span>
+            <span>{t('axisView.actions.export')}</span>
           </button>
           <button
             onClick={async () => {
               try {
                 await generateAxisReport(axisId);
                 toast({
-                  title: "Rapport généré",
-                  description: `Le rapport pour l'axe ${axis.name} a été généré avec succès.`,
+                  title: t('axisView.actions.reportSuccess'),
+                  description: t('axisView.actions.reportDescription', { name: axis.name }),
                   type: "success"
                 });
               } catch (error) {
                 toast({
-                  title: "Erreur de génération",
-                  description: "Une erreur s'est produite lors de la génération du rapport.",
+                  title: t('axisView.actions.reportError'),
+                  description: t('axisView.actions.reportErrorDescription'),
                   type: "error"
                 });
               }
@@ -89,7 +90,7 @@ const AxisView = ({ axisId, onNavigate }) => {
             className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-blue-600 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors"
           >
             <Printer size={16} />
-            <span>Rapport</span>
+            <span>{t('axisView.actions.report')}</span>
           </button>
         </div>
       </div>
@@ -98,7 +99,7 @@ const AxisView = ({ axisId, onNavigate }) => {
         <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow p-6 h-full">
           <h3 className="text-xl font-semibold mb-4 flex items-center">
             <BarChart2 className="mr-2 text-blue-500" size={20} />
-            Évaluation de l'axe
+            {t('axisView.sections.evaluation')}
           </h3>
 
           <div className="flex items-center space-x-4 mb-6">
@@ -109,7 +110,8 @@ const AxisView = ({ axisId, onNavigate }) => {
                   fill="none"
                   stroke="#e2e8f0"
                   strokeWidth="3"
-                />                <path
+                />
+                <path
                   d="M18 2.0845a15.9155 15.9155 0 0 1 0 31.831a15.9155 15.9155 0 0 1 0 -31.831"
                   fill="none"
                   stroke={axis.color}
@@ -139,14 +141,14 @@ const AxisView = ({ axisId, onNavigate }) => {
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <div className="flex items-center text-gray-600 mb-2">
                 <Layers size={16} className="mr-2 text-blue-500" />
-                <span className="text-sm font-medium">Domaines</span>
+                <span className="text-sm font-medium">{t('axisView.sections.domains')}</span>
               </div>
               <div className="text-2xl font-bold">{domainCount}</div>
             </div>
             <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
               <div className="flex items-center text-gray-600 mb-2">
                 <Briefcase size={16} className="mr-2 text-indigo-500" />
-                <span className="text-sm font-medium">Objectifs</span>
+                <span className="text-sm font-medium">{t('axisView.sections.objectives.title')}</span>
               </div>
               <div className="text-2xl font-bold">{objectiveCount}</div>
             </div>
@@ -154,11 +156,11 @@ const AxisView = ({ axisId, onNavigate }) => {
 
           <div className="mt-4 pt-4 border-t border-gray-100">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-600">Objectifs faibles:</span>
+              <span className="text-sm text-gray-600">{t('axisView.sections.objectives.lowScore')}:</span>
               <span className="font-medium text-red-600">{lowScoreObjectives}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-sm text-gray-600">Objectifs excellents:</span>
+              <span className="text-sm text-gray-600">{t('axisView.sections.objectives.highScore')}:</span>
               <span className="font-medium text-green-600">{highScoreObjectives}</span>
             </div>
           </div>
@@ -178,7 +180,7 @@ const AxisView = ({ axisId, onNavigate }) => {
       <div className="card bg-white rounded-xl shadow-md">
         <h3 className="text-xl font-semibold mb-6 flex items-center">
           <Layers size={20} className="mr-2 text-blue-500" />
-          Domaines ({axisDomains.length})
+          {t('axisView.sections.domains')} ({axisDomains.length})
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -211,11 +213,11 @@ const AxisView = ({ axisId, onNavigate }) => {
 
                 <div className="mt-4 flex items-center justify-between">
                   <div className="text-sm text-gray-600">
-                    {domainObjectives.length} objectifs
+                    {domainObjectives.length} {t('axisView.sections.objectives.title')}
                   </div>
                   <div className="flex items-center text-blue-600 group-hover:translate-x-1 transition-transform">
                     <Eye size={16} className="mr-1" />
-                    <span className="text-sm font-medium">Voir détails</span>
+                    <span className="text-sm font-medium">{t('axisView.sections.details')}</span>
                   </div>
                 </div>
               </div>
