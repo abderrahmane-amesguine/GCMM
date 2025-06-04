@@ -24,7 +24,12 @@
       "details": "Détails du score",
       "outOf": "/5"
     },
-    "unsavedChanges": "Modifications non enregistrées"
+    "unsavedChanges": "Modifications non enregistrées",
+    "language": {
+      "select": "Sélectionner la langue",
+      "english": "Anglais",
+      "french": "Français"
+    }
   },
   "sidebar": {
     "title": "NCSecMM Plateforme",

@@ -24,7 +24,12 @@
       "details": "Score Details",
       "outOf": "/5"
     },
-    "unsavedChanges": "Unsaved Changes"
+    "unsavedChanges": "Unsaved Changes",
+    "language": {
+      "select": "Select language",
+      "english": "English",
+      "french": "French"
+    }
   },
   "sidebar": {
     "title": "NCSecMM Platform",

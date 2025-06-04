@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Menu, Shield, AlertCircle, Info, Table, BarChart2, FileSpreadsheet } from 'lucide-react';
+import { Menu, Shield, AlertCircle, Info, Table, BarChart2, FileSpreadsheet, Globe } from 'lucide-react';
 import { DataContext } from '../context/DataContext';
 import { getScoreBadgeClass } from '../utils/colors';
 import { exportNCSecMMToExcel } from '../services/api';
@@ -7,9 +7,18 @@ import { toast } from './ui/Toast';
 import { useTranslation } from 'react-i18next';
 
 const Header = ({ toggleSidebar, switchView, activeView }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const context = useContext(DataContext) || {};
   const { globalScore = 0, loaded = false, axes = [], hasUnsavedChanges = false, markDataAsSaved } = context;
+
+  const languages = [
+    { code: 'en', name: 'English' },
+    { code: 'fr', name: 'Français' }
+  ];
+
+  const handleLanguageChange = (languageCode) => {
+    i18n.changeLanguage(languageCode);
+  };
 
   const handleExport = async () => {
     try {
@@ -56,6 +65,33 @@ const Header = ({ toggleSidebar, switchView, activeView }) => {
           </div>
 
           <div className="flex items-center space-x-4">
+            {/* Language Selector */}
+            <div className="relative group">
+              <button
+                className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg hover:bg-gray-100 transition-all duration-300"
+                aria-label={t('header.language.select')}
+              >
+                <Globe size={16} className="text-gray-600" />
+                <span className="text-gray-700">{languages.find(lang => lang.code === i18n.language)?.name}</span>
+              </button>
+              <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="language-menu">
+                  {languages.map((language) => (
+                    <button
+                      key={language.code}
+                      onClick={() => handleLanguageChange(language.code)}
+                      className={`block w-full text-left px-4 py-2 text-sm ${
+                        i18n.language === language.code ? 'bg-blue-50 text-blue-700' : 'text-gray-700'
+                      } hover:bg-blue-50 hover:text-blue-700 transition-colors duration-300`}
+                      role="menuitem"
+                    >
+                      {language.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             <div className="hidden sm:flex items-center space-x-2">
               <button
                 className={`px-3 py-1.5 text-sm flex items-center gap-1 rounded-lg transition-all duration-300 ${

@@ -3,7 +3,8 @@ import { axisColors } from '../utils/colors';
 /**
  * API service for fetching NCSecMM data from the backend
  */
-const API_BASE_URL = 'https://ncsec.vercel.app/api';
+// const API_BASE_URL = 'https://ncsec.vercel.app/api';
+const API_BASE_URL = 'http://localhost:8000/api';
 
 /**
  * Fetch all NCSecMM data from the backend
