@@ -21,7 +21,7 @@ const Dashboard = ({ onNavigate }) => {
 
   // Calculate some statistics
   const totalObjectives = objectives.length;
-  const lowScoreObjectives = objectives.filter(obj => obj.evaluation < 2).length;
+  const lowScoreObjectives = objectives.filter(obj => obj.profile < 2).length;
 
   return (
     <div className="flex flex-col space-y-8 animate-fadeIn">
