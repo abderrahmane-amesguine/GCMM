@@ -1,6 +1,6 @@
 {
   "welcome": {
-    "title": "Welcome to GCMM",
+    "title": "Welcome to NCSecMM",
     "description": "Get started by uploading your file"
   },
   "common": {
@@ -36,7 +36,7 @@
     "menu": {
       "dashboard": "Dashboard",
       "tableView": "NCSecMM Table",
-      "axes": "Axes",
+      "axes": "Domains",
       "importData": "Import",
       "exportData": "Export",
       "close": "Close"
@@ -124,17 +124,17 @@
     "title": "Dashboard",
     "subtitle": "Cybersecurity Maturity Overview",
     "metrics": {
-      "axes": "Axes",
-      "domains": "Domains",
-      "objectives": "Objectives",
-      "objectivesToImprove": "Objectives to Improve"
+      "axes": "Domains",
+      "domains": "Processes",
+      "objectives": "Governance Practices",
+      "objectivesToImprove": "Governance Practices to Improve"
     },
     "charts": {
-      "axisRadar": "Axis Radar",
-      "scoresByAxis": "Scores by Axis"
+      "axisRadar": "Domain Radar",
+      "scoresByAxis": "Scores by Domain"
     },
     "sections": {
-      "evaluationAxes": "Evaluation Axes",
+      "evaluationAxes": "Evaluation Domains",
       "viewDetails": "View Details",
       "improvement": {
         "needed": "Needs Improvement",
@@ -182,28 +182,28 @@
     }
   },
   "axisView": {
-    "notFound": "Axis not found",
+    "notFound": "Domain not found",
     "backToDashboard": "Back to Dashboard",
     "actions": {
       "export": "Export",
       "report": "Report",
       "exportSuccess": "Export successful",
-      "exportDescription": "The data for axis {{name}} has been exported successfully",
+      "exportDescription": "The data for domain {{name}} has been exported successfully",
       "exportError": "Export error",
       "exportErrorDescription": "An error occurred while exporting the data",
       "reportSuccess": "Report generated",
-      "reportDescription": "The report for axis {{name}} has been generated successfully",
+      "reportDescription": "The report for domain {{name}} has been generated successfully",
       "reportError": "Generation error",
       "reportErrorDescription": "An error occurred while generating the report"
     },
     "sections": {
-      "evaluation": "Axis Evaluation",
-      "domains": "Domains",
+      "evaluation": "Domain Evaluation",
+      "domains": "Processes",
       "objectives": {
-        "title": "Objectives",
-        "count": "Total objectives",
-        "lowScore": "Low score objectives",
-        "highScore": "High score objectives"
+        "title": "Governance Practices",
+        "count": "Total Governance Practices",
+        "lowScore": "Low score Governance Practices",
+        "highScore": "High score Governance Practices"
       },
       "details": "View details"
     }
@@ -217,26 +217,26 @@
   "NCSecTable": {
     "toast": {
       "titleError": "Error",
-      "descriptionErrorObj": "No objective selected",
+      "descriptionErrorObj": "No gouvernance Practice selected",
       "descriptionErrorInput": "Please enter valid profile values (1-5, target >= current)",
       "descriptionError": "Error saving evaluation",
       "titleSuccess": "Success",
       "descriptionSuccess": "Evaluation saved successfully"
     },
     "columns": {
-      "axis": "Axis",
-      "domain": "Domains",
-      "objective": "Objectives",
+      "axis": "Domains",
+      "domain": "Processes",
+      "objective": "Governance Practices",
       "score": "Score",
       "level": "Level"
     },
     "objDetails": {
-      "title": "Objective Details",
-      "axis": "Axis",
-      "domain": "Domain",
-      "objective": "Objective",
+      "title": "Governance Practice Details",
+      "axis": "Domain",
+      "domain": "Process",
+      "objective": "Governance Practice",
       "description": "Description",
-      "id": "Objective ID",
+      "id": "Gouvernance Practice ID",
       "MaturityLevels": "Maturity Levels",
       "Profile": {
         "title": "Set Your Current Profile",
@@ -249,32 +249,32 @@
     }
   },
   "domainView": {
-    "notFound": "Domain not found",
-    "backToAxis": "Back to Axis",
+    "notFound": "Process not found",
+    "backToAxis": "Back to Domain",
     "statistics": {
       "objectives": {
-        "title": "Objectives",
-        "total": "Total objectives in this domain",
+        "title": "Governance Practices",
+        "total": "Total Governance Practices in this process",
         "needImprovement": "Need Improvement",
-        "needImprovementDesc": "Objectives scoring below 2",
+        "needImprovementDesc": "Governance Practices scoring below 2",
         "highPerformance": "High Performance",
-        "highPerformanceDesc": "Objectives scoring 4 or above",
+        "highPerformanceDesc": "Governance Practices scoring 4 or above",
         "averageScore": "Average Score",
-        "averageScoreDesc": "Average score for this domain"
+        "averageScoreDesc": "Average score for this process"
       }
     },
     "radarChart": {
-      "title": "Domain Overview",
-      "description": "Objective scores distribution"
+      "title": "Process Overview",
+      "description": "Gouvernance Practice scores distribution"
     },
     "objectivesList": {
-      "title": "Objectives",
+      "title": "Governance Practices",
       "viewDetails": "View details"
     }
   },
   "objectiveView": {
-    "notFound": "Objective not found",
-    "backToDomain": "Back to Domain",
+    "notFound": "Gouvernance proctice not found",
+    "backToDomain": "Back to Process",
     "navigation": {
       "separator": " > "
     },
